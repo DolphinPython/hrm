@@ -1,0 +1,13 @@
+Array
+(
+    [bank_id] => 
+    [new_id] => 57
+    [bank_name] => State Bank Of India 
+    [account_holder_name] => Asha
+    [account_type] => Saving Account
+    [account_number] => 42500135255
+    [ifsc] => SBIN0009110
+    [branch] => Vikaspuri
+    [pan] => 
+)
+Attempting to delete employee ID: 10 at 2025-09-01 14:52:43Cannot delete employee ID 10: Admin or Super Admin roleAttempting to delete employee ID: 10 at 2025-09-01 14:57:32Successfully archived employee ID: 10Transaction committed for employee ID: 10

@@ -1,0 +1,24 @@
+.leave-filter-btn {
+        margin-right: 10px;
+        margin-bottom: 15px;
+    }
+    .modal-lg {
+        max-width: 90%;
+    }
+    .modal-table {
+        width: 100%;
+        margin-bottom: 0;
+    }
+    .table-striped tbody tr.status-new {
+        background-color: #ffb3b3 !important; /* Orange for New */
+    }
+    /*.table-striped tbody tr.status-approved {*/
+    /*    background-color: #90ee90 !important;*/
+    /*}*/
+    .table-striped tbody tr.status-pending {
+        background-color: #add8e6 !important; /* Light blue for Pending */
+    }
+    .table-striped tbody tr.status-declined {
+        background-color: #ffcccb !important; /* Light red for Declined */
+    }
+    

@@ -1,0 +1,29 @@
+[01-May-2025 09:00:02 Asia/Kolkata] Cron: Monthly deductions processed successfully
+[01-Jun-2025 09:00:02 Asia/Kolkata] Cron: Monthly deductions processed successfully
+[01-Jul-2025 09:00:02 Asia/Kolkata] Cron: Monthly deductions processed successfully
+[01-Aug-2025 09:00:02 Asia/Kolkata] Cron: Monthly deductions processed successfully
+[01-Sep-2025 09:00:04 Asia/Kolkata] Cron: Monthly deductions processed successfully
+[01-Sep-2025 09:00:04 Asia/Kolkata] PHP Fatal error:  Uncaught Error: mysqli object is already closed in /home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php:41
+Stack trace:
+#0 /home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php(41): mysqli_close()
+#1 [internal function]: {closure:/home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php:39}()
+#2 {main}
+  thrown in /home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php on line 41
+[01-Sep-2025 16:37:45 Asia/Kolkata] PHP Fatal error:  Uncaught Error: mysqli object is already closed in /home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php:41
+Stack trace:
+#0 /home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php(41): mysqli_close()
+#1 [internal function]: {closure:/home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php:39}()
+#2 {main}
+  thrown in /home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php on line 41
+[01-Sep-2025 16:37:56 Asia/Kolkata] PHP Fatal error:  Uncaught Error: mysqli object is already closed in /home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php:41
+Stack trace:
+#0 /home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php(41): mysqli_close()
+#1 [internal function]: {closure:/home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php:39}()
+#2 {main}
+  thrown in /home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php on line 41
+[01-Sep-2025 16:39:46 Asia/Kolkata] PHP Fatal error:  Uncaught Error: mysqli object is already closed in /home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php:41
+Stack trace:
+#0 /home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php(41): mysqli_close()
+#1 [internal function]: {closure:/home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php:39}()
+#2 {main}
+  thrown in /home/u179772606/domains/hrmpulse.com/public_html/layouts/config.php on line 41

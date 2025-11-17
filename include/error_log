@@ -1,0 +1,32 @@
+[27-Nov-2022 10:25:08 Asia/Colombo] PHP Notice:  Undefined index: hometutor_org_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 16
+[03-Dec-2022 11:39:25 Asia/Colombo] PHP Notice:  Undefined index: hometutor_org_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 16
+[03-Dec-2022 11:44:02 Asia/Colombo] PHP Notice:  Undefined index: hometutor_org_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 16
+[03-Dec-2022 11:44:03 Asia/Colombo] PHP Notice:  Undefined index: hometutor_org_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 16
+[03-Dec-2022 11:44:51 Asia/Colombo] PHP Notice:  Undefined index: hometutor_org_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 16
+[03-Dec-2022 11:44:54 Asia/Colombo] PHP Notice:  Undefined index: hometutor_org_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 16
+[03-Dec-2022 11:44:55 Asia/Colombo] PHP Notice:  Undefined index: hometutor_org_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 16
+[03-Dec-2022 11:45:06 Asia/Colombo] PHP Notice:  Undefined index: hometutor_org_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 16
+[03-Dec-2022 11:45:25 Asia/Colombo] PHP Notice:  Undefined index: city_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 15
+[03-Dec-2022 11:45:25 Asia/Colombo] PHP Notice:  Undefined index: hometutor_org_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 16
+[03-Dec-2022 11:45:25 Asia/Colombo] PHP Notice:  Undefined index: locality_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 32
+[03-Dec-2022 11:45:25 Asia/Colombo] PHP Notice:  Undefined index: locality_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 33
+[03-Dec-2022 11:45:27 Asia/Colombo] PHP Notice:  Undefined index: city_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 15
+[03-Dec-2022 11:45:27 Asia/Colombo] PHP Notice:  Undefined index: hometutor_org_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 16
+[03-Dec-2022 11:45:27 Asia/Colombo] PHP Notice:  Undefined index: locality_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 32
+[03-Dec-2022 11:45:27 Asia/Colombo] PHP Notice:  Undefined index: locality_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 33
+[03-Dec-2022 11:45:36 Asia/Colombo] PHP Notice:  Undefined index: hometutor_org_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 16
+[03-Dec-2022 11:45:36 Asia/Colombo] PHP Notice:  Undefined index: locality_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 32
+[03-Dec-2022 11:45:36 Asia/Colombo] PHP Notice:  Undefined index: locality_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 33
+[03-Dec-2022 11:49:54 Asia/Colombo] PHP Notice:  Undefined index: city_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 15
+[03-Dec-2022 11:49:54 Asia/Colombo] PHP Notice:  Undefined index: hometutor_org_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 16
+[03-Dec-2022 11:49:54 Asia/Colombo] PHP Notice:  Undefined index: locality_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 32
+[03-Dec-2022 11:49:54 Asia/Colombo] PHP Notice:  Undefined index: locality_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 33
+[03-Dec-2022 11:49:56 Asia/Colombo] PHP Notice:  Undefined index: hometutor_org_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 16
+[03-Dec-2022 11:51:33 Asia/Colombo] PHP Notice:  Undefined index: hometutor_org_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 16
+[03-Dec-2022 11:51:38 Asia/Colombo] PHP Notice:  Undefined index: hometutor_org_id in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality1.php on line 16
+[07-Dec-2022 10:47:46 UTC] PHP Warning:  include(easy_function.php): failed to open stream: No such file or directory in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality3.php on line 9
+[07-Dec-2022 10:47:46 UTC] PHP Warning:  include(): Failed opening 'easy_function.php' for inclusion (include_path='.:/opt/alt/php72/usr/share/pear') in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality3.php on line 9
+[07-Dec-2022 16:17:46 Asia/Colombo] PHP Fatal error:  Uncaught Error: Call to undefined function connect() in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality3.php:13
+Stack trace:
+#0 {main}
+  thrown in /home4/msofthco/rlsrsm.org.in/deleted/include/display_locality3.php on line 13
