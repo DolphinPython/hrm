@@ -629,42 +629,7 @@ $reporting_manager = get_reporting_manager($emp_id, $profile_image_dir);
                                                         <!-- /Profile Modal -->
 
 
-                                                        <?php echo $reporting_manager;
-
-
-                                                        /*
-//print_r($reporting_manager);
-foreach($reporting_manager as $key1 => $value1)
-{
-echo $key1." value is ". $value1 . "<br>";
-    foreach($value1 as $key => $value)
-    {
-        echo "<hr><br>".$key." value is ". $value . "<br>";
-
-        echo $value[$key1][3] . "<br>";
-
-
-    }
-}*/
-
-                                                        /*
-print_r($reporting_manager);
-foreach($reporting_manager as $key1 => $value1)
-{
-//echo $key1." value is ". $value1 . "< br>";
-
-        echo $reporting_manager[$key1][1]."<br>";
-
-}*/
-                                                        /*
-foreach($reporting_manager as $row) {
-    foreach($row['reporting_manager_id'] as $k) {
-          echo $k['reporting_manager_id'];
-         //echo $k['boards']['price'];
-    }
-}*/
-
-                                                        ?>
+                                                        <?php echo $reporting_manager; ?>
 
 
 

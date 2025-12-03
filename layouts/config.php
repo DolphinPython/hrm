@@ -5,7 +5,7 @@
 define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
-define('DB_NAME', 'hrm');
+define('DB_NAME', 'hrm2');
 
 /* ===============================
    Create Database Connection (Singleton)
@@ -36,10 +36,10 @@ $gmailusername = '';   // Display name for email
 /* ===============================
    Close Connection on Script End
    =============================== */
-register_shutdown_function(function () {
-    if (isset($GLOBALS['con']) && $GLOBALS['con'] !== null) {
-        mysqli_close($GLOBALS['con']);
-        $GLOBALS['con'] = null;
-    }
-});
+// register_shutdown_function(function () {
+//     if (isset($GLOBALS['con']) && $GLOBALS['con'] !== null) {
+//         mysqli_close($GLOBALS['con']);
+//         $GLOBALS['con'] = null;
+//     }
+// });
 ?>

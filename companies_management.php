@@ -369,7 +369,7 @@ if (isset($_GET['edit'])) {
                                 <th>Mobile 2</th>
                                 <th>Website</th>
                                 <th>Industry</th>
-                                <th>Tax ID</th>
+                                <!-- <th>Tax ID</th> -->
                                 <th>Logo</th>
                                 <th>Banner</th>
                                 <th>LinkedIn</th>
@@ -377,8 +377,8 @@ if (isset($_GET['edit'])) {
                                 <th>Twitter</th>
                                 <th>Founded Year</th>
                                 <th>Employee Count</th>
-                                <th>Status</th>
-                                <th>Description</th>
+                                <!-- <th>Status</th> -->
+                                <!-- <th>Description</th> -->
                                 <th>Operating Hours</th>
                                 <th>Location</th> <!-- Updated from Longitude to Location -->
                                 <th>Parent Company</th>
@@ -397,7 +397,7 @@ if (isset($_GET['edit'])) {
                                 echo '<td>' . $row['mobile2'] . '</td>';
                                 echo '<td>' . $row['website'] . '</td>';
                                 echo '<td>' . $row['industry'] . '</td>';
-                                echo '<td>' . $row['tax_id'] . '</td>';
+                                // echo '<td>' . $row['tax_id'] . '</td>';
                                 
                                 // Display Logo
                                 echo '<td>';
@@ -422,8 +422,8 @@ if (isset($_GET['edit'])) {
                                 echo '<td>' . $row['twitter'] . '</td>';
                                 echo '<td>' . $row['founded_year'] . '</td>';
                                 echo '<td>' . $row['employee_count'] . '</td>';
-                                echo '<td>' . $row['status'] . '</td>';
-                                echo '<td>' . $row['description'] . '</td>';
+                                // echo '<td>' . $row['status'] . '</td>';
+                                // echo '<td>' . $row['description'] . '</td>';
                                 echo '<td>' . $row['operating_hours'] . '</td>';
                                 
                                 // Display Google Maps Embed Code
@@ -483,8 +483,8 @@ if (isset($_GET['edit'])) {
                         echo '<p class="card-text"><strong>Twitter:</strong> ' . $row['twitter'] . '</p>';
                         echo '<p class="card-text"><strong>Founded Year:</strong> ' . $row['founded_year'] . '</p>';
                         echo '<p class="card-text"><strong>Employee Count:</strong> ' . $row['employee_count'] . '</p>';
-                        echo '<p class="card-text"><strong>Status:</strong> ' . $row['status'] . '</p>';
-                        echo '<p class="card-text"><strong>Description:</strong> ' . $row['description'] . '</p>';
+                        // echo '<p class="card-text"><strong>Status:</strong> ' . $row['status'] . '</p>'; 
+                        // echo '<p class="card-text"><strong>Description:</strong> ' . $row['description'] . '</p>';
                         echo '<p class="card-text"><strong>Operating Hours:</strong> ' . $row['operating_hours'] . '</p>';
                         
                         // Display Google Maps Embed Code

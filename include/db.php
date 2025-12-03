@@ -37,7 +37,7 @@ function connect()
 	$servername = "localhost";
 	$username   = "root";
 	$password   = "";
-	$dbname     = "hrm";
+	$dbname     = "hrm2";
 
 	// Create connection
 	$conn = mysqli_connect($servername, $username, $password, $dbname);
