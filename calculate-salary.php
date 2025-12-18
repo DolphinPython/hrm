@@ -4,7 +4,7 @@ include 'layouts/head-main.php';
 include 'include/function.php';
 
 $conn = connect();
-$emp_id = $_SESSION['id'];     
+$emp_id = $_SESSION['id'];
 $user_id = $_GET['id'];
 
 // Fetch all employees for the dropdown
@@ -26,8 +26,8 @@ $salary = $employee_row['salary'];
 $email = $employee_row['email'];
 
 // Get month and year from GET parameters
-$month = isset($_GET['month']) ? (int)$_GET['month'] : 0;
-$year = isset($_GET['year']) ? (int)$_GET['year'] : 0;
+$month = isset($_GET['month']) ? (int) $_GET['month'] : 0;
+$year = isset($_GET['year']) ? (int) $_GET['year'] : 0;
 
 // Fetch Saturday option from office_timing table
 // $saturday_option_query = "SELECT saturday_option FROM office_timing WHERE id = 1";
@@ -273,7 +273,7 @@ if ($month > 0 && $year > 0) {
 }
 
 $totalWorkingDays = $totalDays;
-$perDaySalary = round($salary / $totalWorkingDays,2);
+$perDaySalary = round($salary / $totalWorkingDays, 2);
 
 
 // Define your query with placeholders
@@ -372,7 +372,7 @@ $late_extra_all = $all_late_data['late_extra'];
 $half_day_all = $all_late_data['half_day'];
 
 // Calculate the differences
-$normal_late = $normal_late_all ;
+$normal_late = $normal_late_all;
 $late_extra = $late_extra_all - $late_extra_starting;
 
 
@@ -393,7 +393,7 @@ $monthly_leaves = $row_fine['monthly_leaves'];
 $extra_fine = $row_fine['extra_fine'];
 
 // $half_day_fine = $perDaySalary / 2;
-$half_day_fine = round($perDaySalary / 2,2);
+$half_day_fine = round($perDaySalary / 2, 2);
 
 // echo $leave_days_query = "
 //     SELECT 
@@ -414,7 +414,7 @@ $stmt = $conn->prepare($leave_days_query);
 
 $stmt->bind_param('iii', $emp_id, $year, $month);
 $stmt->execute();
-$leave_days_result = $stmt->get_result();    
+$leave_days_result = $stmt->get_result();
 
 // $leave_days_data = $leave_days_result->fetch_assoc();
 // $leave_days = $leave_days_data['total_leave_days'] - 1;
@@ -434,12 +434,12 @@ while ($row = $leave_days_result->fetch_assoc()) {
     if ($row['day_type'] == 1 && $row['status'] == 2) {
         $leavehalf += $row['no_of_days'];
         $leavehalfc++;
-    // Full Day
+        // Full Day
     } else if ($row['day_type'] == 2 && $row['status'] == 2) {
         $leavefull += $row['no_of_days'];
         $leavefullc++;
-    // Short Day
-    } else if ($row['day_type'] == 3 && $row['status'] == 2) {        
+        // Short Day
+    } else if ($row['day_type'] == 3 && $row['status'] == 2) {
         $leaveshort += $row['no_of_days'];
         $leaveshortc++;
     }
@@ -447,7 +447,8 @@ while ($row = $leave_days_result->fetch_assoc()) {
 // exit();
 
 
-function calculateSalary($salary, $totalDays, $presentDays, $half_day_all, $normal_late, $late_extra, $normal_fine, $extra_fine, $half_day_fine, $perDaySalary){
+function calculateSalary($salary, $totalDays, $presentDays, $half_day_all, $normal_late, $late_extra, $normal_fine, $extra_fine, $half_day_fine, $perDaySalary)
+{
 
     if ($presentDays > $totalDays) {
         $presentDays = $totalDays;
@@ -466,7 +467,8 @@ function calculateSalary($salary, $totalDays, $presentDays, $half_day_all, $norm
 
 $after_deduction = calculateSalary($salary, $totalDays, $presentDays, $half_day_all, $normal_late, $late_extra, $normal_fine, $extra_fine, $half_day_fine, $perDaySalary);
 
-function numberToWords($num){
+function numberToWords($num)
+{
     $belowTwenty = [
         'Zero',
         'One',
@@ -503,15 +505,19 @@ function numberToWords($num){
     ];
     $aboveThousand = ['', 'Thousand', 'Million', 'Billion'];
 
-    if ($num == 0) return 'Zero';
+    if ($num == 0)
+        return 'Zero';
 
     $result = '';
 
     function helper($n, $belowTwenty, $tens)
     {
-        if ($n < 20) return $belowTwenty[$n];
-        else if ($n < 100) return $tens[intval($n / 10)] . ($n % 10 ? ' ' . $belowTwenty[$n % 10] : '');
-        else if ($n < 1000) return $belowTwenty[intval($n / 100)] . ' Hundred' . ($n % 100 ? ' ' . helper($n % 100, $belowTwenty, $tens) : '');
+        if ($n < 20)
+            return $belowTwenty[$n];
+        else if ($n < 100)
+            return $tens[intval($n / 10)] . ($n % 10 ? ' ' . $belowTwenty[$n % 10] : '');
+        else if ($n < 1000)
+            return $belowTwenty[intval($n / 100)] . ' Hundred' . ($n % 100 ? ' ' . helper($n % 100, $belowTwenty, $tens) : '');
         return '';
     }
 
@@ -545,11 +551,11 @@ function roundAndConvertToWords($decimal)
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <style>
-    .salary_in_word,
-    .salary-structure,
-    .employee-details {
-        font-size: 25px;
-    }
+        .salary_in_word,
+        .salary-structure,
+        .employee-details {
+            font-size: 25px;
+        }
     </style>
 </head>
 
@@ -625,41 +631,41 @@ function roundAndConvertToWords($decimal)
                 <?php
 
 
-$conn = connect();
-$emp_id = $_SESSION['id'];
-$role_query = "SELECT role FROM hrm_employee WHERE id = '$emp_id'";
-$role_result = mysqli_query($conn, $role_query) or die(mysqli_error($conn));
-$role_row = mysqli_fetch_assoc($role_result);
-$is_admin = ($role_row && in_array(strtolower($role_row['role']), ['admin', 'super admin']));
-if ($is_admin) {
-    $employee_query = "SELECT id, CONCAT(fname, ' ', lname) AS name, doj FROM hrm_employee WHERE id != 14 AND archive_status != 1";
-} else {
-    $employee_query = "SELECT id, CONCAT(fname, ' ', lname) AS name, doj FROM hrm_employee WHERE id = '$emp_id' AND archive_status != 1 AND id != 14 
+                $conn = connect();
+                $emp_id = $_SESSION['id'];
+                $role_query = "SELECT role FROM hrm_employee WHERE id = '$emp_id'";
+                $role_result = mysqli_query($conn, $role_query) or die(mysqli_error($conn));
+                $role_row = mysqli_fetch_assoc($role_result);
+                $is_admin = ($role_row && in_array(strtolower($role_row['role']), ['admin', 'super admin']));
+                if ($is_admin) {
+                    $employee_query = "SELECT id, CONCAT(fname, ' ', lname) AS name, doj FROM hrm_employee WHERE id != 14 AND archive_status != 1";
+                } else {
+                    $employee_query = "SELECT id, CONCAT(fname, ' ', lname) AS name, doj FROM hrm_employee WHERE id = '$emp_id' AND archive_status != 1 AND id != 14 
                        UNION 
                        SELECT he.id, CONCAT(he.fname, ' ', he.lname) AS name, he.doj 
                        FROM hrm_employee he 
                        INNER JOIN hrm_reporting_manager hrm ON he.id = hrm.employee_id 
                        WHERE hrm.reporting_manager_id = '$emp_id' AND he.id != 14";
-}
-$employee_result = mysqli_query($conn, $employee_query) or die(mysqli_error($conn));
+                }
+                $employee_result = mysqli_query($conn, $employee_query) or die(mysqli_error($conn));
 
 
-// Fetch employees on leave for current date
-$today = new DateTime(); // Use actual current date
-$current_date = $today->format('Y-m-d');
-$leave_query = "SELECT he.id, CONCAT(he.fname, ' ', he.lname) AS name, hla.start_date, hla.end_date
+                // Fetch employees on leave for current date
+                $today = new DateTime(); // Use actual current date
+                $current_date = $today->format('Y-m-d');
+                $leave_query = "SELECT he.id, CONCAT(he.fname, ' ', he.lname) AS name, hla.start_date, hla.end_date
                 FROM hrm_employee he
                 INNER JOIN hrm_leave_applied hla ON he.id = hla.emp_id
                 WHERE hla.status = 2 
                 AND '$current_date' BETWEEN hla.start_date AND hla.end_date";
-$leave_result = mysqli_query($conn, $leave_query);
-$employees_on_leave = [];
-while ($leave = mysqli_fetch_assoc($leave_result)) {
-    $employees_on_leave[] = $leave;
-}
+                $leave_result = mysqli_query($conn, $leave_query);
+                $employees_on_leave = [];
+                while ($leave = mysqli_fetch_assoc($leave_result)) {
+                    $employees_on_leave[] = $leave;
+                }
 
-// Fetch employees absent for current date (no clock-in and not on leave), excluding emp_id = 14
-$absent_query = "SELECT he.id, CONCAT(he.fname, ' ', he.lname) AS name
+                // Fetch employees absent for current date (no clock-in and not on leave), excluding emp_id = 14
+                $absent_query = "SELECT he.id, CONCAT(he.fname, ' ', he.lname) AS name
                  FROM hrm_employee he
                  LEFT JOIN newuser_attendance na ON he.id = na.user_id 
                      AND DATE(na.clock_in_time) = '$current_date'
@@ -671,12 +677,12 @@ $absent_query = "SELECT he.id, CONCAT(he.fname, ' ', he.lname) AS name
                  AND hla.id IS NULL
                  AND archive_status = 0
                  AND (na.id IS NULL OR na.status = 'absent')";
-$absent_result = mysqli_query($conn, $absent_query);
-$employees_absent = [];
-while ($absent = mysqli_fetch_assoc($absent_result)) {
-    $employees_absent[] = $absent;
-}
-?>
+                $absent_result = mysqli_query($conn, $absent_query);
+                $employees_absent = [];
+                while ($absent = mysqli_fetch_assoc($absent_result)) {
+                    $employees_absent[] = $absent;
+                }
+                ?>
 
                 <!-- Temp Section Start -->
 
@@ -693,9 +699,9 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                         <?php
                                         mysqli_data_seek($employee_result, 0);
                                         while ($employee = mysqli_fetch_assoc($employee_result)) { ?>
-                                        <option value="<?= $employee['id']; ?>" data-doj="<?= $employee['doj']; ?>">
-                                            <?= $employee['name']; ?>
-                                        </option>
+                                            <option value="<?= $employee['id']; ?>" data-doj="<?= $employee['doj']; ?>">
+                                                <?= $employee['name']; ?>
+                                            </option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -719,22 +725,22 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                         </form>
 
                         <script>
-                        document.getElementById("salaryForm").addEventListener("submit", function(e) {
-                            e.preventDefault(); // form ke default submit ko rokna
+                            document.getElementById("salaryForm").addEventListener("submit", function (e) {
+                                e.preventDefault(); // form ke default submit ko rokna
 
-                            const empId = document.getElementById("employee").value;
-                            const month = document.getElementById("month").value;
-                            const year = document.getElementById("year").value;
+                                const empId = document.getElementById("employee").value;
+                                const month = document.getElementById("month").value;
+                                const year = document.getElementById("year").value;
 
-                            if (!empId || !month || !year) {
-                                alert("Please select Employee, Month and Year");
-                                return;
-                            }
+                                if (!empId || !month || !year) {
+                                    alert("Please select Employee, Month and Year");
+                                    return;
+                                }
 
-                            // Redirect to required URL
-                            window.location.href =
-                                `calculate-salary.php?employee_id=${empId}&id=${empId}&month=${month}&year=${year}`;
-                        });
+                                // Redirect to required URL
+                                window.location.href =
+                                    `calculate-salary.php?employee_id=${empId}&id=${empId}&month=${month}&year=${year}`;
+                            });
                         </script>
 
                     </div>
@@ -743,50 +749,74 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
 
 
                 <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                    const employeeSelect = document.getElementById('employee');
-                    const monthSelect = document.getElementById('month');
-                    const yearSelect = document.getElementById('year');
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const employeeSelect = document.getElementById('employee');
+                        const monthSelect = document.getElementById('month');
+                        const yearSelect = document.getElementById('year');
 
-                    function updateDateOptions() {
-                        const selectedEmployee = employeeSelect.options[employeeSelect.selectedIndex];
-                        const doj = selectedEmployee ? selectedEmployee.getAttribute('data-doj') : null;
+                        function updateDateOptions() {
+                            const selectedEmployee = employeeSelect.options[employeeSelect.selectedIndex];
+                            const doj = selectedEmployee ? selectedEmployee.getAttribute('data-doj') : null;
 
-                        monthSelect.innerHTML = '<option value="">Select Month</option>';
-                        yearSelect.innerHTML = '<option value="">Select Year</option>';
+                            monthSelect.innerHTML = '<option value="">Select Month</option>';
+                            yearSelect.innerHTML = '<option value="">Select Year</option>';
 
-                        const currentDate = new Date();
-                        let currentYear = currentDate.getFullYear();
-                        let currentMonth = currentDate.getMonth() + 1;
+                            const currentDate = new Date();
+                            let currentYear = currentDate.getFullYear();
+                            let currentMonth = currentDate.getMonth() + 1;
 
-                        // 👉 Last month calculate
-                        let lastMonth = currentMonth - 1;
-                        let lastMonthYear = currentYear;
+                            // 👉 Last month calculate
+                            let lastMonth = currentMonth - 1;
+                            let lastMonthYear = currentYear;
 
-                        if (lastMonth === 0) {
-                            lastMonth = 12;
-                            lastMonthYear = currentYear - 1;
-                        }
-
-                        if (doj) {
-                            const dojDate = new Date(doj);
-                            const dojYear = dojDate.getFullYear();
-                            const dojMonth = dojDate.getMonth() + 1;
-
-                            // Year loop only till current year (no future year)
-                            for (let y = dojYear; y <= currentYear; y++) {
-                                const option = document.createElement('option');
-                                option.value = y;
-                                option.text = y;
-                                yearSelect.appendChild(option);
+                            if (lastMonth === 0) {
+                                lastMonth = 12;
+                                lastMonthYear = currentYear - 1;
                             }
 
-                            // Default year = last month ka year
-                            yearSelect.value = lastMonthYear;
+                            if (doj) {
+                                const dojDate = new Date(doj);
+                                const dojYear = dojDate.getFullYear();
+                                const dojMonth = dojDate.getMonth() + 1;
 
-                            // Month loop
-                            for (let m = 1; m <= 12; m++) {
-                                if (lastMonthYear > dojYear || (lastMonthYear == dojYear && m >= dojMonth)) {
+                                // Year loop only till current year (no future year)
+                                for (let y = dojYear; y <= currentYear; y++) {
+                                    const option = document.createElement('option');
+                                    option.value = y;
+                                    option.text = y;
+                                    yearSelect.appendChild(option);
+                                }
+
+                                // Default year = last month ka year
+                                yearSelect.value = lastMonthYear;
+
+                                // Month loop
+                                for (let m = 1; m <= 12; m++) {
+                                    if (lastMonthYear > dojYear || (lastMonthYear == dojYear && m >= dojMonth)) {
+                                        const option = document.createElement('option');
+                                        option.value = m;
+                                        option.text = new Date(0, m - 1).toLocaleString('default', {
+                                            month: 'long'
+                                        });
+                                        monthSelect.appendChild(option);
+                                    }
+                                }
+
+                                // Default month = last month
+                                monthSelect.value = lastMonth;
+
+                            } else {
+                                // Agar DOJ nahi hai to normal range
+                                for (let y = currentYear - 1; y <= currentYear; y++) {
+                                    const option = document.createElement('option');
+                                    option.value = y;
+                                    option.text = y;
+                                    yearSelect.appendChild(option);
+                                }
+
+                                yearSelect.value = lastMonthYear;
+
+                                for (let m = 1; m <= 12; m++) {
                                     const option = document.createElement('option');
                                     option.value = m;
                                     option.text = new Date(0, m - 1).toLocaleString('default', {
@@ -794,64 +824,50 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                     });
                                     monthSelect.appendChild(option);
                                 }
+
+                                monthSelect.value = lastMonth;
                             }
-
-                            // Default month = last month
-                            monthSelect.value = lastMonth;
-
-                        } else {
-                            // Agar DOJ nahi hai to normal range
-                            for (let y = currentYear - 1; y <= currentYear; y++) {
-                                const option = document.createElement('option');
-                                option.value = y;
-                                option.text = y;
-                                yearSelect.appendChild(option);
-                            }
-
-                            yearSelect.value = lastMonthYear;
-
-                            for (let m = 1; m <= 12; m++) {
-                                const option = document.createElement('option');
-                                option.value = m;
-                                option.text = new Date(0, m - 1).toLocaleString('default', {
-                                    month: 'long'
-                                });
-                                monthSelect.appendChild(option);
-                            }
-
-                            monthSelect.value = lastMonth;
-                        }
-                    }
-
-                    updateDateOptions();
-
-                    employeeSelect.addEventListener('change', updateDateOptions);
-
-                    yearSelect.addEventListener('change', function() {
-                        const selectedEmployee = employeeSelect.options[employeeSelect.selectedIndex];
-                        const doj = selectedEmployee ? selectedEmployee.getAttribute('data-doj') : null;
-                        monthSelect.innerHTML = '<option value="">Select Month</option>';
-
-                        const selectedYear = parseInt(this.value);
-                        const currentDate = new Date();
-                        const currentYear = currentDate.getFullYear();
-                        const currentMonth = currentDate.getMonth() + 1;
-
-                        let lastMonth = currentMonth - 1;
-                        let lastMonthYear = currentYear;
-                        if (lastMonth === 0) {
-                            lastMonth = 12;
-                            lastMonthYear = currentYear - 1;
                         }
 
-                        if (doj) {
-                            const dojDate = new Date(doj);
-                            const dojYear = dojDate.getFullYear();
-                            const dojMonth = dojDate.getMonth() + 1;
+                        updateDateOptions();
 
-                            for (let m = 1; m <= 12; m++) {
-                                if (selectedYear > dojYear || (selectedYear == dojYear && m >=
+                        employeeSelect.addEventListener('change', updateDateOptions);
+
+                        yearSelect.addEventListener('change', function () {
+                            const selectedEmployee = employeeSelect.options[employeeSelect.selectedIndex];
+                            const doj = selectedEmployee ? selectedEmployee.getAttribute('data-doj') : null;
+                            monthSelect.innerHTML = '<option value="">Select Month</option>';
+
+                            const selectedYear = parseInt(this.value);
+                            const currentDate = new Date();
+                            const currentYear = currentDate.getFullYear();
+                            const currentMonth = currentDate.getMonth() + 1;
+
+                            let lastMonth = currentMonth - 1;
+                            let lastMonthYear = currentYear;
+                            if (lastMonth === 0) {
+                                lastMonth = 12;
+                                lastMonthYear = currentYear - 1;
+                            }
+
+                            if (doj) {
+                                const dojDate = new Date(doj);
+                                const dojYear = dojDate.getFullYear();
+                                const dojMonth = dojDate.getMonth() + 1;
+
+                                for (let m = 1; m <= 12; m++) {
+                                    if (selectedYear > dojYear || (selectedYear == dojYear && m >=
                                         dojMonth)) {
+                                        const option = document.createElement('option');
+                                        option.value = m;
+                                        option.text = new Date(0, m - 1).toLocaleString('default', {
+                                            month: 'long'
+                                        });
+                                        monthSelect.appendChild(option);
+                                    }
+                                }
+                            } else {
+                                for (let m = 1; m <= 12; m++) {
                                     const option = document.createElement('option');
                                     option.value = m;
                                     option.text = new Date(0, m - 1).toLocaleString('default', {
@@ -860,23 +876,13 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                     monthSelect.appendChild(option);
                                 }
                             }
-                        } else {
-                            for (let m = 1; m <= 12; m++) {
-                                const option = document.createElement('option');
-                                option.value = m;
-                                option.text = new Date(0, m - 1).toLocaleString('default', {
-                                    month: 'long'
-                                });
-                                monthSelect.appendChild(option);
-                            }
-                        }
 
-                        // Default month = last month (agar current year hi selected hai)
-                        if (selectedYear === lastMonthYear) {
-                            monthSelect.value = lastMonth;
-                        }
+                            // Default month = last month (agar current year hi selected hai)
+                            if (selectedYear === lastMonthYear) {
+                                monthSelect.value = lastMonth;
+                            }
+                        });
                     });
-                });
                 </script>
                 <!-- Temp  -->
 
@@ -888,102 +894,102 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
 
 
 
-                
+
                 <!-- Attendance Table -->
-                        <?php
+                <?php
 
-                            echo $leaveshort;
-                            echo " |S: ";
-                            echo $leaveshortc;
-                            $total_short_day = $leaveshortc;
-                            echo "<br>";
-                            echo $leavehalf;
-                            echo " |H: ";
-                            echo $leavehalfc;
-                            echo "<br>";
-                            echo $leavefull;
-                            echo " |C: ";
-                            echo $leavefullc;
-                            echo "<br>";
-                            // echo $leavefulld;
-                            // echo " |L: ";
-                            // echo $leavefulldc;
+                echo $leaveshort;
+                echo " |S: ";
+                echo $leaveshortc;
+                $total_short_day = $leaveshortc;
+                echo "<br>";
+                echo $leavehalf;
+                echo " |H: ";
+                echo $leavehalfc;
+                echo "<br>";
+                echo $leavefull;
+                echo " |C: ";
+                echo $leavefullc;
+                echo "<br>";
+                // echo $leavefulld;
+                // echo " |L: ";
+                // echo $leavefulldc;
+                
 
-                            
-                            $present_days = 0;
-                            $saturday_days = 0;
-                            $sunday_days = 0;
-                            $holiday_days = 0;
-                            $leave_days = 0;
-                            $absent_days = 0;
-                            $totalwork_days = 0;
-                            $late = 0;
-                            $extra_late = 0;
-                            $extra_fine = 0;
-                            $total_late = 0;
-                            $late_cover = 0;
-                            $total_half_day = 0;
-                            $total_half_day_late = 0;
-                            
-
-
-                            if (
-                                isset($_GET['employee_id'], $_GET['month'], $_GET['year']) &&
-                                !empty($_GET['employee_id']) &&
-                                !empty($_GET['month']) &&
-                                !empty($_GET['year'])
-                            ) {
-                                $employee_id = $_GET['employee_id'];
-                                $month = $_GET['month'];
-                                $year = $_GET['year'];
-
-                                $emp_query = "SELECT CONCAT(fname, ' ', lname) as employee_name FROM hrm_employee WHERE id = '$employee_id' AND id != 14";
-                                $emp_result = mysqli_query($conn, $emp_query);
-                                $emp_row = mysqli_fetch_assoc($emp_result);
-                                $employee_name = $emp_row['employee_name'] ?? '';
-                                }
+                $present_days = 0;
+                $saturday_days = 0;
+                $sunday_days = 0;
+                $holiday_days = 0;
+                $leave_days = 0;
+                $absent_days = 0;
+                $totalwork_days = 0;
+                $late = 0;
+                $extra_late = 0;
+                $extra_fine = 0;
+                $total_late = 0;
+                $late_cover = 0;
+                $total_half_day = 0;
+                $total_half_day_late = 0;
 
 
-                                    if (
-                                        isset($_GET['employee_id'], $_GET['month'], $_GET['year']) &&
-                                        !empty($_GET['employee_id']) &&
-                                        !empty($_GET['month']) &&
-                                        !empty($_GET['year'])
-                                    ) {
-                                        $employee_id = $_GET['employee_id'];
-                                        $month = $_GET['month'];
-                                        $year = $_GET['year'];
 
-                                        $manager_check_query = "SELECT * FROM hrm_reporting_manager WHERE employee_id = '$employee_id' AND reporting_manager_id = '{$_SESSION['id']}'";
-                                        $manager_check_result = mysqli_query($conn, $manager_check_query);
-                                        $is_manager = mysqli_num_rows($manager_check_result) > 0;
+                if (
+                    isset($_GET['employee_id'], $_GET['month'], $_GET['year']) &&
+                    !empty($_GET['employee_id']) &&
+                    !empty($_GET['month']) &&
+                    !empty($_GET['year'])
+                ) {
+                    $employee_id = $_GET['employee_id'];
+                    $month = $_GET['month'];
+                    $year = $_GET['year'];
 
-                                        if (($is_admin || $is_manager || $employee_id == $_SESSION['id']) && $employee_id != 14) {
-                                            $emp_query = "SELECT CONCAT(fname, ' ', lname) as employee_name, doj 
+                    $emp_query = "SELECT CONCAT(fname, ' ', lname) as employee_name FROM hrm_employee WHERE id = '$employee_id' AND id != 14";
+                    $emp_result = mysqli_query($conn, $emp_query);
+                    $emp_row = mysqli_fetch_assoc($emp_result);
+                    $employee_name = $emp_row['employee_name'] ?? '';
+                }
+
+
+                if (
+                    isset($_GET['employee_id'], $_GET['month'], $_GET['year']) &&
+                    !empty($_GET['employee_id']) &&
+                    !empty($_GET['month']) &&
+                    !empty($_GET['year'])
+                ) {
+                    $employee_id = $_GET['employee_id'];
+                    $month = $_GET['month'];
+                    $year = $_GET['year'];
+
+                    $manager_check_query = "SELECT * FROM hrm_reporting_manager WHERE employee_id = '$employee_id' AND reporting_manager_id = '{$_SESSION['id']}'";
+                    $manager_check_result = mysqli_query($conn, $manager_check_query);
+                    $is_manager = mysqli_num_rows($manager_check_result) > 0;
+
+                    if (($is_admin || $is_manager || $employee_id == $_SESSION['id']) && $employee_id != 14) {
+                        $emp_query = "SELECT CONCAT(fname, ' ', lname) as employee_name, doj 
                                                          FROM hrm_employee 
                                                          WHERE id = '$employee_id' AND id != 14";
-                                            $emp_result = mysqli_query($conn, $emp_query);
-                                            $emp_row = mysqli_fetch_assoc($emp_result);
-                                            $employee_name = $emp_row['employee_name'] ?? '';
-                                            $doj = $emp_row['doj'] ?? '';
+                        $emp_result = mysqli_query($conn, $emp_query);
+                        $emp_row = mysqli_fetch_assoc($emp_result);
+                        $employee_name = $emp_row['employee_name'] ?? '';
+                        $doj = $emp_row['doj'] ?? '';
 
-                                            if (empty($employee_name)) {
-                                                echo '<tr><td colspan="9" class="text-center">No data available for this employee.</td></tr>';
-                                            } else {
-                                                // Fetch holidays for the selected year and convert date format
-                                                $holiday_query = "SELECT name, date FROM hrm_holidays WHERE year = '$year'";
-                                                $holiday_result = mysqli_query($conn, $holiday_query);
-                                                $holidays = [];
-                                                while ($holiday = mysqli_fetch_assoc($holiday_result)) {
-                                                    $date_parts = explode('-', $holiday['date']);
-                                                    if (count($date_parts) === 3) {
-                                                        $converted_date = $date_parts[2] . '-' . $date_parts[1] . '-' . $date_parts[0];
-                                                        $holidays[$converted_date] = $holiday['name'];
-                                                    }
-                                                }
+                        if (empty($employee_name)) {
+                            echo '<tr><td colspan="9" class="text-center">No data available for this employee.</td></tr>';
+                        } else {
+                            // Fetch holidays for the selected year and convert date format
+                            $holiday_query = "SELECT name, date FROM hrm_holidays WHERE year = '$year'";
+                            $holiday_result = mysqli_query($conn, $holiday_query);
+                            $holidays = [];
+                            while ($holiday = mysqli_fetch_assoc($holiday_result)) {
+                                $date_parts = explode('-', $holiday['date']);
+                                if (count($date_parts) === 3) {
+                                    $converted_date = $date_parts[2] . '-' . $date_parts[1] . '-' . $date_parts[0];
+                                    $holidays[$converted_date] = $holiday['name'];
+                                }
+                            }
 
-                                                // Fetch approved leaves for the employee and month/year
-                                                $leave_query = "SELECT start_date, end_date ,status 
+                            // Fetch approved leaves for the employee and month/year
+                            $leave_query = "SELECT start_date, end_date ,status 
                                                               FROM hrm_leave_applied 
                                                               WHERE emp_id = '$employee_id' 
                                                               AND status = 2 
@@ -991,136 +997,136 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                               AND status = 4
                                                               AND YEAR(start_date) = '$year' 
                                                               AND MONTH(start_date) = '$month'";
-                                                $leave_result = mysqli_query($conn, $leave_query);
-                                                $approved_leaves = [];
-                                                while ($leave = mysqli_fetch_assoc($leave_result)) {
-                                                    $start_date = new DateTime($leave['start_date']);
-                                                    $end_date = new DateTime($leave['end_date']);
-                                                    $interval = new DateInterval('P1D');
-                                                    $date_range = new DatePeriod($start_date, $interval, $end_date->modify('+1 day'));
-                                                    foreach ($date_range as $date) {
-                                                        $approved_leaves[$date->format('Y-m-d')] = true;
-                                                    }
-                                                }
+                            $leave_result = mysqli_query($conn, $leave_query);
+                            $approved_leaves = [];
+                            while ($leave = mysqli_fetch_assoc($leave_result)) {
+                                $start_date = new DateTime($leave['start_date']);
+                                $end_date = new DateTime($leave['end_date']);
+                                $interval = new DateInterval('P1D');
+                                $date_range = new DatePeriod($start_date, $interval, $end_date->modify('+1 day'));
+                                foreach ($date_range as $date) {
+                                    $approved_leaves[$date->format('Y-m-d')] = true;
+                                }
+                            }
 
-                                                $attendance_query = "SELECT * FROM newuser_attendance 
+                            $attendance_query = "SELECT * FROM newuser_attendance 
                                                     WHERE user_id = '$employee_id' 
                                                     AND MONTH(clock_in_time) = '$month' 
                                                     AND YEAR(clock_in_time) = '$year'
                                                     AND clock_in_time >= '$doj'
                                                     ORDER BY clock_in_time ASC";
 
-                                                $attendance_result = mysqli_query($conn, $attendance_query) or die(mysqli_error($conn));
+                            $attendance_result = mysqli_query($conn, $attendance_query) or die(mysqli_error($conn));
 
-                                                $attendance_records = [];
-                                                while ($row = mysqli_fetch_assoc($attendance_result)) {
-                                                    $attendance_records[date('Y-m-d', strtotime($row['clock_in_time']))] = $row;
-                                                }
+                            $attendance_records = [];
+                            while ($row = mysqli_fetch_assoc($attendance_result)) {
+                                $attendance_records[date('Y-m-d', strtotime($row['clock_in_time']))] = $row;
+                            }
 
-                                                $days_in_month = cal_days_in_month(CAL_GREGORIAN, $month, $year);
-                                                $count = 1;
-                                                $doj_date = new DateTime($doj);
-                                                $today_date = new DateTime();
+                            $days_in_month = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+                            $count = 1;
+                            $doj_date = new DateTime($doj);
+                            $today_date = new DateTime();
 
-                                                for ($day = 1; $day <= $days_in_month; $day++) {
-                                                    $current_date = sprintf("%d-%02d-%02d", $year, $month, $day);
-                                                    $date_obj = new DateTime($current_date);
-                                                    if ($date_obj < $doj_date)
-                                                        continue; // Skip dates before doj
-                                                    if ($date_obj > $today_date)
-                                                        continue; // Skip future dates
-                                    
-                                                    $day_of_week = $date_obj->format('N');
+                            for ($day = 1; $day <= $days_in_month; $day++) {
+                                $current_date = sprintf("%d-%02d-%02d", $year, $month, $day);
+                                $date_obj = new DateTime($current_date);
+                                if ($date_obj < $doj_date)
+                                    continue; // Skip dates before doj
+                                if ($date_obj > $today_date)
+                                    continue; // Skip future dates
+                
+                                $day_of_week = $date_obj->format('N');
 
-                                                    if (isset($attendance_records[$current_date]) && $attendance_records[$current_date]['status'] !== 'absent') {
-                                                        $present_days++;
-                                                        $row = $attendance_records[$current_date];
-                                                        $login_timestamp = strtotime($row['clock_in_time']);
-                                                        $clock_out_time = $row['clock_out_time'];
-                                                        $logout_display = $clock_out_time ? date("h:i A", strtotime($clock_out_time)) : "N/A";
-                                                        $late_status = $row['late_status'];
-                                                        $status_color = $row['status_color'];
-                                                        $total_working_time = $row['total_working_time'];
-                                                        $extra_or_remaining_time = $row['extra_or_remaining_time'];
-                                                        $extra_or_remaining_label = $row['extra_or_remaining_label'];
-                                                        ?>
-
-
-                <?php
-                                                     
-                                                        $count++;
-                                                        $employee_name;
-                                                        $current_date;
-                                                        date("h:i A", $login_timestamp);
-                                                        $logout_display;
-                                                        $total_working_time;
-                                                        $extra_or_remaining_label;
-                                                       
-                                                       if ($late_status == "Late") {
-                                                            $late++;
-                                                        }
-                                                        if ($late_status == "Late (Extra Late)") {
-                                                            $extra_late++;
-                                                        }
-                                                        if($late_status == "Late (Extra Fine)") {
-                                                            $extra_fine++;
-                                                        }
-                                                        if($late_status == "Half Day") {
-                                                            $total_half_day++;
-                                                        }
-                                                        if($late_status == "Late (Half Day)") {
-                                                            $total_half_day_late++;
-                                                        }
-
-                                                        if($extra_or_remaining_label == "Extra Time" AND ($late_status == "Late" || $late_status == "Late (Extra Late)" || $late_status == "Late (Extra Fine)")){
-                                                            $late_cover++;
-                                                        }else{
-                                                            $late_status;
-                                                        }
-                                                    ?>
+                                if (isset($attendance_records[$current_date]) && $attendance_records[$current_date]['status'] !== 'absent') {
+                                    $present_days++;
+                                    $row = $attendance_records[$current_date];
+                                    $login_timestamp = strtotime($row['clock_in_time']);
+                                    $clock_out_time = $row['clock_out_time'];
+                                    $logout_display = $clock_out_time ? date("h:i A", strtotime($clock_out_time)) : "N/A";
+                                    $late_status = $row['late_status'];
+                                    $status_color = $row['status_color'];
+                                    $total_working_time = $row['total_working_time'];
+                                    $extra_or_remaining_time = $row['extra_or_remaining_time'];
+                                    $extra_or_remaining_label = $row['extra_or_remaining_label'];
+                                    ?>
 
 
-                <?php if ($is_admin) { ?>
+                                    <?php
 
-                <?php } ?>
-                </tr>
-                <?php
-                                                    } elseif (isset($holidays[$current_date])) {
-                                                        $holiday_days++;
-                                                    } elseif (isset($approved_leaves[$current_date])) {
-                                                        $leave_days++;
-                                                    } elseif ($day_of_week == 6) {
-                                                        $saturday_days++;
-                                                    } elseif ($day_of_week == 7) {
-                                                        $sunday_days++;
-                                                    } else {
-                                                        $absent_days++;
-                                                        // Check for existing absent record
-                                                        $check_query = "SELECT id, status FROM newuser_attendance 
+                                    $count++;
+                                    $employee_name;
+                                    $current_date;
+                                    date("h:i A", $login_timestamp);
+                                    $logout_display;
+                                    $total_working_time;
+                                    $extra_or_remaining_label;
+
+                                    if ($late_status == "Late") {
+                                        $late++;
+                                    }
+                                    if ($late_status == "Late (Extra Late)") {
+                                        $extra_late++;
+                                    }
+                                    if ($late_status == "Late (Extra Fine)") {
+                                        $extra_fine++;
+                                    }
+                                    if ($late_status == "Half Day") {
+                                        $total_half_day++;
+                                    }
+                                    if ($late_status == "Late (Half Day)") {
+                                        $total_half_day_late++;
+                                    }
+
+                                    if ($extra_or_remaining_label == "Extra Time" AND ($late_status == "Late" || $late_status == "Late (Extra Late)" || $late_status == "Late (Extra Fine)")) {
+                                        $late_cover++;
+                                    } else {
+                                        $late_status;
+                                    }
+                                    ?>
+
+
+                                    <?php if ($is_admin) { ?>
+
+                                    <?php } ?>
+                                    </tr>
+                                    <?php
+                                } elseif (isset($holidays[$current_date])) {
+                                    $holiday_days++;
+                                } elseif (isset($approved_leaves[$current_date])) {
+                                    $leave_days++;
+                                } elseif ($day_of_week == 6) {
+                                    $saturday_days++;
+                                } elseif ($day_of_week == 7) {
+                                    $sunday_days++;
+                                } else {
+                                    $absent_days++;
+                                    // Check for existing absent record
+                                    $check_query = "SELECT id, status FROM newuser_attendance 
                                                                       WHERE user_id = '$employee_id' 
                                                                       AND DATE(clock_in_time) = '$current_date'";
-                                                        $check_result = mysqli_query($conn, $check_query);
-                                                        $absent_id = '';
-                                                        if (mysqli_num_rows($check_result) > 0) {
-                                                            $absent_row = mysqli_fetch_assoc($check_result);
-                                                            $absent_id = $absent_row['id'];
-                                                            // Only display absent if not on leave
-                                                            if ($absent_row['status'] === 'absent' && !isset($approved_leaves[$current_date])) {
-                                                                
-                                                            }
-                                                        } elseif (!isset($approved_leaves[$current_date])) {
-                                                            // No record exists and not on leave, display Absent
-                                                           
-                                                        }
-                                                    }
-                                                }
+                                    $check_result = mysqli_query($conn, $check_query);
+                                    $absent_id = '';
+                                    if (mysqli_num_rows($check_result) > 0) {
+                                        $absent_row = mysqli_fetch_assoc($check_result);
+                                        $absent_id = $absent_row['id'];
+                                        // Only display absent if not on leave
+                                        if ($absent_row['status'] === 'absent' && !isset($approved_leaves[$current_date])) {
 
-                                                $totalwork_days = $present_days + $holiday_days + $leave_days + $absent_days;
+                                        }
+                                    } elseif (!isset($approved_leaves[$current_date])) {
+                                        // No record exists and not on leave, display Absent
+                
+                                    }
+                                }
+                            }
 
-                                                $total_late = $late + $extra_late + $extra_fine;
+                            $totalwork_days = $present_days + $holiday_days + $leave_days + $absent_days;
 
-                                                // Update counters in DOM
-                                                echo "<script>
+                            $total_late = $late + $extra_late + $extra_fine;
+
+                            // Update counters in DOM
+                            echo "<script>
                                                     document.getElementById('latestatus').textContent = '$late_cover';
                                                     document.getElementById('totalhalfday').textContent = '$total_half_day';
                                                     document.getElementById('totalworkingdays').textContent = '$totalwork_days';
@@ -1132,15 +1138,15 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                     document.getElementById('leaveDaysCount').textContent = '$leave_days';
                                                     document.getElementById('absentDaysCount').textContent = '$absent_days';
                                                 </script>";
-                                            }
-                                        } else {
-                                            echo '<tr><td colspan="9" class="text-center">You are not authorized to view this employee\'s attendance or employee is restricted.</td></tr>';
-                                        }
-                                    } else {
-                                        $current_date = $today->format('Y-m-d');
-                                        // Modify attendance query based on user role
-                                        if ($is_admin) {
-                                           $attendance_query = "SELECT na.id, na.user_id, na.clock_in_time, na.clock_in_ip, 
+                        }
+                    } else {
+                        echo '<tr><td colspan="9" class="text-center">You are not authorized to view this employee\'s attendance or employee is restricted.</td></tr>';
+                    }
+                } else {
+                    $current_date = $today->format('Y-m-d');
+                    // Modify attendance query based on user role
+                    if ($is_admin) {
+                        $attendance_query = "SELECT na.id, na.user_id, na.clock_in_time, na.clock_in_ip, 
                                                  na.clock_out_time, na.clock_out_ip, na.status, na.created_at, na.updated_at,
                                                  na.late_status, na.status_color, na.total_working_time, 
                                                  na.extra_or_remaining_time, na.extra_or_remaining_label,
@@ -1153,9 +1159,9 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                  AND he.id != 14
                                                  ORDER BY na.clock_in_time ASC";
 
-                                        } else {
-                                            // Managers see only their assigned employees
-                                            $attendance_query = "SELECT na.id, na.user_id, na.clock_in_time, na.clock_in_ip, 
+                    } else {
+                        // Managers see only their assigned employees
+                        $attendance_query = "SELECT na.id, na.user_id, na.clock_in_time, na.clock_in_ip, 
                                                 na.clock_out_time, na.clock_out_ip, na.status, na.created_at, na.updated_at,
                                                 na.late_status, na.status_color, na.total_working_time, 
                                                 na.extra_or_remaining_time, na.extra_or_remaining_label,
@@ -1169,26 +1175,26 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                 AND he.id != 14
                                                 AND hrm.reporting_manager_id = '$emp_id'
                                                 ORDER BY na.id DESC";
-                                        }
-
-
-
-
-
-                                     
-                                    }
-  
-
-?>
+                    }
 
 
 
 
 
 
+                }
 
 
-<!--
+                ?>
+
+
+
+
+
+
+
+
+                <!--
     <input type="text" id="totalworkingdays" value="<?= $totalwork_days; ?>">
     <input type="text" id="presentDaysCount" value="<?= $present_days; ?>">
     <input type="text" id="saturdayDaysCount" value="<?= $saturday_days; ?>">
@@ -1202,12 +1208,12 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
     <input type="text" id="totalhalfday" value="<?= $total_half_day_late; ?>">
 -->
 
-<?php
-    $actual_lates = $total_late - $late_cover;
-    $pdsalary = round($salary / $totalwork_days, 0);
-    $hdsalary = round($pdsalary / 2, 0);
-    $sdsalary = round($hdsalary / 2, 0);
-?>
+                <?php
+                $actual_lates = $total_late - $late_cover;
+                $pdsalary = round($salary / $totalwork_days, 0);
+                $hdsalary = round($pdsalary / 2, 0);
+                $sdsalary = round($hdsalary / 2, 0);
+                ?>
 
 
 
@@ -1226,11 +1232,11 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                         </div>
                         <div class="row mb-3">
                             <h6
-                                title="<?= $present_days+$holiday_days; ?> Working Days = <?= $present_days ?> Present Days + <?= $holiday_days ?> Holidays">
+                                title="<?= $present_days + $holiday_days; ?> Working Days = <?= $present_days ?> Present Days + <?= $holiday_days ?> Holidays">
                                 Present Days : <?= $present_days; ?>*</h6>
                         </div>
                         <div class="row">
-<!-- <h4 class="text-muted" style="font-size:13px">
+                            <!-- <h4 class="text-muted" style="font-size:13px">
     Total Working Days: <span id="totalworkingdays"><?= $totalwork_days ?></span> <br>
     Present Days: <span id="presentDaysCount"><?= $present_days ?></span> <br>
     Saturdays: <span id="saturdayDaysCount"><?= $saturday_days ?></span> <br>
@@ -1250,18 +1256,18 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                     <div class="col-md-2">
                         <div class="row mb-3">
                             <?php
-                $month = isset($_GET['month']) ? (int)$_GET['month'] : date('n');
-                $year  = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');
-                // Month ka naam banao
-                $monthName = date("F", mktime(0, 0, 0, $month, 10));
-                // Display kar do
-                echo "<h4>$monthName $year</h4>";
-            ?>
+                            $month = isset($_GET['month']) ? (int) $_GET['month'] : date('n');
+                            $year = isset($_GET['year']) ? (int) $_GET['year'] : date('Y');
+                            // Month ka naam banao
+                            $monthName = date("F", mktime(0, 0, 0, $month, 10));
+                            // Display kar do
+                            echo "<h4>$monthName $year</h4>";
+                            ?>
                         </div>
                         <div class="row mb-2">
                             <h6
-                                title="<?= $totalwork_days ?> Working Days = <?= $totalwork_days-$holiday_days ?> Working Days + <?= $holiday_days ?> Holidays">
-                                Working Days : <?= $totalwork_days-$holiday_days ?>*</h6>
+                                title="<?= $totalwork_days ?> Working Days = <?= $totalwork_days - $holiday_days ?> Working Days + <?= $holiday_days ?> Holidays">
+                                Working Days : <?= $totalwork_days - $holiday_days ?>*</h6>
                         </div>
                     </div>
                 </div>
@@ -1269,23 +1275,23 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
 
                 <div class="container mt-4 mb-4">
                     <style>
-                    .notes th,
-                    .notes td {
-                        border: 0px solid #dee2e6;
-                        padding: 0px;
-                        vertical-align: middle;
-                        border-left-width: 6px;
-                        padding-left: 10px;
-                        padding-right: 10px;
-                    }
+                        .notes th,
+                        .notes td {
+                            border: 0px solid #dee2e6;
+                            padding: 0px;
+                            vertical-align: middle;
+                            border-left-width: 6px;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                        }
                     </style>
                     <table class="notes">
                         <tr>
                             <td class="">*Note</td>
                             <?php
-                                if($monthly_shorts){
-                                    echo "<td class=''>Monthly Shorts : $monthly_shorts</td>";
-                                }
+                            if ($monthly_shorts) {
+                                echo "<td class=''>Monthly Shorts : $monthly_shorts</td>";
+                            }
                             ?>
                             <td class="">Monthly Half : <?= $monthly_half ?></td>
                             <td class="">Monthly Leaves : <?= $monthly_leaves ?></td>
@@ -1304,231 +1310,261 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
 
 
 
-<form id="salaryForm">
+                            <form id="salaryForm">
 
-    <!-- Row One Start -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-3">
-                <label for="salary" class="form-label">Salary</label>
-                <input type="number" class="form-control" id="salary" name="salary" value="<?= $salary ?>" min="0" readonly>
-            </div>
-            <div class="col-md-3" title="<?= $totalwork_days ?> Working Days = <?= $totalwork_days-$holiday_days ?> Working Days + <?= $holiday_days ?> Holidays">
-                <label for="totalDays" class="form-label">*Total Days</label>
-                <input type="number" class="form-control" id="totalDays" name="totalDays" value="<?= $totalwork_days ?>" min="0" readonly>
-            </div>
-            <div class="col-md-3">
-                <label for="perDaySalary" class="form-label">Per Day Salary</label>
-                <input type="number" class="form-control" id="perDaySalary" name="perDaySalary" value="<?= $pdsalary ?>" min="0" readonly>
-            </div>
-            <div class="col-md-2">
-                <label for="half_day_fine" class="form-label">Half Day</label>
-                <input type="number" class="form-control" id="half_day_fine" name="half_day_fine" value="<?= $hdsalary ?>" min="0" readonly>
-            </div>
-            <div class="col-md-1">
-                <label for="short_day_fine" class="form-label">Short Day</label>
-                <input type="number" class="form-control" id="short_day_fine" name="short_day_fine" value="<?= $sdsalary ?>" min="0" readonly>
-            </div>
-        </div>
-    <!-- Row One End -->
+                                <!-- Row One Start -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-3">
+                                        <label for="salary" class="form-label">Salary</label>
+                                        <input type="number" class="form-control" id="salary" name="salary"
+                                            value="<?= $salary ?>" min="0" readonly>
+                                    </div>
+                                    <div class="col-md-3"
+                                        title="<?= $totalwork_days ?> Working Days = <?= $totalwork_days - $holiday_days ?> Working Days + <?= $holiday_days ?> Holidays">
+                                        <label for="totalDays" class="form-label">*Total Days</label>
+                                        <input type="number" class="form-control" id="totalDays" name="totalDays"
+                                            value="<?= $totalwork_days ?>" min="0" readonly>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="perDaySalary" class="form-label">Per Day Salary</label>
+                                        <input type="number" class="form-control" id="perDaySalary" name="perDaySalary"
+                                            value="<?= $pdsalary ?>" min="0" readonly>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="half_day_fine" class="form-label">Half Day</label>
+                                        <input type="number" class="form-control" id="half_day_fine"
+                                            name="half_day_fine" value="<?= $hdsalary ?>" min="0" readonly>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label for="short_day_fine" class="form-label">Short Day</label>
+                                        <input type="number" class="form-control" id="short_day_fine"
+                                            name="short_day_fine" value="<?= $sdsalary ?>" min="0" readonly>
+                                    </div>
+                                </div>
+                                <!-- Row One End -->
 
-    <!-- Row Two Start -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-3" title="Present Days">
-                <label for="presentDays" class="form-label">Present Days</label>
-                <input type="number" class="form-control" id="presentDays" name="presentDays" value="<?= $present_days ?>" min="0" readonly>
-            </div>
-            <?php
-                // Leaves & Absents
-                $totalLeaves = ($leave_days + $absent_days) - $monthly_leaves;
-                $leaveDeduct = max(0, $totalLeaves * $pdsalary);
-                $displayLeaves = ($totalLeaves == -1 ? "0" : $totalLeaves);
+                                <!-- Row Two Start -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-3" title="Present Days">
+                                        <label for="presentDays" class="form-label">Present Days</label>
+                                        <input type="number" class="form-control" id="presentDays" name="presentDays"
+                                            value="<?= $present_days ?>" min="0" readonly>
+                                    </div>
+                                    <?php
+                                    // Leaves & Absents
+                                    $totalLeaves = ($leave_days + $absent_days) - $monthly_leaves;
+                                    $leaveDeduct = max(0, $totalLeaves * $pdsalary);
+                                    $displayLeaves = ($totalLeaves == -1 ? "0" : $totalLeaves);
 
-                // Half Day
-                $total_half_day_new = max(0, $total_half_day-$monthly_half);
-                $halfDayDeduct = $total_half_day_new * $hdsalary;
-                // $leavehalfc
+                                    // Half Day
+                                    $total_half_day_new = max(0, $total_half_day - $monthly_half);
+                                    $halfDayDeduct = $total_half_day_new * $hdsalary;
+                                    // $leavehalfc
+                                    
+                                    // Short Day
+                                    $total_short_day_new = max(0, $leaveshortc - $monthly_shorts);
+                                    $shortDayDeduct = $total_short_day_new * $sdsalary;
 
-                // Short Day
-                $total_short_day_new = max(0, $leaveshortc-$monthly_shorts);
-                $shortDayDeduct = $total_short_day_new * $sdsalary;
+                                    // Normal Lates
+                                    $lateCount = max(0, $actual_lates - $relaxation_late);
+                                    $lateDeduct = $lateCount * $normal_fine;
 
-                // Normal Lates
-                $lateCount   = max(0, $actual_lates - $relaxation_late);
-                $lateDeduct  = $lateCount * $normal_fine;
+                                    // Late Cover (default 0, JS se handle hoga)
+                                    $lateCoverDeduct = $late_cover * $normal_fine;
 
-                // Late Cover (default 0, JS se handle hoga)
-                $lateCoverDeduct = $late_cover * $normal_fine;
+                                    // Initial Total (without late-cover checkbox)
+                                    $totalDeduction = $leaveDeduct + $halfDayDeduct + $lateDeduct;
+                                    ?>
 
-                // Initial Total (without late-cover checkbox)
-                $totalDeduction = $leaveDeduct + $halfDayDeduct + $lateDeduct;
-            ?>
-
-            <!-- Leaves Deduction -->
-            <div class="col-md-3" title="Leaves : <?= $leave_days ?> | Absents : <?= $absent_days ?> | Monthly Leaves Exempted : <?= $monthly_leaves ?>">
-                <label class="form-label">Leaves + Absent - Monthly Leave</label>
-                <input type="text" class="form-control" title="<?= $leaveDeduct ?> Deduction" value="<?= $leave_days ?> L + <?= $absent_days ?> A - <?= $monthly_leaves ?> M = <?= $displayLeaves ?> Total Leaves" readonly>
-                <input type="hidden" class="deduction" value="<?= $leaveDeduct ?>">
-            </div>
-
-
-             <!-- Half Day Deduction -->
-            <div class="col-md-3" title="<?= $total_half_day ?> Half Day | <?= $monthly_half ?> Monthly Half Exempted">
-                <label class="form-label">Half Day 1</label>
-                <input type="text" class="form-control"  title="Fine Deduction : <?= $halfDayDeduct ?>" value="<?= $total_half_day ?> H - <?= $monthly_half ?> M = <?= $total_half_day_new ?> Total Half" min="0" readonly>
-                <input type="hidden" class="deduction" id="half_day_all" name="half_day_all" value="<?= $halfDayDeduct ?>">
-            </div>
-
-            <!-- Short Day Deduction -->
-            <div class="col-md-3" title="Fine Deduction : <?= $lateDeduct ?>">
-                <label class="form-label">Short Leave</label>
-                <input type="text" class="form-control"  title="Fine Deduction : <?= $shortDayDeduct ?>" value="<?= $total_short_day ?> S - <?= $monthly_shorts ?> M = <?= $total_short_day_new ?> Total Short" min="0" readonly>
-                <input type="hidden" class="deduction" id="short_day_all" name="short_day_all" value="<?= $shortDayDeduct ?>">
-            </div>
+                                    <!-- Leaves Deduction -->
+                                    <div class="col-md-3"
+                                        title="Leaves : <?= $leave_days ?> | Absents : <?= $absent_days ?> | Monthly Leaves Exempted : <?= $monthly_leaves ?>">
+                                        <label class="form-label">Leaves + Absent - Monthly Leave</label>
+                                        <input type="text" class="form-control" title="<?= $leaveDeduct ?> Deduction"
+                                            value="<?= $leave_days ?> L + <?= $absent_days ?> A - <?= $monthly_leaves ?> M = <?= $displayLeaves ?> Total Leaves"
+                                            readonly>
+                                        <input type="hidden" class="deduction" value="<?= $leaveDeduct ?>">
+                                    </div>
 
 
-            
-        </div>
-    <!-- Row Two End -->
+                                    <!-- Half Day Deduction -->
+                                    <div class="col-md-3"
+                                        title="<?= $total_half_day ?> Half Day | <?= $monthly_half ?> Monthly Half Exempted">
+                                        <label class="form-label">Half Day 1</label>
+                                        <input type="text" class="form-control"
+                                            title="Fine Deduction : <?= $halfDayDeduct ?>"
+                                            value="<?= $total_half_day ?> H - <?= $monthly_half ?> M = <?= $total_half_day_new ?> Total Half"
+                                            min="0" readonly>
+                                        <input type="hidden" class="deduction" id="half_day_all" name="half_day_all"
+                                            value="<?= $halfDayDeduct ?>">
+                                    </div>
 
-    <!-- Row Third Start -->
-        <!-- Total Deduction -->
-        <div class="row g-3">
-            <!-- Total Deduction -->  
-            <div class="col-md-4">
-                <label class="form-label">Total Deduction Amount</label>
-                <input type="number" class="form-control" id="total_deduction"
-                    value="<?= $totalDeduction ?>" readonly>
-            </div>
-            <div class="col-md-4"></div>
-            <div class="col-md-4">
-                <label for="final_salary" class="form-label">Final Salary</label>
-                <input type="number" class="form-control" id="final_salary" name="final_salary"
-                    value="<?= $final_salary ?>" readonly>
-                <input type="hidden" id="total_salary" value="<?= $salary ?>">
-            </div>
-        </div>
-    <!-- Row Third End -->
+                                    <!-- Short Day Deduction -->
+                                    <div class="col-md-3" title="Fine Deduction : <?= $lateDeduct ?>">
+                                        <label class="form-label">Short Leave</label>
+                                        <input type="text" class="form-control"
+                                            title="Fine Deduction : <?= $shortDayDeduct ?>"
+                                            value="<?= $total_short_day ?> S - <?= $monthly_shorts ?> M = <?= $total_short_day_new ?> Total Short"
+                                            min="0" readonly>
+                                        <input type="hidden" class="deduction" id="short_day_all" name="short_day_all"
+                                            value="<?= $shortDayDeduct ?>">
+                                    </div>
 
 
 
+                                </div>
+                                <!-- Row Two End -->
 
-<hr>
-
-
-
-        <div class="row g-3 mb-5 mt-3">
-            <!-- Half Day Deduction -->
-            <div class="col-md-2" title="<?= $total_half_day ?> Half Day | <?= $monthly_half ?> Monthly Half Exempted">
-                <label class="form-label">Half Day</label>
-                <input type="text" class="form-control"  title="Fine Deduction : <?= $halfDayDeduct ?>" value="<?= $total_half_day ?> H - <?= $monthly_half ?> M = <?= $total_half_day_new ?> Total Half" min="0" readonly>
-                <input type="hidden" class="deduction" id="half_day_all" name="half_day_all" value="<?= $halfDayDeduct ?>">
-            </div>
-
-            <!-- Lates Deduction -->
-            <div class="col-md-3" title="Fine Deduction : <?= $lateDeduct ?>">
-                <label class="form-label">Actual Lates - <?= $relaxation_late; ?> Relaxation</label>
-                <input type="text" class="form-control" value="<?= $actual_lates ?> - <?= $relaxation_late ?> = <?= $lateCount ?>" readonly>
-                <input type="hidden" class="deduction" value="<?= $lateDeduct ?>">
-            </div>
-
-            <!-- Late Cover Deduction -->
-            <div class="col-md-2" title="Fine Deduction : <?= $lateCoverDeduct ?>">
-                <input type="checkbox" class="form-check-input" id="late_cover_checkbox">
-                <label class="form-label">Late-&-Cover</label>
-                <input type="number" class="form-control" id="normal_late_cover" value="<?= htmlspecialchars($late_cover) ?>" min="0" readonly>
-                <input type="hidden" class="deduction" id="late_cover_value" value="<?= $lateCoverDeduct ?>">
-            </div>
-        </div>
+                                <!-- Row Third Start -->
+                                <!-- Total Deduction -->
+                                <div class="row g-3">
+                                    <!-- Total Deduction -->
+                                    <div class="col-md-4">
+                                        <label class="form-label">Total Deduction Amount</label>
+                                        <input type="number" class="form-control" id="total_deduction"
+                                            value="<?= $totalDeduction ?>" readonly>
+                                    </div>
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-4">
+                                        <label for="final_salary" class="form-label">Final Salary</label>
+                                        <input type="number" class="form-control" id="final_salary" name="final_salary"
+                                            value="<?= $final_salary ?>" readonly>
+                                        <input type="hidden" id="total_salary" value="<?= $salary ?>">
+                                    </div>
+                                </div>
+                                <!-- Row Third End -->
 
 
 
-    <!-- <div class="mt-4">
+
+                                <hr>
+
+
+
+                                <div class="row g-3 mb-5 mt-3">
+                                    <!-- Half Day Deduction -->
+                                    <div class="col-md-2"
+                                        title="<?= $total_half_day ?> Half Day | <?= $monthly_half ?> Monthly Half Exempted">
+                                        <label class="form-label">Half Day</label>
+                                        <input type="text" class="form-control"
+                                            title="Fine Deduction : <?= $halfDayDeduct ?>"
+                                            value="<?= $total_half_day ?> H - <?= $monthly_half ?> M = <?= $total_half_day_new ?> Total Half"
+                                            min="0" readonly>
+                                        <input type="hidden" class="deduction" id="half_day_all" name="half_day_all"
+                                            value="<?= $halfDayDeduct ?>">
+                                    </div>
+
+                                    <!-- Lates Deduction -->
+                                    <div class="col-md-3" title="Fine Deduction : <?= $lateDeduct ?>">
+                                        <label class="form-label">Actual Lates - <?= $relaxation_late; ?>
+                                            Relaxation</label>
+                                        <input type="text" class="form-control"
+                                            value="<?= $actual_lates ?> - <?= $relaxation_late ?> = <?= $lateCount ?>"
+                                            readonly>
+                                        <input type="hidden" class="deduction" value="<?= $lateDeduct ?>">
+                                    </div>
+
+                            
+                                    <!-- Late Cover Deduction -->
+                                    <div class="col-md-2" title="Fine Deduction : <?= $lateCoverDeduct ?>">
+                                        <input type="checkbox" class="form-check-input" id="late_cover_checkbox">
+                                        <label class="form-label">Late-&-Cover</label>
+                                        <input type="number" class="form-control" id="normal_late_cover"
+                                            value="<?= htmlspecialchars($late_cover) ?>" min="0" readonly>
+                                        <input type="hidden" class="deduction" id="late_cover_value"
+                                            value="<?= $lateCoverDeduct ?>">
+                                    </div>
+                                </div>
+
+
+
+                                <!-- <div class="mt-4">
         <button type="button" class="btn btn-success" id="calculateButton">Submit</button>
     </div> -->
-</form>
-       
+                            </form>
 
 
-  <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const totalField = document.getElementById("total_deduction");
-                const lateCoverCheckbox = document.getElementById("late_cover_checkbox");
-                const lateCoverValue = document.getElementById("late_cover_value");
 
-                function calculateTotal() {
-                    let total = 0;
-                    document.querySelectorAll(".deduction").forEach(input => {
-                        // agar ye late-cover hai to tabhi add kare jab checkbox checked hai
-                        if (input.id === "late_cover_value") {
-                            if (lateCoverCheckbox.checked) {
-                                total += parseFloat(input.value) || 0;
-                            }
-                        } else {
-                            total += parseFloat(input.value) || 0;
-                        }
-                    });
-                    totalField.value = total;
-                }
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    const totalField = document.getElementById("total_deduction");
+                                    const lateCoverCheckbox = document.getElementById("late_cover_checkbox");
+                                    const lateCoverValue = document.getElementById("late_cover_value");
 
-                // Event Listener
-                lateCoverCheckbox.addEventListener("change", calculateTotal);
+                                    function calculateTotal() {
+                                        let total = 0;
+                                        document.querySelectorAll(".deduction").forEach(input => {
+                                            // agar ye late-cover hai to tabhi add kare jab checkbox checked hai
+                                            if (input.id === "late_cover_value") {
+                                                if (lateCoverCheckbox.checked) {
+                                                    total += parseFloat(input.value) || 0;
+                                                }
+                                            } else {
+                                                total += parseFloat(input.value) || 0;
+                                            }
+                                        });
+                                        totalField.value = total;
+                                    }
 
-                // Page load pe bhi ek baar run kar do
-                calculateTotal();
-            });
-        </script>
-        <?php
-            // Final Salary
-            $final_salary = max(0, $salary - $totalDeduction); // negative avoid
-        ?>
-        <!--  Existing deductions code here ... -->
+                                    // Event Listener
+                                    lateCoverCheckbox.addEventListener("change", calculateTotal);
 
-        <!-- Final Salary Display -->
+                                    // Page load pe bhi ek baar run kar do
+                                    calculateTotal();
+                                });
+                            </script>
+                            <?php
+                            // Final Salary
+                            $final_salary = max(0, $salary - $totalDeduction); // negative avoid
+                            ?>
+                            <!--  Existing deductions code here ... -->
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const totalField = document.getElementById("total_deduction");
-        const finalField = document.getElementById("final_salary");
-        const totalFieldslip = document.getElementById("total_deduction_slip");
-        const finalFieldslip = document.getElementById("final_salary_slip");
-        const baseSalary = parseFloat(document.getElementById("total_salary")
-            .value) || 0;
-        const lateCoverCheckbox = document.getElementById("late_cover_checkbox");
-        const lateCoverValue = document.getElementById("late_cover_value");
+                            <!-- Final Salary Display -->
 
-        function calculateTotal() {
-            let total = 0;
-            document.querySelectorAll(".deduction").forEach(input => {
-                if (input.id === "late_cover_value") {
-                    if (lateCoverCheckbox.checked) {
-                        total += parseFloat(input.value) || 0;
-                    }
-                } else {
-                    total += parseFloat(input.value) || 0;
-                }
-            });
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    const totalField = document.getElementById("total_deduction");
+                                    const finalField = document.getElementById("final_salary");
+                                    const totalFieldslip = document.getElementById("total_deduction_slip");
+                                    const finalFieldslip = document.getElementById("final_salary_slip");
+                                    const baseSalary = parseFloat(document.getElementById("total_salary")
+                                        .value) || 0;
+                                    const lateCoverCheckbox = document.getElementById("late_cover_checkbox");
+                                    const lateCoverValue = document.getElementById("late_cover_value");
 
-            let finalSalary = baseSalary - total;
-            if (finalSalary < 0) finalSalary = 0;
+                                    function calculateTotal() {
+                                        let total = 0;
+                                        document.querySelectorAll(".deduction").forEach(input => {
+                                            if (input.id === "late_cover_value") {
+                                                if (lateCoverCheckbox.checked) {
+                                                    total += parseFloat(input.value) || 0;
+                                                }
+                                            } else {
+                                                total += parseFloat(input.value) || 0;
+                                            }
+                                        });
 
-            // input fields update (2 decimal places)
-            if (totalField) totalField.value = total.toFixed(0);
-            if (finalField) finalField.value = finalSalary.toFixed(0);
+                                        let finalSalary = baseSalary - total;
+                                        if (finalSalary < 0) finalSalary = 0;
 
-            // span update (2 decimal places)
-            totalFieldslip.textContent = total.toFixed(0);
-            finalFieldslip.textContent = finalSalary.toFixed(0);
-        }
+                                        // input fields update (2 decimal places)
+                                        if (totalField) totalField.value = total.toFixed(0);
+                                        if (finalField) finalField.value = finalSalary.toFixed(0);
 
-        // Checkbox event
-        lateCoverCheckbox.addEventListener("change", calculateTotal);
+                                        // span update (2 decimal places)
+                                        totalFieldslip.textContent = total.toFixed(0);
+                                        finalFieldslip.textContent = finalSalary.toFixed(0);
+                                    }
 
-        // Initial calculation
-        calculateTotal();
-    });
-    </script>
+                                    // Checkbox event
+                                    lateCoverCheckbox.addEventListener("change", calculateTotal);
 
-<!-- 
+                                    // Initial calculation
+                                    calculateTotal();
+                                });
+                            </script>
+
+                            <!-- 
                             <div class="mt-4">
                                 <h4>Calculated Salary After Deductions: <span id="resultSalary">0</span></h4>
                             </div> -->
@@ -1536,34 +1572,9 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
 
 
 
-<br><br><br>
-<hr>
-<br><br><br>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                        <br><br><br>
+                        <hr>
+                        <br><br><br>
 
 
 
@@ -1645,24 +1656,24 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                     <p>
                                         <?php
 
-$query = "SELECT doj FROM hrm_employee WHERE id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $emp_id);
-$stmt->execute();
-$result = $stmt->get_result();
+                                        $query = "SELECT doj FROM hrm_employee WHERE id = ?";
+                                        $stmt = $conn->prepare($query);
+                                        $stmt->bind_param("i", $emp_id);
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
 
-if ($row = $result->fetch_assoc()) {
-    $doj = date("F j, Y", strtotime($row['doj'])); 
-?>
-                                        Date of joining: <?php echo htmlspecialchars($doj); ?>
+                                        if ($row = $result->fetch_assoc()) {
+                                            $doj = date("F j, Y", strtotime($row['doj']));
+                                            ?>
+                                            Date of joining: <?php echo htmlspecialchars($doj); ?>
 
-                                        <?php
-} else {
-?>
-                                        Date of joining:00-00-0000
-                                        <?php
-}
-?>
+                                            <?php
+                                        } else {
+                                            ?>
+                                            Date of joining:00-00-0000
+                                            <?php
+                                        }
+                                        ?>
 
 
 
@@ -1767,7 +1778,7 @@ if ($row = $result->fetch_assoc()) {
 
                             </div>
                             <!--<div class="salary_in_word">-->
-                            <!--    Rupees-<span id="salary-in-word"><?= isset($pay_in_word) ? $pay_in_word : ''  ?> </span>-->
+                            <!--    Rupees-<span id="salary-in-word"><?= isset($pay_in_word) ? $pay_in_word : '' ?> </span>-->
                             <!--</div>-->
 
                             <hr>
@@ -1793,221 +1804,221 @@ if ($row = $result->fetch_assoc()) {
 
 
     <script>
-    document.getElementById('calculateButton').addEventListener('click', function() {
-        // Retrieve form values
-        const salary = parseFloat(document.getElementById('salary').value) || 0;
-        const totalDays = parseFloat(document.getElementById('totalDays').value) || 0;
-        let presentDays = parseFloat(document.getElementById('presentDays').value) || 0;
-        const halfDayAll = parseFloat(document.getElementById('half_day_all').value) || 0;
-        const normalLate = parseFloat(document.getElementById('normal_late').value) || 0;
-        const lateExtra = parseFloat(document.getElementById('late_extra').value) || 0;
-        const normalFine = parseFloat(document.getElementById('normal_fine').value) || 0;
-        const extraFine = parseFloat(document.getElementById('extra_fine').value) || 0;
-        const halfDayFine = parseFloat(document.getElementById('half_day_fine').value) || 0;
-        const perDaySalary = parseFloat(document.getElementById('perDaySalary').value) || 0;
+        document.getElementById('calculateButton').addEventListener('click', function () {
+            // Retrieve form values
+            const salary = parseFloat(document.getElementById('salary').value) || 0;
+            const totalDays = parseFloat(document.getElementById('totalDays').value) || 0;
+            let presentDays = parseFloat(document.getElementById('presentDays').value) || 0;
+            const halfDayAll = parseFloat(document.getElementById('half_day_all').value) || 0;
+            const normalLate = parseFloat(document.getElementById('normal_late').value) || 0;
+            const lateExtra = parseFloat(document.getElementById('late_extra').value) || 0;
+            const normalFine = parseFloat(document.getElementById('normal_fine').value) || 0;
+            const extraFine = parseFloat(document.getElementById('extra_fine').value) || 0;
+            const halfDayFine = parseFloat(document.getElementById('half_day_fine').value) || 0;
+            const perDaySalary = parseFloat(document.getElementById('perDaySalary').value) || 0;
 
-        // Calculation for present and absent days
-        presentDays = presentDays;
-        if (presentDays > totalDays) {
-            presentDays = totalDays;
-        }
-
-        const absentDays = totalDays - presentDays;
-        document.getElementById('lop').textContent = absentDays;
-
-        const salaryDeductions = (normalLate * normalFine) +
-            (lateExtra * extraFine) +
-            (halfDayAll * halfDayFine) +
-            (absentDays * perDaySalary);
-        const salaryAfterDeductions = salary - salaryDeductions;
-
-        // Display result salary
-        document.getElementById('resultSalary').textContent = salaryAfterDeductions.toFixed(2);
-        document.getElementById('net-salary').textContent = salaryAfterDeductions.toFixed(2);
-        const salaryInWords = (roundAndConvertToWords(salaryAfterDeductions));
-        document.getElementById('salary-in-word').textContent = salaryInWords;
-
-        const basic = salary * 0.40;
-
-        const hra = basic * 0.50;
-
-        const medical_allowance = 800;
-
-
-
-        const conveyance_allowance = 1200;
-
-        const special_allowance = salary - (basic + hra + medical_allowance + conveyance_allowance);
-        const total_allowance = basic + hra + medical_allowance + conveyance_allowance + special_allowance;
-        const total_deduction = salaryDeductions;
-        document.getElementById('total_allowance').textContent = round(total_allowance).toFixed(2);
-        document.getElementById('total-deduction').textContent = round(total_deduction).toFixed(2);
-
-        // Update the displayed values
-        document.getElementById('basic').textContent = basic.toFixed(2);
-        document.getElementById('hra').textContent = hra.toFixed(2);
-        document.getElementById('medical_allowance').textContent = medical_allowance.toFixed(2);
-        document.getElementById('conveyance_allowance').textContent = conveyance_allowance.toFixed(2);
-        document.getElementById('special_allowance').textContent = special_allowance.toFixed(2);
-    });
-
-    // Helper function to round values
-    function round(value) {
-        return Math.round(value * 100) / 100; // rounding to two decimal places
-    }
-
-    function numberToWords(num) {
-        const belowTwenty = [
-            'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
-            'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
-        ];
-        const tens = [
-            '', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'
-        ];
-        const aboveThousand = ['', 'Thousand', 'Million', 'Billion'];
-
-        if (num === 0) return 'Zero';
-
-        function helper(n) {
-            if (n < 20) return belowTwenty[n];
-            else if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? ' ' + belowTwenty[n % 10] : '');
-            else if (n < 1000) return belowTwenty[Math.floor(n / 100)] + ' Hundred' + (n % 100 ? ' ' + helper(n % 100) :
-                '');
-            return '';
-        }
-
-        let word = '';
-        let i = 0;
-
-        while (num > 0) {
-            if (num % 1000 !== 0) {
-                word = helper(num % 1000) + (aboveThousand[i] ? ' ' + aboveThousand[i] : '') + (word ? ' ' + word : '');
+            // Calculation for present and absent days
+            presentDays = presentDays;
+            if (presentDays > totalDays) {
+                presentDays = totalDays;
             }
-            num = Math.floor(num / 1000);
-            i++;
-        }
 
-        return word.trim();
-    }
+            const absentDays = totalDays - presentDays;
+            document.getElementById('lop').textContent = absentDays;
 
-    // Function to round off and convert to words
-    function roundAndConvertToWords(decimal) {
-        const roundedNumber = Math.round(decimal); // Round off the number
-        return numberToWords(roundedNumber); // Convert to words
-    }
+            const salaryDeductions = (normalLate * normalFine) +
+                (lateExtra * extraFine) +
+                (halfDayAll * halfDayFine) +
+                (absentDays * perDaySalary);
+            const salaryAfterDeductions = salary - salaryDeductions;
 
-    async function generatePDF() {
-        const salarySlip = document.getElementById('salarySlip');
+            // Display result salary
+            document.getElementById('resultSalary').textContent = salaryAfterDeductions.toFixed(2);
+            document.getElementById('net-salary').textContent = salaryAfterDeductions.toFixed(2);
+            const salaryInWords = (roundAndConvertToWords(salaryAfterDeductions));
+            document.getElementById('salary-in-word').textContent = salaryInWords;
 
-        if (!salarySlip) {
-            alert('Salary slip not found!');
-            return;
-        }
+            const basic = salary * 0.40;
 
-        // Convert the salary slip to a canvas
-        const canvas = await html2canvas(salarySlip, {
-            scale: 2
+            const hra = basic * 0.50;
+
+            const medical_allowance = 800;
+
+
+
+            const conveyance_allowance = 1200;
+
+            const special_allowance = salary - (basic + hra + medical_allowance + conveyance_allowance);
+            const total_allowance = basic + hra + medical_allowance + conveyance_allowance + special_allowance;
+            const total_deduction = salaryDeductions;
+            document.getElementById('total_allowance').textContent = round(total_allowance).toFixed(2);
+            document.getElementById('total-deduction').textContent = round(total_deduction).toFixed(2);
+
+            // Update the displayed values
+            document.getElementById('basic').textContent = basic.toFixed(2);
+            document.getElementById('hra').textContent = hra.toFixed(2);
+            document.getElementById('medical_allowance').textContent = medical_allowance.toFixed(2);
+            document.getElementById('conveyance_allowance').textContent = conveyance_allowance.toFixed(2);
+            document.getElementById('special_allowance').textContent = special_allowance.toFixed(2);
         });
-        const imgData = canvas.toDataURL('image/png');
 
-        // Generate PDF
-        const {
-            jsPDF
-        } = window.jspdf;
-        const pdf = new jsPDF();
-        const imgWidth = 190; // Adjust based on A4 size
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-
-        // Save the PDF
-        pdf.save('Salary_Slip.pdf'); // This will download the file
-    }
-
-    // Attach the click event to the button
-    document.getElementById('downloadSalarySlip').addEventListener('click', generatePDF);
-
-
-    async function generateAndSendPDF() {
-        const salarySlip = document.getElementById('salarySlip');
-        const submitButton = document.getElementById('submitButton'); // Button ID
-        const loadingIcon = document.getElementById('loadingIcon'); // Loading spinner ID
-
-        if (!salarySlip) {
-            alert('Salary slip not found!');
-            return;
+        // Helper function to round values
+        function round(value) {
+            return Math.round(value * 100) / 100; // rounding to two decimal places
         }
 
-        // Show the loading spinner and disable the button
-        if (loadingIcon) loadingIcon.style.display = 'inline-block';
-        if (submitButton) submitButton.disabled = true;
+        function numberToWords(num) {
+            const belowTwenty = [
+                'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+                'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+            ];
+            const tens = [
+                '', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'
+            ];
+            const aboveThousand = ['', 'Thousand', 'Million', 'Billion'];
 
-        try {
-            // Convert the salary slip to a canvas
-            const canvas = await html2canvas(salarySlip, {
-                scale: 2, // Higher scale for better quality
-            });
-            const imgData = canvas.toDataURL('image/jpeg', 0.7); // Compress image data (JPEG format)
+            if (num === 0) return 'Zero';
 
-            // Generate PDF with compression
-            const {
-                jsPDF
-            } = window.jspdf;
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'mm',
-                format: 'a4',
-                compress: true, // Enable PDF compression
-            });
+            function helper(n) {
+                if (n < 20) return belowTwenty[n];
+                else if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? ' ' + belowTwenty[n % 10] : '');
+                else if (n < 1000) return belowTwenty[Math.floor(n / 100)] + ' Hundred' + (n % 100 ? ' ' + helper(n % 100) :
+                    '');
+                return '';
+            }
 
-            const imgWidth = 190; // Adjust for A4 width
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            pdf.addImage(imgData, 'JPEG', 10, 10, imgWidth, imgHeight, undefined,
-                'FAST'); // Use 'FAST' compression mode
+            let word = '';
+            let i = 0;
 
-            // Convert PDF to a Blob
-            const pdfBlob = pdf.output('blob');
+            while (num > 0) {
+                if (num % 1000 !== 0) {
+                    word = helper(num % 1000) + (aboveThousand[i] ? ' ' + aboveThousand[i] : '') + (word ? ' ' + word : '');
+                }
+                num = Math.floor(num / 1000);
+                i++;
+            }
 
-            // Get email input value
-            const email = document.getElementById('email').value;
-            if (!email) {
-                alert('Please enter a valid email address.');
+            return word.trim();
+        }
+
+        // Function to round off and convert to words
+        function roundAndConvertToWords(decimal) {
+            const roundedNumber = Math.round(decimal); // Round off the number
+            return numberToWords(roundedNumber); // Convert to words
+        }
+
+        async function generatePDF() {
+            const salarySlip = document.getElementById('salarySlip');
+
+            if (!salarySlip) {
+                alert('Salary slip not found!');
                 return;
             }
 
-            // Create FormData and append the PDF file and email
-            const formData = new FormData();
-            formData.append('pdf', pdfBlob, 'salary_slip.pdf');
-            formData.append('email', email);
-
-            // Send the PDF to the server
-            const response = await fetch('email/send-salary-slip.php', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                },
+            // Convert the salary slip to a canvas
+            const canvas = await html2canvas(salarySlip, {
+                scale: 2
             });
+            const imgData = canvas.toDataURL('image/png');
 
-            const data = await response.json();
+            // Generate PDF
+            const {
+                jsPDF
+            } = window.jspdf;
+            const pdf = new jsPDF();
+            const imgWidth = 190; // Adjust based on A4 size
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
 
-            if (data.success) {
-                alert('Salary slip sent successfully!');
-            } else {
-                alert(`Failed to send salary slip: ${data.error || 'Unknown error'}`);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while sending the salary slip.');
-        } finally {
-            // Hide the loading spinner and enable the button
-            if (loadingIcon) loadingIcon.style.display = 'none';
-            if (submitButton) submitButton.disabled = false;
+            // Save the PDF
+            pdf.save('Salary_Slip.pdf'); // This will download the file
         }
-    }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('submitButton').onclick = generateAndSendPDF;
-    });
+        // Attach the click event to the button
+        document.getElementById('downloadSalarySlip').addEventListener('click', generatePDF);
+
+
+        async function generateAndSendPDF() {
+            const salarySlip = document.getElementById('salarySlip');
+            const submitButton = document.getElementById('submitButton'); // Button ID
+            const loadingIcon = document.getElementById('loadingIcon'); // Loading spinner ID
+
+            if (!salarySlip) {
+                alert('Salary slip not found!');
+                return;
+            }
+
+            // Show the loading spinner and disable the button
+            if (loadingIcon) loadingIcon.style.display = 'inline-block';
+            if (submitButton) submitButton.disabled = true;
+
+            try {
+                // Convert the salary slip to a canvas
+                const canvas = await html2canvas(salarySlip, {
+                    scale: 2, // Higher scale for better quality
+                });
+                const imgData = canvas.toDataURL('image/jpeg', 0.7); // Compress image data (JPEG format)
+
+                // Generate PDF with compression
+                const {
+                    jsPDF
+                } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4',
+                    compress: true, // Enable PDF compression
+                });
+
+                const imgWidth = 190; // Adjust for A4 width
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                pdf.addImage(imgData, 'JPEG', 10, 10, imgWidth, imgHeight, undefined,
+                    'FAST'); // Use 'FAST' compression mode
+
+                // Convert PDF to a Blob
+                const pdfBlob = pdf.output('blob');
+
+                // Get email input value
+                const email = document.getElementById('email').value;
+                if (!email) {
+                    alert('Please enter a valid email address.');
+                    return;
+                }
+
+                // Create FormData and append the PDF file and email
+                const formData = new FormData();
+                formData.append('pdf', pdfBlob, 'salary_slip.pdf');
+                formData.append('email', email);
+
+                // Send the PDF to the server
+                const response = await fetch('email/send-salary-slip.php', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Salary slip sent successfully!');
+                } else {
+                    alert(`Failed to send salary slip: ${data.error || 'Unknown error'}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while sending the salary slip.');
+            } finally {
+                // Hide the loading spinner and enable the button
+                if (loadingIcon) loadingIcon.style.display = 'none';
+                if (submitButton) submitButton.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('submitButton').onclick = generateAndSendPDF;
+        });
     </script>
 
 

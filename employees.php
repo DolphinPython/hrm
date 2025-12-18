@@ -33,8 +33,8 @@ $inactive_employee = count_where("hrm_employee", "status", "0");
 // Handle employee deletion
 // Handle employee deletion
 if (isset($_GET['id'])) {
-   $delete_emp_id = intval($_GET['id']);
-  
+    $delete_emp_id = intval($_GET['id']);
+
     error_log("Attempting to delete employee ID: $delete_emp_id at " . date('Y-m-d H:i:s'), 3, 'debug.log');
 
     $conn = connect();
@@ -103,44 +103,44 @@ if (isset($_GET['id'])) {
             "hrm_reporting_manager" => "employee_id",
             "hrm_reporting_manager" => "reporting_manager_id"
         ];
-/*
-        foreach ($dependent_tables as $table => $column) {
-            $delete_query = "DELETE FROM $table WHERE $column = ?";
-            $stmt = $conn->prepare($delete_query);
-            if ($stmt) {
+        /*
+                foreach ($dependent_tables as $table => $column) {
+                    $delete_query = "DELETE FROM $table WHERE $column = ?";
+                    $stmt = $conn->prepare($delete_query);
+                    if ($stmt) {
+                        $stmt->bind_param("i", $delete_emp_id);
+                        if (!$stmt->execute()) {
+                            error_log("Failed to delete from $table for employee ID $delete_emp_id: " . $stmt->error, 3, 'debug.log');
+                            // Continue instead of throwing to avoid stopping the transaction
+                        }
+                        $stmt->close();
+                    } else {
+                        error_log("Prepare failed for $table deletion: " . $conn->error, 3, 'debug.log');
+                    }
+                }
+
+                // Delete the employee
+                $delete_employee_query = "DELETE FROM hrm_employee WHERE id = ?";
+                $stmt = $conn->prepare($delete_employee_query);
+                if (!$stmt) {
+                    throw new Exception("Prepare failed for employee deletion: " . $conn->error);
+                }
                 $stmt->bind_param("i", $delete_emp_id);
                 if (!$stmt->execute()) {
-                    error_log("Failed to delete from $table for employee ID $delete_emp_id: " . $stmt->error, 3, 'debug.log');
-                    // Continue instead of throwing to avoid stopping the transaction
+                    throw new Exception("Failed to delete employee: " . $stmt->error);
                 }
                 $stmt->close();
-            } else {
-                error_log("Prepare failed for $table deletion: " . $conn->error, 3, 'debug.log');
-            }
-        }
+                error_log("Successfully deleted employee ID: $delete_emp_id", 3, 'debug.log');
+        */
 
-        // Delete the employee
-        $delete_employee_query = "DELETE FROM hrm_employee WHERE id = ?";
-        $stmt = $conn->prepare($delete_employee_query);
-        if (!$stmt) {
-            throw new Exception("Prepare failed for employee deletion: " . $conn->error);
-        }
-        $stmt->bind_param("i", $delete_emp_id);
-        if (!$stmt->execute()) {
-            throw new Exception("Failed to delete employee: " . $stmt->error);
-        }
-        $stmt->close();
-        error_log("Successfully deleted employee ID: $delete_emp_id", 3, 'debug.log');
-*/
-
-// temporary
+        // temporary
 //  echo   $statuschangetoarchive = "UPDATE hrm_employee SET archive_status = 1 WHERE id = $delete_emp_id ";
 // //  exit();
 //     $conn->prepare($statuschangetoarchive);
 
-$conn->query("UPDATE `hrm_employee` SET `status`='3',`archive_status`='1' WHERE `id` = $delete_emp_id");
+        $conn->query("UPDATE `hrm_employee` SET `status`='3',`archive_status`='1' WHERE `id` = $delete_emp_id");
 
-//  temporary
+        //  temporary
 
 
         // Commit the transaction
@@ -448,6 +448,7 @@ if (isset($_GET['error'])) {
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th>Sr.n</th>
                             <th>Profile</th>
                             <th>Employee ID</th>
                             <th>Name</th>
@@ -459,6 +460,8 @@ if (isset($_GET['error'])) {
                         <?php
                         $current_month = date("m") - 1;
                         $current_year = date("Y");
+
+                        $sr = 0;
 
                         // Build the base query
                         $query = "SELECT * FROM hrm_employee WHERE status = 1 and archive_status =0";
@@ -496,13 +499,22 @@ if (isset($_GET['error'])) {
                                     $designation = "";
                                 if (empty($department))
                                     $department = "";
+
+                                $sr++;
                                 ?>
                                 <tr>
+                                    <td>
+                                        
+                                            <!-- <strong>Sr No.</strong> -->
+                                            <?= $sr ?>
+                                        
+                                    </td>
                                     <td>
                                         <a class="avatar" href="#" onclick="submitProfileForm(<?php echo $row['id']; ?>)">
                                             <img src="<?php echo $profile_image; ?>" alt="User Image" width="50">
                                         </a>
                                     </td>
+                                    
                                     <td><?php echo htmlspecialchars($row['emp_id']); ?></td>
                                     <td>
                                         <a href="#" onclick="submitProfileForm(<?php echo $row['id']; ?>)">
@@ -516,7 +528,8 @@ if (isset($_GET['error'])) {
                                                 <i class="material-icons">more_vert</i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item" href="#" onclick="submitProfileForm(<?php echo $row['id']; ?>)">
+                                                <a class="dropdown-item" href="#"
+                                                    onclick="submitProfileForm(<?php echo $row['id']; ?>)">
                                                     <i class="fa-solid fa-user m-r-5"></i> Profile
                                                 </a>
                                                 <!-- <a class="dropdown-item" href="edit-employees.php?empeditid=<?php echo $row['id']; ?>">
@@ -665,8 +678,8 @@ if (isset($_GET['error'])) {
                                                             <label class="col-form-label">First Name <span
                                                                     class="text-danger">*</span></label>
                                                             <input required class="form-control"
-                                                                value="<?php echo htmlspecialchars($row_edit['fname']); ?>" type="text"
-                                                                name="fname<?php echo $row_edit['id']; ?>"
+                                                                value="<?php echo htmlspecialchars($row_edit['fname']); ?>"
+                                                                type="text" name="fname<?php echo $row_edit['id']; ?>"
                                                                 id="fname<?php echo $row_edit['id']; ?>">
                                                         </div>
                                                     </div>
@@ -674,8 +687,8 @@ if (isset($_GET['error'])) {
                                                         <div class="input-block mb-3">
                                                             <label class="col-form-label">Last Name</label>
                                                             <input required class="form-control"
-                                                                value="<?php echo htmlspecialchars($row_edit['lname']); ?>" type="text"
-                                                                name="lname<?php echo $row_edit['id']; ?>"
+                                                                value="<?php echo htmlspecialchars($row_edit['lname']); ?>"
+                                                                type="text" name="lname<?php echo $row_edit['id']; ?>"
                                                                 id="lname<?php echo $row_edit['id']; ?>">
                                                         </div>
                                                     </div>
@@ -776,8 +789,8 @@ if (isset($_GET['error'])) {
                                                         <label class="col-form-label">Personal Email ID <span
                                                                 class="text-danger">*</span></label>
                                                         <input class="form-control"
-                                                            value="<?php echo htmlspecialchars($row_edit['office_email']); ?>" type="text"
-                                                            name="office_email<?php echo $row_edit['id']; ?>"
+                                                            value="<?php echo htmlspecialchars($row_edit['office_email']); ?>"
+                                                            type="text" name="office_email<?php echo $row_edit['id']; ?>"
                                                             id="office_email<?php echo $row_edit['id']; ?>">
                                                     </div>
                                                 </div>
@@ -785,7 +798,8 @@ if (isset($_GET['error'])) {
                                                     <div class="input-block mb-3">
                                                         <label class="col-form-label">Official Email ID<span
                                                                 class="text-danger">*</span></label>
-                                                        <input class="form-control" value="<?php echo htmlspecialchars($row_edit['email']); ?>"
+                                                        <input class="form-control"
+                                                            value="<?php echo htmlspecialchars($row_edit['email']); ?>"
                                                             type="text" name="email<?php echo $row_edit['id']; ?>"
                                                             id="email<?php echo $row_edit['id']; ?>">
                                                     </div>
@@ -1089,15 +1103,18 @@ if (isset($_GET['error'])) {
                                                                         </td>
                                                                         <td><?php echo htmlspecialchars(get_value("hrm_course_type", "name", $row_employee_education['course_type'])); ?>
                                                                         </td>
-                                                                        <td><?php echo htmlspecialchars($row_employee_education['stream']); ?></td>
+                                                                        <td><?php echo htmlspecialchars($row_employee_education['stream']); ?>
+                                                                        </td>
                                                                         <td><?php echo htmlspecialchars($row_employee_education['start_date']); ?>
                                                                         </td>
-                                                                        <td><?php echo htmlspecialchars($row_employee_education['end_date']); ?></td>
+                                                                        <td><?php echo htmlspecialchars($row_employee_education['end_date']); ?>
+                                                                        </td>
                                                                         <td><?php echo htmlspecialchars($row_employee_education['college_name']); ?>
                                                                         </td>
                                                                         <td><?php echo htmlspecialchars($row_employee_education['university_name']); ?>
                                                                         </td>
-                                                                        <td><?php echo htmlspecialchars($row_employee_education['grade']); ?></td>
+                                                                        <td><?php echo htmlspecialchars($row_employee_education['grade']); ?>
+                                                                        </td>
                                                                     </tr>
                                                                 <?php } ?>
                                                             </tbody>
@@ -1366,9 +1383,11 @@ if (isset($_GET['error'])) {
                                                                     }
                                                                     ?>
                                                                     <tr>
-                                                                        <td><?php echo htmlspecialchars($row_family['name']); ?></td>
+                                                                        <td><?php echo htmlspecialchars($row_family['name']); ?>
+                                                                        </td>
                                                                         <td><?php echo htmlspecialchars($relationship_name); ?></td>
-                                                                        <td><?php echo htmlspecialchars($row_family['phone']); ?></td>
+                                                                        <td><?php echo htmlspecialchars($row_family['phone']); ?>
+                                                                        </td>
                                                                         <td><?php echo ($row_family['dependent'] == 1) ? "Yes" : "No"; ?>
                                                                         </td>
                                                                     </tr>
@@ -1488,10 +1507,14 @@ if (isset($_GET['error'])) {
                                                                     <tr>
                                                                         <td><?php echo htmlspecialchars(get_value("hrm_employee_document_type", "name", $row_document['document_type_id'])); ?>
                                                                         </td>
-                                                                        <td><?php echo htmlspecialchars($row_document['document_number']); ?></td>
-                                                                        <td><?php echo htmlspecialchars($row_document['uploaded_by']); ?></td>
-                                                                        <td><?php echo htmlspecialchars($row_document['file']); ?></td>
-                                                                        <td><?php echo htmlspecialchars($row_document['proof_of']); ?></td>
+                                                                        <td><?php echo htmlspecialchars($row_document['document_number']); ?>
+                                                                        </td>
+                                                                        <td><?php echo htmlspecialchars($row_document['uploaded_by']); ?>
+                                                                        </td>
+                                                                        <td><?php echo htmlspecialchars($row_document['file']); ?>
+                                                                        </td>
+                                                                        <td><?php echo htmlspecialchars($row_document['proof_of']); ?>
+                                                                        </td>
                                                                     </tr>
                                                                 <?php } ?>
                                                             </tbody>
@@ -1600,67 +1623,75 @@ if (isset($_GET['error'])) {
                                 </button>
                             </div>
                             <div class="modal-body">
-                            <h5 class="modal-title bg-success">PERSONAL INFO</h5>
-<form name="f1_add" id="f1_add" method="post" action="#">
-    <input type="hidden" name="last_insert_id" id="last_insert_id">
-    <div class="profile-widget">
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="input-block mb-3">
-                    <label class="col-form-label">First Name <span class="text-danger">*</span></label>
-                    <input required class="form-control" type="text" name="fname_add" id="fname_add">
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="input-block mb-3">
-                    <label class="col-form-label">Last Name</label>
-                    <input required class="form-control" type="text" name="lname_add" id="lname_add">
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="input-block mb-3">
-                    <label class="col-form-label">Date Of Birth <span class="text-danger">*</span></label>
-                    <div class="cal-icon1">
-                        <input class="form-control" name="dob_add" id="dob_add" type="date" max="<?php echo $maxDate; ?>" date-format="YYYY-MM-DD">
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="input-block mb-3">
-                    <label class="col-form-label">Gender <span class="text-danger">*</span></label>
-                    <select name="gender_add" id="gender_add" class="form-control">
-                        <option value="1">Male</option>
-                        <option value="2">Female</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="input-block mb-3">
-                    <label class="col-form-label">Blood Group</label>
-                    <select name="bgroup_add" id="bgroup_add" class="form-control">
-                        <option value="A negative">A negative</option>
-                        <option value="A positive">A positive</option>
-                        <option value="B negative">B negative</option>
-                        <option value="B positive">B positive</option>
-                        <option value="AB negative">AB negative</option>
-                        <option value="AB positive">AB positive</option>
-                        <option value="O negative">O negative</option>
-                        <option value="O positive">O positive</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="input-block mb-3">
-                    <label class="col-form-label">Marital Status</label>
-                    <select name="marital_status_add" id="marital_status_add" class="form-control">
-                        <option value="1">Married</option>
-                        <option value="2">Unmarried</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="submit-section">
-            <button onClick="add_personal_info(
+                                <h5 class="modal-title bg-success">PERSONAL INFO</h5>
+                                <form name="f1_add" id="f1_add" method="post" action="#">
+                                    <input type="hidden" name="last_insert_id" id="last_insert_id">
+                                    <div class="profile-widget">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="input-block mb-3">
+                                                    <label class="col-form-label">First Name <span
+                                                            class="text-danger">*</span></label>
+                                                    <input required class="form-control" type="text" name="fname_add"
+                                                        id="fname_add">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="input-block mb-3">
+                                                    <label class="col-form-label">Last Name</label>
+                                                    <input required class="form-control" type="text" name="lname_add"
+                                                        id="lname_add">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="input-block mb-3">
+                                                    <label class="col-form-label">Date Of Birth <span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="cal-icon1">
+                                                        <input class="form-control" name="dob_add" id="dob_add"
+                                                            type="date" max="<?php echo $maxDate; ?>"
+                                                            date-format="YYYY-MM-DD">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="input-block mb-3">
+                                                    <label class="col-form-label">Gender <span
+                                                            class="text-danger">*</span></label>
+                                                    <select name="gender_add" id="gender_add" class="form-control">
+                                                        <option value="1">Male</option>
+                                                        <option value="2">Female</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="input-block mb-3">
+                                                    <label class="col-form-label">Blood Group</label>
+                                                    <select name="bgroup_add" id="bgroup_add" class="form-control">
+                                                        <option value="A negative">A negative</option>
+                                                        <option value="A positive">A positive</option>
+                                                        <option value="B negative">B negative</option>
+                                                        <option value="B positive">B positive</option>
+                                                        <option value="AB negative">AB negative</option>
+                                                        <option value="AB positive">AB positive</option>
+                                                        <option value="O negative">O negative</option>
+                                                        <option value="O positive">O positive</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="input-block mb-3">
+                                                    <label class="col-form-label">Marital Status</label>
+                                                    <select name="marital_status_add" id="marital_status_add"
+                                                        class="form-control">
+                                                        <option value="1">Married</option>
+                                                        <option value="2">Unmarried</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="submit-section">
+                                            <button onClick="add_personal_info(
                     document.getElementById('fname_add').value,
                     document.getElementById('lname_add').value, 
                     document.getElementById('dob_add').value,
@@ -1668,85 +1699,98 @@ if (isset($_GET['error'])) {
                     document.getElementById('bgroup_add').value,
                     document.getElementById('marital_status_add').value
                 );" type="button" name="b1_add" id="b1_add" class="btn btn-primary submit-btn">Save</button>
-        </div>
-    </div>
-</form>
+                                        </div>
+                                    </div>
+                                </form>
 
-<!-- Contact Info -->
-<h5 class="modal-title bg-success">CONTACT INFO</h5>
-<div class="profile-widget">
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Personal Email ID <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" name="office_email_add" id="office_email_add">
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Official Email ID <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" name="email_add" id="email_add">
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Current Address</label>
-                <textarea class="form-control" name="current_address_add" id="current_address_add"></textarea>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Permanent Address <span class="text-danger">*</span></label>
-                <textarea class="form-control" name="permanent_address_add" id="permanent_address_add"></textarea>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">House Type</label>
-                <select name="house_type_add" id="house_type_add" class="form-control">
-                    <option value="Rented - with Family">Rented - with Family</option>
-                    <option value="Rented - Bachelor">Rented - Bachelor</option>
-                    <option value="Own House">Own House</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Staying at Current Residence Since <span class="text-danger">*</span></label>
-                <div class="cal-icon1">
-                    <input class="form-control" name="staying_current_residence_add" id="staying_current_residence_add" type="date">
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Living in Current City Since <span class="text-danger">*</span></label>
-                <div class="cal-icon1">
-                    <input class="form-control" name="living_current_city_add" id="living_current_city_add" type="date">
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Facebook</label>
-                <input class="form-control" type="text" name="facebook_add" id="facebook_add">
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Twitter</label>
-                <input class="form-control" type="text" name="twitter_add" id="twitter_add">
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">LinkedIn</label>
-                <input class="form-control" type="text" name="linkedin_add" id="linkedin_add">
-            </div>
-        </div>
-    </div>
-    <div class="submit-section">
-        <button onClick="update_contact_info(
+                                <!-- Contact Info -->
+                                <h5 class="modal-title bg-success">CONTACT INFO</h5>
+                                <div class="profile-widget">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Personal Email ID <span
+                                                        class="text-danger">*</span></label>
+                                                <input class="form-control" type="text" name="office_email_add"
+                                                    id="office_email_add">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Official Email ID <span
+                                                        class="text-danger">*</span></label>
+                                                <input class="form-control" type="text" name="email_add" id="email_add">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Current Address</label>
+                                                <textarea class="form-control" name="current_address_add"
+                                                    id="current_address_add"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Permanent Address <span
+                                                        class="text-danger">*</span></label>
+                                                <textarea class="form-control" name="permanent_address_add"
+                                                    id="permanent_address_add"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">House Type</label>
+                                                <select name="house_type_add" id="house_type_add" class="form-control">
+                                                    <option value="Rented - with Family">Rented - with Family</option>
+                                                    <option value="Rented - Bachelor">Rented - Bachelor</option>
+                                                    <option value="Own House">Own House</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Staying at Current Residence Since <span
+                                                        class="text-danger">*</span></label>
+                                                <div class="cal-icon1">
+                                                    <input class="form-control" name="staying_current_residence_add"
+                                                        id="staying_current_residence_add" type="date">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Living in Current City Since <span
+                                                        class="text-danger">*</span></label>
+                                                <div class="cal-icon1">
+                                                    <input class="form-control" name="living_current_city_add"
+                                                        id="living_current_city_add" type="date">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Facebook</label>
+                                                <input class="form-control" type="text" name="facebook_add"
+                                                    id="facebook_add">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Twitter</label>
+                                                <input class="form-control" type="text" name="twitter_add"
+                                                    id="twitter_add">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">LinkedIn</label>
+                                                <input class="form-control" type="text" name="linkedin_add"
+                                                    id="linkedin_add">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="submit-section">
+                                        <button onClick="update_contact_info(
                 document.getElementById('last_insert_id').value,
                 document.getElementById('office_email_add').value,
                 document.getElementById('email_add').value, 
@@ -1759,113 +1803,123 @@ if (isset($_GET['error'])) {
                 document.getElementById('twitter_add').value,
                 document.getElementById('linkedin_add').value
             );" class="btn btn-primary submit-btn">Save</button>
-    </div>
-</div>
+                                    </div>
+                                </div>
 
-<!-- Work Info -->
-<h5 class="modal-title bg-success">Work Info</h5>
-<div class="profile-widget">
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Date of Joining <span class="text-danger">*</span></label>
-                <div class="cal-icon1">
-                    <input class="form-control" name="doj_add" id="doj_add" type="date">
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Probation Period</label>
-                <select name="probation_period_add" id="probation_period_add" class="form-control">
-                    <option value="1">1 Month</option>
-                    <option value="2">2 Months</option>
-                    <option value="3">3 Months</option>
-                    <option value="4">4 Months</option>
-                    <option value="5">5 Months</option>
-                    <option value="6">6 Months</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Employee Type</label>
-                <select name="employee_type_add" id="employee_type_add" class="form-control">
-                    <option value="Full Time">Full Time</option>
-                    <option value="Part Time">Part Time</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Work Location <span class="text-danger">*</span></label>
-                <select name="work_location_add" id="work_location_add" class="form-control">
-                    <option value="Registered Office">Registered Office</option>
-                    <option value="Corporate Office">Corporate Office</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Work Experience</label>
-                <select name="experience_add" id="experience_add" class="form-control">
-                    <option value="Fresher">Fresher</option>
-                    <option value="6 Month">6 Month</option>
-                    <option value="1 Year">6 Month to 1 Year</option>
-                    <option value="2 Year">1 Year to 2 Year</option>
-                    <option value="3 Year">2 Year to 3 Year</option>
-                    <option value="4 Year">3 Year to 4 Year</option>
-                    <option value="5 Year">4 Year to 5 Year</option>
-                    <option value="6 Year">5 Year to 6 Year</option>
-                    <option value="7 Year">6 Year to 7 Year</option>
-                    <option value="8 Year">7 Year to 8 Year</option>
-                    <option value="9 Year">8 Year to 9 Year</option>
-                    <option value="10 Year">9 Year to 10 Year</option>
-                    <option value="11 Year">10 Year to 11 Year</option>
-                    <option value="12 Year">11 Year to 12 Year</option>
-                    <option value="More than 12 Year">More than 12 Year</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Designation <span class="text-danger">*</span></label>
-                <select name="designation_id_add" id="designation_id_add" class="form-control">
-                    <?php
-                    $query_designation = "SELECT * FROM hrm_designation;";
-                    $result_designation = mysqli_query($conn, $query_designation) or die(mysqli_error($conn));
-                    while ($row_designation = mysqli_fetch_array($result_designation)) { ?>
-                        <option value="<?php echo $row_designation['id']; ?>">
-                            <?php echo htmlspecialchars($row_designation['name']); ?>
-                        </option>
-                    <?php } ?>
-                </select>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Job Title</label>
-                <input class="form-control" type="text" name="job_title_add" id="job_title_add">
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="input-block mb-3">
-                <label class="col-form-label">Department <span class="text-danger">*</span></label>
-                <select name="department_id_add" id="department_id_add" class="form-control">
-                    <?php
-                    $query_department = "SELECT * FROM hrm_department;";
-                    $result_department = mysqli_query($conn, $query_department) or die(mysqli_error($conn));
-                    while ($row_department = mysqli_fetch_array($result_department)) { ?>
-                        <option value="<?php echo $row_department['id']; ?>">
-                            <?php echo htmlspecialchars($row_department['name']); ?>
-                        </option>
-                    <?php } ?>
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="submit-section">
-        <button class="btn btn-primary submit-btn" type="button" onclick="update_work_info(
+                                <!-- Work Info -->
+                                <h5 class="modal-title bg-success">Work Info</h5>
+                                <div class="profile-widget">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Date of Joining <span
+                                                        class="text-danger">*</span></label>
+                                                <div class="cal-icon1">
+                                                    <input class="form-control" name="doj_add" id="doj_add" type="date">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Probation Period</label>
+                                                <select name="probation_period_add" id="probation_period_add"
+                                                    class="form-control">
+                                                    <option value="1">1 Month</option>
+                                                    <option value="2">2 Months</option>
+                                                    <option value="3">3 Months</option>
+                                                    <option value="4">4 Months</option>
+                                                    <option value="5">5 Months</option>
+                                                    <option value="6">6 Months</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Employee Type</label>
+                                                <select name="employee_type_add" id="employee_type_add"
+                                                    class="form-control">
+                                                    <option value="Full Time">Full Time</option>
+                                                    <option value="Part Time">Part Time</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Work Location <span
+                                                        class="text-danger">*</span></label>
+                                                <select name="work_location_add" id="work_location_add"
+                                                    class="form-control">
+                                                    <option value="Registered Office">Registered Office</option>
+                                                    <option value="Corporate Office">Corporate Office</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Work Experience</label>
+                                                <select name="experience_add" id="experience_add" class="form-control">
+                                                    <option value="Fresher">Fresher</option>
+                                                    <option value="6 Month">6 Month</option>
+                                                    <option value="1 Year">6 Month to 1 Year</option>
+                                                    <option value="2 Year">1 Year to 2 Year</option>
+                                                    <option value="3 Year">2 Year to 3 Year</option>
+                                                    <option value="4 Year">3 Year to 4 Year</option>
+                                                    <option value="5 Year">4 Year to 5 Year</option>
+                                                    <option value="6 Year">5 Year to 6 Year</option>
+                                                    <option value="7 Year">6 Year to 7 Year</option>
+                                                    <option value="8 Year">7 Year to 8 Year</option>
+                                                    <option value="9 Year">8 Year to 9 Year</option>
+                                                    <option value="10 Year">9 Year to 10 Year</option>
+                                                    <option value="11 Year">10 Year to 11 Year</option>
+                                                    <option value="12 Year">11 Year to 12 Year</option>
+                                                    <option value="More than 12 Year">More than 12 Year</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Designation <span
+                                                        class="text-danger">*</span></label>
+                                                <select name="designation_id_add" id="designation_id_add"
+                                                    class="form-control">
+                                                    <?php
+                                                    $query_designation = "SELECT * FROM hrm_designation;";
+                                                    $result_designation = mysqli_query($conn, $query_designation) or die(mysqli_error($conn));
+                                                    while ($row_designation = mysqli_fetch_array($result_designation)) { ?>
+                                                        <option value="<?php echo $row_designation['id']; ?>">
+                                                            <?php echo htmlspecialchars($row_designation['name']); ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Job Title</label>
+                                                <input class="form-control" type="text" name="job_title_add"
+                                                    id="job_title_add">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="input-block mb-3">
+                                                <label class="col-form-label">Department <span
+                                                        class="text-danger">*</span></label>
+                                                <select name="department_id_add" id="department_id_add"
+                                                    class="form-control">
+                                                    <?php
+                                                    $query_department = "SELECT * FROM hrm_department;";
+                                                    $result_department = mysqli_query($conn, $query_department) or die(mysqli_error($conn));
+                                                    while ($row_department = mysqli_fetch_array($result_department)) { ?>
+                                                        <option value="<?php echo $row_department['id']; ?>">
+                                                            <?php echo htmlspecialchars($row_department['name']); ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="submit-section">
+                                        <button class="btn btn-primary submit-btn" type="button" onclick="update_work_info(
                 document.getElementById('last_insert_id').value,
                 document.getElementById('doj_add').value,
                 document.getElementById('probation_period_add').value,
@@ -1876,94 +1930,107 @@ if (isset($_GET['error'])) {
                 document.getElementById('job_title_add').value,
                 document.getElementById('department_id_add').value
             );">Save</button>
-    </div>
-</div>
+                                    </div>
+                                </div>
 
-<!-- Education -->
-<div class="card analytics-card w-100">
-    <div class="card-body">
-        <div class="statistic-header">
-            <h4>Education</h4>
-        </div>
-        <div align="right">
-            <button type="button" id="education_button_add" name="education_button_add" class="btn btn-success">Add Education</button>
-        </div>
-        <script>
-            $(document).ready(function () {
-                $("#education_button_add").click(function () {
-                    $("#panel_add").slideToggle("slow");
-                });
-            });
-        </script>
-        <style>
-            #panel_add, #education_button_add {
-                padding: 5px;
-                background-color: #f2f2f2;
-                color: #000000;
-            }
-            #panel_add {
-                padding: 50px;
-                display: none;
-            }
-        </style>
-        <div id="panel_add">
-            <div class="row">
-                <div class="col-lg-4">
-                    <label>Qualification Type</label><br>
-                    <select name="qualification_type_add" id="qualification_type_add" class="form-control">
-                        <?php
-                        $query_display_qualification_type = "SELECT * FROM hrm_qualification_type;";
-                        $result_display_qualification_type = mysqli_query($conn, $query_display_qualification_type) or die(mysqli_error($conn));
-                        while ($row_display_qualification_type = mysqli_fetch_array($result_display_qualification_type)) { ?>
-                            <option value="<?php echo $row_display_qualification_type['id']; ?>">
-                                <?php echo htmlspecialchars($row_display_qualification_type['name']); ?>
-                            </option>
-                        <?php } ?>
-                    </select>
-                </div>
-                <div class="col-lg-4">
-                    <label>Course Name</label><br>
-                    <input type="text" name="course_name_add" id="course_name_add" class="form-control" value="">
-                </div>
-                <div class="col-lg-4">
-                    <label>Course Type</label><br>
-                    <select name="course_type_add" id="course_type_add" class="form-control">
-                        <?php
-                        $query_display_course_type = "SELECT * FROM hrm_course_type;";
-                        $result_display_course_type = mysqli_query($conn, $query_display_course_type) or die(mysqli_error($conn));
-                        while ($row_display_course_type = mysqli_fetch_array($result_display_course_type)) { ?>
-                            <option value="<?php echo $row_display_course_type['id']; ?>">
-                                <?php echo htmlspecialchars($row_display_course_type['name']); ?>
-                            </option>
-                        <?php } ?>
-                    </select>
-                </div>
-                <div class="col-lg-4">
-                    <label>Stream</label><br>
-                    <input type="text" name="stream_add" id="stream_add" class="form-control" value="">
-                </div>
-                <div class="col-lg-4">
-                    <label>Course Start Date</label><br>
-                    <input type="date" name="start_date_add" id="start_date_add" class="form-control" value="">
-                </div>
-                <div class="col-lg-4">
-                    <label>Course End Date</label><br>
-                    <input type="date" name="end_date_add" id="end_date_add" class="form-control" value="">
-                </div>
-                <div class="col-lg-4">
-                    <label>College Name</label><br>
-                    <input type="text" name="college_name_add" id="college_name_add" class="form-control" value="">
-                </div>
-                <div class="col-lg-4">
-                    <label>University Name</label><br>
-                    <input type="text" name="university_name_add" id="university_name_add" class="form-control" value="">
-                </div>
-                <div class="col-lg-4">
-                    <label>Grade</label><br>
-                    <input type="text" name="grade_add" id="grade_add" class="form-control" value="">
-                </div>
-                <div class="submit-section">
-                    <button class="btn btn-primary submit-btn" type="button" onclick="update_education(
+                                <!-- Education -->
+                                <div class="card analytics-card w-100">
+                                    <div class="card-body">
+                                        <div class="statistic-header">
+                                            <h4>Education</h4>
+                                        </div>
+                                        <div align="right">
+                                            <button type="button" id="education_button_add" name="education_button_add"
+                                                class="btn btn-success">Add Education</button>
+                                        </div>
+                                        <script>
+                                            $(document).ready(function () {
+                                                $("#education_button_add").click(function () {
+                                                    $("#panel_add").slideToggle("slow");
+                                                });
+                                            });
+                                        </script>
+                                        <style>
+                                            #panel_add,
+                                            #education_button_add {
+                                                padding: 5px;
+                                                background-color: #f2f2f2;
+                                                color: #000000;
+                                            }
+
+                                            #panel_add {
+                                                padding: 50px;
+                                                display: none;
+                                            }
+                                        </style>
+                                        <div id="panel_add">
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <label>Qualification Type</label><br>
+                                                    <select name="qualification_type_add" id="qualification_type_add"
+                                                        class="form-control">
+                                                        <?php
+                                                        $query_display_qualification_type = "SELECT * FROM hrm_qualification_type;";
+                                                        $result_display_qualification_type = mysqli_query($conn, $query_display_qualification_type) or die(mysqli_error($conn));
+                                                        while ($row_display_qualification_type = mysqli_fetch_array($result_display_qualification_type)) { ?>
+                                                            <option
+                                                                value="<?php echo $row_display_qualification_type['id']; ?>">
+                                                                <?php echo htmlspecialchars($row_display_qualification_type['name']); ?>
+                                                            </option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>Course Name</label><br>
+                                                    <input type="text" name="course_name_add" id="course_name_add"
+                                                        class="form-control" value="">
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>Course Type</label><br>
+                                                    <select name="course_type_add" id="course_type_add"
+                                                        class="form-control">
+                                                        <?php
+                                                        $query_display_course_type = "SELECT * FROM hrm_course_type;";
+                                                        $result_display_course_type = mysqli_query($conn, $query_display_course_type) or die(mysqli_error($conn));
+                                                        while ($row_display_course_type = mysqli_fetch_array($result_display_course_type)) { ?>
+                                                            <option value="<?php echo $row_display_course_type['id']; ?>">
+                                                                <?php echo htmlspecialchars($row_display_course_type['name']); ?>
+                                                            </option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>Stream</label><br>
+                                                    <input type="text" name="stream_add" id="stream_add"
+                                                        class="form-control" value="">
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>Course Start Date</label><br>
+                                                    <input type="date" name="start_date_add" id="start_date_add"
+                                                        class="form-control" value="">
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>Course End Date</label><br>
+                                                    <input type="date" name="end_date_add" id="end_date_add"
+                                                        class="form-control" value="">
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>College Name</label><br>
+                                                    <input type="text" name="college_name_add" id="college_name_add"
+                                                        class="form-control" value="">
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>University Name</label><br>
+                                                    <input type="text" name="university_name_add"
+                                                        id="university_name_add" class="form-control" value="">
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>Grade</label><br>
+                                                    <input type="text" name="grade_add" id="grade_add"
+                                                        class="form-control" value="">
+                                                </div>
+                                                <div class="submit-section">
+                                                    <button class="btn btn-primary submit-btn" type="button" onclick="update_education(
                         document.getElementById('last_insert_id').value,
                         document.getElementById('qualification_type_add').value,
                         document.getElementById('course_name_add').value,
@@ -1975,232 +2042,257 @@ if (isset($_GET['error'])) {
                         document.getElementById('university_name_add').value,
                         document.getElementById('grade_add').value
                     );">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-<!-- Team -->
-<div class="card analytics-card w-100">
-    <div class="card-body">
-        <div class="statistic-header">
-            <h4>Team</h4>
-        </div>
-        <div align="right">
-            <button type="button" id="reporting_button_add" name="reporting_button_add" class="btn btn-success">Add Reporting Manager</button>
-        </div>
-        <script>
-            $(document).ready(function () {
-                $("#reporting_button_add").click(function () {
-                    $("#panel_reporting_add").slideToggle("slow");
-                });
-            });
-        </script>
-        <style>
-            #panel_reporting_add, #reporting_button_add {
-                padding: 5px;
-                background-color: #f2f2f2;
-                color: #000000;
-            }
-            #panel_reporting_add {
-                padding: 50px;
-                display: none;
-            }
-        </style>
-        <div id="panel_reporting_add">
-            <div class="row">
-                <div class="col-lg-4">
-                    <label>Reporting Manager</label><br>
-                    <select name="employee_id_add" id="employee_id_add" class="form-control">
-                        <?php
-                        $query_display_employee = "SELECT * FROM hrm_employee;";
-                        $result_display_employee = mysqli_query($conn, $query_display_employee) or die(mysqli_error($conn));
-                        while ($row_display_employee = mysqli_fetch_array($result_display_employee)) { ?>
-                            <option value="<?php echo $row_display_employee['id']; ?>">
-                                <?php echo htmlspecialchars($row_display_employee['fname'] . " " . $row_display_employee['lname']); ?>
-                            </option>
-                        <?php } ?>
-                    </select>
-                </div>
-                <div class="col-lg-4">
-                    <label>Type</label><br>
-                    <select name="reporting_manager_type_add" id="reporting_manager_type_add" class="form-control">
-                        <option value="Primary">Primary</option>
-                        <option value="Secondary">Secondary</option>
-                    </select>
-                </div>
-                <div class="submit-section">
-                    <button class="btn btn-primary submit-btn" type="button" onclick="update_reporting_manager(
+                                <!-- Team -->
+                                <div class="card analytics-card w-100">
+                                    <div class="card-body">
+                                        <div class="statistic-header">
+                                            <h4>Team</h4>
+                                        </div>
+                                        <div align="right">
+                                            <button type="button" id="reporting_button_add" name="reporting_button_add"
+                                                class="btn btn-success">Add Reporting Manager</button>
+                                        </div>
+                                        <script>
+                                            $(document).ready(function () {
+                                                $("#reporting_button_add").click(function () {
+                                                    $("#panel_reporting_add").slideToggle("slow");
+                                                });
+                                            });
+                                        </script>
+                                        <style>
+                                            #panel_reporting_add,
+                                            #reporting_button_add {
+                                                padding: 5px;
+                                                background-color: #f2f2f2;
+                                                color: #000000;
+                                            }
+
+                                            #panel_reporting_add {
+                                                padding: 50px;
+                                                display: none;
+                                            }
+                                        </style>
+                                        <div id="panel_reporting_add">
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <label>Reporting Manager</label><br>
+                                                    <select name="employee_id_add" id="employee_id_add"
+                                                        class="form-control">
+                                                        <?php
+                                                        $query_display_employee = "SELECT * FROM hrm_employee;";
+                                                        $result_display_employee = mysqli_query($conn, $query_display_employee) or die(mysqli_error($conn));
+                                                        while ($row_display_employee = mysqli_fetch_array($result_display_employee)) { ?>
+                                                            <option value="<?php echo $row_display_employee['id']; ?>">
+                                                                <?php echo htmlspecialchars($row_display_employee['fname'] . " " . $row_display_employee['lname']); ?>
+                                                            </option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>Type</label><br>
+                                                    <select name="reporting_manager_type_add"
+                                                        id="reporting_manager_type_add" class="form-control">
+                                                        <option value="Primary">Primary</option>
+                                                        <option value="Secondary">Secondary</option>
+                                                    </select>
+                                                </div>
+                                                <div class="submit-section">
+                                                    <button class="btn btn-primary submit-btn" type="button" onclick="update_reporting_manager(
                         document.getElementById('last_insert_id').value,
                         document.getElementById('employee_id_add').value,
                         document.getElementById('reporting_manager_type_add').value
                     );">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-<!-- Family -->
-<div class="card analytics-card w-100">
-    <div class="card-body">
-        <div class="statistic-header">
-            <h4>Family</h4>
-        </div>
-        <div align="right">
-            <button type="button" id="family_button_add" name="family_button_add" class="btn btn-success">Add Family Member</button>
-        </div>
-        <script>
-            $(document).ready(function () {
-                $("#family_button_add").click(function () {
-                    $("#panel_family_add").slideToggle("slow");
-                });
-            });
-        </script>
-        <style>
-            #panel_family_add, #family_button_add {
-                padding: 5px;
-                background-color: #f2f2f2;
-                color: #000000;
-            }
-            #panel_family_add {
-                padding: 50px;
-                display: none;
-            }
-        </style>
-        <div id="panel_family_add">
-            <div class="row">
-                <div class="col-lg-4">
-                    <label>Name</label><br>
-                    <input type="text" name="name_add" id="name_add" class="form-control" value="">
-                </div>
-                <div class="col-lg-4">
-                    <label>Relationship</label><br>
-                    <select name="relationship_add" id="relationship_add" class="form-control">
-                        <?php
-                        $query_display_relationship = "SELECT * FROM hrm_family_relationship_member;";
-                        $result_display_relationship = mysqli_query($conn, $query_display_relationship) or die(mysqli_error($conn));
-                        while ($row_display_relationship = mysqli_fetch_array($result_display_relationship)) { ?>
-                            <option value="<?php echo $row_display_relationship['id']; ?>">
-                                <?php echo htmlspecialchars($row_display_relationship['name']); ?>
-                            </option>
-                        <?php } ?>
-                    </select>
-                </div>
-                <div class="col-lg-4">
-                    <label>Phone</label><br>
-                    <input type="text" name="phone_add" id="phone_add" class="form-control" value="">
-                </div>
-                <div class="col-lg-4">
-                    <label>Dependent</label><br>
-                    <label>
-                        <input class="ck_add" name="dependent_add" id="dependent_add" type="radio" value="1"> Yes
-                    </label>
-                    <label>
-                        <input class="ck_add" name="dependent_add" id="dependent_add" type="radio" value="0" checked="checked"> No
-                    </label>
-                </div>
-                <div class="submit-section">
-                    <button class="btn btn-primary submit-btn" type="button" onclick="update_family(
+                                <!-- Family -->
+                                <div class="card analytics-card w-100">
+                                    <div class="card-body">
+                                        <div class="statistic-header">
+                                            <h4>Family</h4>
+                                        </div>
+                                        <div align="right">
+                                            <button type="button" id="family_button_add" name="family_button_add"
+                                                class="btn btn-success">Add Family Member</button>
+                                        </div>
+                                        <script>
+                                            $(document).ready(function () {
+                                                $("#family_button_add").click(function () {
+                                                    $("#panel_family_add").slideToggle("slow");
+                                                });
+                                            });
+                                        </script>
+                                        <style>
+                                            #panel_family_add,
+                                            #family_button_add {
+                                                padding: 5px;
+                                                background-color: #f2f2f2;
+                                                color: #000000;
+                                            }
+
+                                            #panel_family_add {
+                                                padding: 50px;
+                                                display: none;
+                                            }
+                                        </style>
+                                        <div id="panel_family_add">
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <label>Name</label><br>
+                                                    <input type="text" name="name_add" id="name_add"
+                                                        class="form-control" value="">
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>Relationship</label><br>
+                                                    <select name="relationship_add" id="relationship_add"
+                                                        class="form-control">
+                                                        <?php
+                                                        $query_display_relationship = "SELECT * FROM hrm_family_relationship_member;";
+                                                        $result_display_relationship = mysqli_query($conn, $query_display_relationship) or die(mysqli_error($conn));
+                                                        while ($row_display_relationship = mysqli_fetch_array($result_display_relationship)) { ?>
+                                                            <option value="<?php echo $row_display_relationship['id']; ?>">
+                                                                <?php echo htmlspecialchars($row_display_relationship['name']); ?>
+                                                            </option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>Phone</label><br>
+                                                    <input type="text" name="phone_add" id="phone_add"
+                                                        class="form-control" value="">
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>Dependent</label><br>
+                                                    <label>
+                                                        <input class="ck_add" name="dependent_add" id="dependent_add"
+                                                            type="radio" value="1"> Yes
+                                                    </label>
+                                                    <label>
+                                                        <input class="ck_add" name="dependent_add" id="dependent_add"
+                                                            type="radio" value="0" checked="checked"> No
+                                                    </label>
+                                                </div>
+                                                <div class="submit-section">
+                                                    <button class="btn btn-primary submit-btn" type="button" onclick="update_family(
                         document.getElementById('last_insert_id').value,
                         document.getElementById('name_add').value,
                         document.getElementById('relationship_add').value,
                         document.getElementById('phone_add').value,
                         document.querySelector('input[name=dependent_add]:checked').value
                     );">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-<!-- Documents -->
-<div class="card analytics-card w-100" style="display:none;">
-    <div class="card-body">
-        <div class="statistic-header">
-            <h4>Documents</h4>
-        </div>
-        <div align="right">
-            <button type="button" id="document_button_add" name="document_button_add" class="btn btn-success">Add Documents</button>
-        </div>
-        <script>
-            $(document).ready(function () {
-                $("#document_button_add").click(function () {
-                    $("#panel_document_add").slideToggle("slow");
-                });
-            });
-        </script>
-        <style>
-            #panel_document_add, #document_button_add {
-                padding: 5px;
-                background-color: #f2f2f2;
-                color: #000000;
-            }
-            #panel_document_add {
-                padding: 50px;
-                display: none;
-            }
-        </style>
-        <div id="panel_document_add">
-            <div class="row">
-                <div class="col-lg-4">
-                    <label>Type</label><br>
-                    <select name="document_type_add" id="document_type_add" class="form-control">
-                        <?php
-                        $query_display_employee_document_type = "SELECT * FROM hrm_employee_document_type;";
-                        $result_employee_document_type = mysqli_query($conn, $query_display_employee_document_type) or die(mysqli_error($conn));
-                        while ($row_employee_document_type = mysqli_fetch_array($result_employee_document_type)) { ?>
-                            <option value="<?php echo $row_employee_document_type['id']; ?>">
-                                <?php echo htmlspecialchars($row_employee_document_type['name']); ?>
-                            </option>
-                        <?php } ?>
-                    </select>
-                </div>
-                <div class="col-lg-4">
-                    <label>ID</label><br>
-                    <input type="text" name="document_number_add" id="document_number_add" class="form-control" value="">
-                </div>
-                <div class="col-lg-4">
-                    <label>File</label><br>
-                    <input type="file" name="file_document_add" id="file_document_add" class="form-control">
-                </div>
-                <div class="col-lg-4">
-                    <label>Use it as proof for</label><br>
-                    <label><input class="ck1" name="proof1_add[]" type="checkbox" value="1">Photo ID </label>
-                    <label><input class="ck1" name="proof1_add[]" type="checkbox" value="2">Date of Birth </label>
-                    <label><input class="ck1" name="proof1_add[]" type="checkbox" value="3">Current Address</label>
-                    <label><input class="ck1" name="proof1_add[]" type="checkbox" value="4">Permanent Address</label>
-                </div>
-                <div class="submit-section">
-                    <button class="btn btn-primary submit-btn" type="button" onclick="add_documents(
+                                <!-- Documents -->
+                                <div class="card analytics-card w-100" style="display:none;">
+                                    <div class="card-body">
+                                        <div class="statistic-header">
+                                            <h4>Documents</h4>
+                                        </div>
+                                        <div align="right">
+                                            <button type="button" id="document_button_add" name="document_button_add"
+                                                class="btn btn-success">Add Documents</button>
+                                        </div>
+                                        <script>
+                                            $(document).ready(function () {
+                                                $("#document_button_add").click(function () {
+                                                    $("#panel_document_add").slideToggle("slow");
+                                                });
+                                            });
+                                        </script>
+                                        <style>
+                                            #panel_document_add,
+                                            #document_button_add {
+                                                padding: 5px;
+                                                background-color: #f2f2f2;
+                                                color: #000000;
+                                            }
+
+                                            #panel_document_add {
+                                                padding: 50px;
+                                                display: none;
+                                            }
+                                        </style>
+                                        <div id="panel_document_add">
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <label>Type</label><br>
+                                                    <select name="document_type_add" id="document_type_add"
+                                                        class="form-control">
+                                                        <?php
+                                                        $query_display_employee_document_type = "SELECT * FROM hrm_employee_document_type;";
+                                                        $result_employee_document_type = mysqli_query($conn, $query_display_employee_document_type) or die(mysqli_error($conn));
+                                                        while ($row_employee_document_type = mysqli_fetch_array($result_employee_document_type)) { ?>
+                                                            <option
+                                                                value="<?php echo $row_employee_document_type['id']; ?>">
+                                                                <?php echo htmlspecialchars($row_employee_document_type['name']); ?>
+                                                            </option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>ID</label><br>
+                                                    <input type="text" name="document_number_add"
+                                                        id="document_number_add" class="form-control" value="">
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>File</label><br>
+                                                    <input type="file" name="file_document_add" id="file_document_add"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <label>Use it as proof for</label><br>
+                                                    <label><input class="ck1" name="proof1_add[]" type="checkbox"
+                                                            value="1">Photo ID </label>
+                                                    <label><input class="ck1" name="proof1_add[]" type="checkbox"
+                                                            value="2">Date of Birth </label>
+                                                    <label><input class="ck1" name="proof1_add[]" type="checkbox"
+                                                            value="3">Current Address</label>
+                                                    <label><input class="ck1" name="proof1_add[]" type="checkbox"
+                                                            value="4">Permanent Address</label>
+                                                </div>
+                                                <div class="submit-section">
+                                                    <button class="btn btn-primary submit-btn" type="button" onclick="add_documents(
                         document.getElementById('last_insert_id').value,
                         document.getElementById('document_type_add').value,
                         document.getElementById('document_number_add').value,
                         'file_document_add'
                     );">Save</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <!-- /Add Employee Modal -->
+
             </div>
+            <!-- /Page Content -->
+
         </div>
+        <!-- /Page Wrapper -->
+
     </div>
-</div>
+    <!-- /Main Wrapper -->
 
-</div>
-</div>
-</div>
-</div>
-<!-- /Add Employee Modal -->
-
-</div>
-<!-- /Page Content -->
-
-</div>
-<!-- /Page Wrapper -->
-
-</div>
-<!-- /Main Wrapper -->
-
-<?php include 'layouts/customizer.php'; ?>
-<?php include 'layouts/vendor-scripts.php'; ?>
+    <?php include 'layouts/customizer.php'; ?>
+    <?php include 'layouts/vendor-scripts.php'; ?>
 </body>
+
 </html>
