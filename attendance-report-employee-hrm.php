@@ -93,6 +93,11 @@ $profile_image = $profile_image_dir . "/" . $row['image'];
                         $holiday_days = 0;
                         $leave_days = 0;
 
+                        $normal_late = 0;
+                        $late_half_day = 0;
+                        $half_Day = 0;
+                        
+
                         // Get selected month and year with doj consideration
                         $today = new DateTime(); // Use current date
                         $doj_date = new DateTime($doj);
@@ -172,9 +177,9 @@ $profile_image = $profile_image_dir . "/" . $row['image'];
     </div>
     <div class="col-md-4">
         <h4 class="m-3" style="text-align: end;">
-            Fine: <span id="saturdayDaysCount"><?= $saturday_days ?></span> <br>
-            Late: <span id="holidayDaysCount"><?= $holiday_days ?></span> <br>
-            Late Fine: <span id="sundayDaysCount"><?= $sunday_days ?></span> <br>
+            Normal Late: <span id="normallateCount"><?= $normal_late ?></span> <br>
+            Late (Half Day): <span id="latehalfdayCount"><?= $late_half_day ?></span> <br>
+            Half Day: <span id="halfdayCount"><?= $half_Day ?></span> <br>
         </h4>
     </div>
 </div>
@@ -205,6 +210,7 @@ $profile_image = $profile_image_dir . "/" . $row['image'];
                                 <tbody>
                                     <?php
                                     $count = 1;
+
 
                                     for ($day = 1; $day <= $days_in_month; $day++) {
                                         $current_date = sprintf("%d-%02d-%02d", $current_year, $current_month, $day);
@@ -256,7 +262,19 @@ $profile_image = $profile_image_dir . "/" . $row['image'];
                                                 <td><?= $extra_or_remaining_label . ': ' . ($extra_or_remaining_time ?? 'N/A') ?></td>
                                                 <td style="color:<?= $late_color ?>"><?= $late_status ?></td>
                                             </tr>
+
                                     <?php
+
+                                            if($late_status == "Late"){
+                                                $normal_late++;
+                                            }
+                                            if($late_status == "Late (Half Day)"){
+                                                $late_half_day++;
+                                            }
+                                            if($late_status == "Half Day"){
+                                                $half_Day++;
+                                            }
+
                                         } elseif (isset($holidays[$current_date])) {
                                             $holiday_days++;
                                     ?>
@@ -328,6 +346,9 @@ $profile_image = $profile_image_dir . "/" . $row['image'];
                                         document.getElementById('sundayDaysCount').textContent = '$sunday_days';
                                         document.getElementById('holidayDaysCount').textContent = '$holiday_days';
                                         document.getElementById('leaveDaysCount').textContent = '$leave_days';
+                                        document.getElementById('normallateCount').textContent = '$normal_late';
+                                        document.getElementById('latehalfdayCount').textContent = '$late_half_day';
+                                        document.getElementById('halfdayCount').textContent = '$half_Day';
                                     </script>";
                                     ?>
                                 </tbody>

@@ -916,6 +916,7 @@ function roundAndConvertToWords($decimal)
                 // echo $leavefulldc;
                 
 
+<<<<<<< Updated upstream
                 $present_days = 0;
                 $saturday_days = 0;
                 $sunday_days = 0;
@@ -930,6 +931,25 @@ function roundAndConvertToWords($decimal)
                 $late_cover = 0;
                 $total_half_day = 0;
                 $total_half_day_late = 0;
+=======
+                            
+                            $present_days = 0;
+                            $saturday_days = 0;
+                            $sunday_days = 0;
+                            $holiday_days = 0;
+                            $leave_days = 0;
+                            $absent_days = 0;
+                            $totalwork_days = 0;
+                            $late = 0;
+                            $extra_late = 0;
+                            $extra_fine = 0;
+                            $total_late = 0;
+                            $late_cover = 0;
+                            $total_half_day = 0;
+                            $total_half_day_late = 0;
+                            $total_half_day_late_cover = 0;
+                            
+>>>>>>> Stashed changes
 
 
 
@@ -1052,7 +1072,39 @@ function roundAndConvertToWords($decimal)
                                     ?>
 
 
+<<<<<<< Updated upstream
                                     <?php
+=======
+                <?php
+                                                     
+                                                        $count++;
+                                                        $employee_name;
+                                                        $current_date;
+                                                        date("h:i A", $login_timestamp);
+                                                        $logout_display;
+                                                        $total_working_time;
+                                                        $extra_or_remaining_label;
+                                                       
+                                                       if ($late_status == "Late") {
+                                                            $late++;
+                                                        }
+                                                        if ($late_status == "Late (Extra Late)") {
+                                                            $extra_late++;
+                                                        }
+                                                        if($late_status == "Late (Extra Fine)") {
+                                                            $extra_fine++;
+                                                        }
+                                                        if($late_status == "Half Day") {
+                                                            $total_half_day++;
+                                                        }
+
+                                                        if($late_status == "Late (Half Day)" AND ($extra_or_remaining_label == "Extra Time")){
+                                                            $total_half_day_late_cover++;
+                                                        }
+                                                        if($late_status == "Late (Half Day)" AND ($extra_or_remaining_label != "Extra Time")){
+                                                            $total_half_day_late++;
+                                                        }
+>>>>>>> Stashed changes
 
                                     $count++;
                                     $employee_name;
@@ -1436,10 +1488,46 @@ function roundAndConvertToWords($decimal)
 
 
 
+    <style>
+        .fineibox{
+            border: 1px solid red;
+            border-top: 0px;
+            border-left: 0px;
+            border-right: 0px;
+            padding: 0px;
+            border-radius: 0px;
+            height: 25px;
+        }
+    </style>
 
+
+<<<<<<< Updated upstream
                                 <hr>
+=======
+<hr>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <h6>Late & Deductions Details</h6>
+            </div>
+            <div class="col-md-2">
+                <label for="">Late (Half Day) Fine : </label>
+            </div>
+            <div class="col-md-1">
+                <input type="text" class="form-control fineibox" value="100" min="0" placeholder="Late H.D. Fine">
+            </div>
+            <div class="col-md-1">
+                <label for="">Late Fine : </label>
+            </div>
+            <div class="col-md-1">
+                <input type="text" class="form-control fineibox" value="100" min="0" placeholder="Late Fine">
+            </div>
+            <div class="col-md-3">
+>>>>>>> Stashed changes
 
+            </div>
+        </div>
 
+<<<<<<< Updated upstream
 
                                 <div class="row g-3 mb-5 mt-3">
                                     <!-- Half Day Deduction -->
@@ -1475,6 +1563,45 @@ function roundAndConvertToWords($decimal)
                                             value="<?= $lateCoverDeduct ?>">
                                     </div>
                                 </div>
+=======
+<hr>
+        <div class="row g-3 mb-5 mt-3">
+            <!-- Half Day Deduction -->
+            <div class="col-md-2" title="Actual Late (Half Day)">
+                <input type="checkbox" class="form-check-input deduction-checkbox" data-target="late_halfday_value">
+                <label class="form-label">Actual Late (Half Day)</label>
+                <input type="text" class="form-control" value="<?= $total_half_day_late; ?>" readonly>
+                <input type="hidden" class="deduction" id="late_halfday_value" value="<?= $total_half_day_late * $hdsalary ?>">
+            </div>
+
+
+            <!-- Half Day Deduction -->
+            <div class="col-md-2" title="Late (Half Day) & Cover">
+                <input type="checkbox" class="form-check-input deduction-checkbox" data-target="late_halfday_cover_value">
+                <label class="form-label">Late (Half Day) & Cover</label>
+                <input type="text" class="form-control" value="<?= $total_half_day_late_cover; ?>" readonly>
+                <input type="hidden" class="deduction" id="late_halfday_cover_value" value="<?= $total_half_day_late_cover * $hdsalary ?>">
+            </div>
+
+
+            <!-- Lates Deduction -->
+            <div class="col-md-3" title="Fine Deduction">
+                <input type="checkbox" class="form-check-input deduction-checkbox" data-target="late_relax_value">
+                <label class="form-label">Actual Lates - <?= $relaxation_late; ?> Relaxation</label>
+                <input type="text" class="form-control" value="<?= $actual_lates ?> - <?= $relaxation_late ?> = <?= $lateCount ?>" readonly>
+                <input type="hidden" class="deduction" id="late_relax_value" value="<?= $lateDeduct ?>">
+            </div>
+
+
+            <!-- Late Cover Deduction -->
+            <div class="col-md-2" title="Fine Deduction : <?= $lateCoverDeduct ?>">
+                <input type="checkbox" class="form-check-input" id="late_cover_checkbox">
+                <label class="form-label">Late-&-Cover</label>
+                <input type="number" class="form-control" id="normal_late_cover" value="<?= htmlspecialchars($late_cover) ?>" min="0" readonly>
+                <input type="hidden" class="deduction" id="late_cover_value" value="<?= $lateCoverDeduct ?>">
+            </div>
+        </div>
+>>>>>>> Stashed changes
 
 
 
@@ -1484,6 +1611,7 @@ function roundAndConvertToWords($decimal)
                             </form>
 
 
+<<<<<<< Updated upstream
 
                             <script>
                                 document.addEventListener("DOMContentLoaded", function () {
@@ -1508,6 +1636,67 @@ function roundAndConvertToWords($decimal)
 
                                     // Event Listener
                                     lateCoverCheckbox.addEventListener("change", calculateTotal);
+=======
+        <script>
+            document.addEventListener("DOMContentLoaded", function() 
+            {
+                const totalField = document.getElementById("total_deduction");
+                const lateCoverCheckbox = document.getElementById("late_cover_checkbox");
+                const lateCoverValue = document.getElementById("late_cover_value");
+
+                // function calculateTotal() {
+                //     let total = 0;
+                //     document.querySelectorAll(".deduction").forEach(input => {
+                        
+                //         if (input.id === "late_cover_value") {
+                //             if (lateCoverCheckbox.checked) {
+                //                 total += parseFloat(input.value) || 0;
+                //             }
+                //         } else {
+                //             total += parseFloat(input.value) || 0;
+                //         }
+                //     });
+                //     totalField.value = total;
+                // }
+
+                function calculateTotal() {
+                    let total = 0;
+
+                    document.querySelectorAll(".deduction").forEach(input => {
+                        let checkbox = document.querySelector(`.deduction-checkbox[data-target='${input.id}']`);
+
+                        if (checkbox) {
+                            if (checkbox.checked) {
+                                total += parseFloat(input.value) || 0;
+                            }
+                        } else {
+                            total += parseFloat(input.value) || 0;
+                        }
+                    });
+
+                    totalField.value = total;
+                    finalField.value = (baseSalary - total);
+                }
+
+                document.querySelectorAll(".deduction-checkbox").forEach(box => {
+                    box.addEventListener("change", calculateTotal);
+                });
+
+
+                // Event Listener
+                lateCoverCheckbox.addEventListener("change", calculateTotal);
+
+                // Page load pe bhi ek baar run kar do
+                calculateTotal();
+            });
+        </script>
+        
+        <?php
+            // Final Salary
+            $final_salary = max(0, $salary - $totalDeduction); // negative avoid
+        ?>
+        <!--  Existing deductions code here ... -->
+>>>>>>> Stashed changes
 
                                     // Page load pe bhi ek baar run kar do
                                     calculateTotal();
@@ -1544,12 +1733,21 @@ function roundAndConvertToWords($decimal)
                                             }
                                         });
 
+<<<<<<< Updated upstream
                                         let finalSalary = baseSalary - total;
                                         if (finalSalary < 0) finalSalary = 0;
 
                                         // input fields update (2 decimal places)
                                         if (totalField) totalField.value = total.toFixed(0);
                                         if (finalField) finalField.value = finalSalary.toFixed(0);
+=======
+            if (totalField) totalField.value = total.toFixed(0);
+            if (finalField) finalField.value = finalSalary.toFixed(0);
+
+            totalFieldslip.textContent = total.toFixed(0);
+            finalFieldslip.textContent = finalSalary.toFixed(0);
+        }
+>>>>>>> Stashed changes
 
                                         // span update (2 decimal places)
                                         totalFieldslip.textContent = total.toFixed(0);

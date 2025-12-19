@@ -241,7 +241,6 @@ if ($row_session['role'] == 'admin' or $row_session['role'] == 'super admin') {
             preloader.style.display = "none";
         });
     });
-
 </script>
 <script>
     function submitProfileForm(empId) {
