@@ -390,7 +390,7 @@ if (isset($_GET['error'])) {
                             <h3 class="page-title">Employee</h3>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="admin-dashboard.php">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Employee</li>
+                                <li class="breadcrumb-item active">Employees</li>
                             </ul>
                         </div>
                         <div class="col-auto float-end ms-auto">
@@ -448,7 +448,7 @@ if (isset($_GET['error'])) {
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Sr.n</th>
+                            <th>S.No</th>
                             <th>Profile</th>
                             <th>Employee ID</th>
                             <th>Name</th>

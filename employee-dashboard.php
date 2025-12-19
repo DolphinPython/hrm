@@ -45,7 +45,35 @@ $inactive_employee = count_where("hrm_employee", "status", "0");
     <?php include 'layouts/head-css.php'; ?>
 
 
+
+
+
+
+
+
+
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
+        .exp1, .exp2 {
+            display: none;
+        }
+
+        @media (max-width: 1000px) {
+            .exp1 {
+                display: block;
+            }
+        }
+
+        @media (min-width: 1001px) {
+            .exp2 {
+                display: block;
+            }
+        }
+
+
         .event-list {
             scrollbar-width: thin;
             scrollbar-color: #007bff #f1f1f1;
@@ -165,14 +193,14 @@ $inactive_employee = count_where("hrm_employee", "status", "0");
         
         <!-- Card Body -->
 <!--        <div class="card-body bg-white">-->
-<!--            <?php-->
-<!--            $query = "SELECT * FROM newuser_attendance WHERE user_id='$emp_id' AND DATE(clock_in_time)=CURDATE() ORDER BY clock_in_time DESC LIMIT 1";-->
-<!--            $result = $conn->query($query);-->
-<!--            $row = $result->fetch_assoc();-->
-<!--            $status = isset($row['status']) ? $row['status'] : 'logout';-->
+<?php
+// <!--            $query = "SELECT * FROM newuser_attendance WHERE user_id='$emp_id' AND DATE(clock_in_time)=CURDATE() ORDER BY clock_in_time DESC LIMIT 1";-->
+// <!--            $result = $conn->query($query);-->
+// <!--            $row = $result->fetch_assoc();-->
+// <!--            $status = isset($row['status']) ? $row['status'] : 'logout';-->
 
-<!--            $login_time = isset($row['clock_in_time']) ? $row['clock_in_time'] : '';-->
-<!--            ?>-->
+// <!--            $login_time = isset($row['clock_in_time']) ? $row['clock_in_time'] : '';-->
+?>
             
 <!--            <div class="row g-4 align-items-center">-->
 
@@ -183,17 +211,17 @@ $inactive_employee = count_where("hrm_employee", "status", "0");
                     
 <!--                    <a href="javascript:void(0);" class="btn btn-lg btn-primary px-4 py-2 d-flex justify-content-center align-items-center gap-2 rounded-3 shadow-sm" id="clock_in_btn" data-status="<?= ($status === 'login') ? 'login' : 'logout'; ?>">-->
 <!--                        <img src="assets/img/icons/clock-in.svg" alt="Icon" style="height: 24px;">-->
-<!--                        <?php-->
-<!--                        if (isset($row['status'])) {-->
-<!--                            if ($row['status'] === 'login') {-->
-<!--                                echo 'Clock-Out';-->
-<!--                            } else {-->
-<!--                                echo 'Clock-In';-->
-<!--                            }-->
-<!--                        } else {-->
-<!--                            echo 'Clock-In';-->
-<!--                        }-->
-<!--                        ?>-->
+<?php
+// <!--                        if (isset($row['status'])) {-->
+// <!--                            if ($row['status'] === 'login') {-->
+// <!--                                echo 'Clock-Out';-->
+// <!--                            } else {-->
+// <!--                                echo 'Clock-In';-->
+// <!--                            }-->
+// <!--                        } else {-->
+// <!--                            echo 'Clock-In';-->
+// <!--                        }-->
+?>
 <!--                    </a>-->
                     
 <!--                    <h3 class="timer mt-3 text-dark" id="timer"></h3>-->
@@ -255,24 +283,15 @@ $inactive_employee = count_where("hrm_employee", "status", "0");
                     <input type="hidden" id="status" value="<?= $status; ?>">
                     
                     
-                    
 
+<!--    Desktop Section Only Start    -->
+    <div class="exp2">
 
-<!-- Temparory Section Start -->
-<div class="">
-    <div class="location-status">
-        <div>
-            <span id="location-status-text">Checking your location...</span>
-        </div>
-    </div>
-    
-    <!-- Div A  -->
-    <div id="divA" style="display:none;">
         <a href="javascript:void(0);" 
-            class="btn btn-lg btn-outline-warning px-4 py-2 d-flex justify-content-center align-items-center gap-2 rounded-3 shadow-sm" 
-            id="clock_in_btn" 
-            data-status="<?= $status; ?>">
-            
+           class="btn btn-lg btn-outline-warning px-4 py-2 d-flex justify-content-center align-items-center gap-2 rounded-3 shadow-sm" 
+           id="clock_in_btn" 
+           data-status="<?= $status; ?>">
+           
             <span class="btn-text d-flex align-items-center gap-2 ">
                 <img src="assets/img/icons/clock-in.svg" alt="Icon" style="height: 24px;">
                 <?= ($status === 'login') ? 'Clock-Out' : 'Clock-In'; ?>
@@ -280,124 +299,153 @@ $inactive_employee = count_where("hrm_employee", "status", "0");
             
             <span class="spinner-border spinner-border-sm text-light d-none" role="status" id="loadingSpinner"></span>
         </a>
-    </div>
-
-    <!-- Div B  -->
-    <div id="divB" style="display:none;">
-        <div class="alert alert-warning text-center">
-            <i class="fas fa-exclamation-triangle me-2"></i>
-            You must be within <span id="maxDistanceText"></span> of the office to clock in/out.
-        </div>
-    </div>
-
-    <div class="distance-info" id="distance-info">
-        <!-- <i class="fas fa-ruler-combined me-2"></i> -->
-        <span id="distance-text">Calculating distance to office...</span>
-    </div>
-</div>
-
-<script>
-    // Office location coordinates
-    const officeLat = 28.634281440118656;
-    const officeLon = 77.28287964624323;
-    
-    // Maximum allowed distance from office (in meters)
-    const maxDistance = 50;
-    
-    let userLat = null;
-    let userLon = null;
-    let distance = null;
-    
-    document.getElementById('maxDistanceText').textContent = maxDistance + 'm';
-
-    // Function to calculate distance between two points (Haversine Formula)
-    function calculateDistance(lat1, lon1, lat2, lon2) {
-        const earthRadius = 6371000; // Radius of Earth in meters
-
-        const dLat = deg2rad(lat2 - lat1);
-        const dLon = deg2rad(lon2 - lon1);
-
-        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-                Math.sin(dLon/2) * Math.sin(dLon/2);
-                
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return earthRadius * c;
-    }
-
-    function deg2rad(deg) {
-        return deg * (Math.PI/180);
-    }
-    
-    // Get user's location
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                function(position) {
-                    userLat = position.coords.latitude;
-                    userLon = position.coords.longitude;
-                    
-                    // Calculate distance to office
-                    distance = calculateDistance(userLat, userLon, officeLat, officeLon);
-                    
-                    // Update UI
-                    updateLocationStatus(distance <= maxDistance);
-                    updateDistanceText(distance);
-                    toggleDivs(distance <= maxDistance);
-                },
-                function(error) {
-                    console.error("Error getting location:", error);
-                    document.getElementById('location-status-text').innerHTML = 
-                        '<span class="text-danger"><i class="fas fa-exclamation-circle me-1"></i> Could not determine location</span>';
-                    
-                    // Default : agar location error hai to div B dikhado
-                    toggleDivs(false);
-                },
-                { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
-            );
-        } else {
-            alert("Geolocation is not supported by this browser.");
-            toggleDivs(false);
-        }
-    }
-    
-    // Update location status UI
-    function updateLocationStatus(isWithinRange) {
-        const statusElement = document.getElementById('location-status-text');
         
-        if (isWithinRange) {
-            // statusElement.innerHTML = '<span class="text-success"><i class="fas fa-check-circle me-1"></i> You are within office range</span>';
-            statusElement.innerHTML = '<span class="text-success"></span>';
-        } else {
-            // statusElement.innerHTML = '<span class="text-danger"><i class="fas fa-exclamation-circle me-1"></i> You are not in office range</span>';
-            statusElement.innerHTML = '<span class="text-danger"></span>';
-        }
-    }
-    
-    // Update distance text
-    function updateDistanceText(distance) {
-        const distanceElement = document.getElementById('distance-text');
-        distanceElement.textContent = `You are ${Math.round(distance)} meters from the office`;
-        // distanceElement.textContent = ``;
-    }
-
-    // ✅ Ye function bas divA/divB toggle karega
-    function toggleDivs(isWithinRange) {
-        if (isWithinRange) {
-            document.getElementById('divA').style.display = 'block';
-            document.getElementById('divB').style.display = 'none';
-        } else {
-            document.getElementById('divA').style.display = 'none';
-            document.getElementById('divB').style.display = 'block';
-        }
-    }
-    
-    // Initialize the page
-    window.onload = function() {
-        getLocation();
-    };
-</script>
-<!-- // Temparory Section End -->
+    </div>
+<!--    Desktop Section Only End    -->
+<!--    Mobile Section Only Start    -->
+    <div class="exp1">
+        <!-- Temparory Section Start -->
+        <div class="">
+            <div class="location-status">
+                <div>
+                    <span id="location-status-text">Checking your location...</span>
+                </div>
+            </div>
+            
+            <!-- Div A  -->
+            <div id="divA" style="display:none;">
+                <a href="javascript:void(0);" 
+                    class="btn btn-lg btn-outline-warning px-4 py-2 d-flex justify-content-center align-items-center gap-2 rounded-3 shadow-sm" 
+                    id="clock_in_btn" 
+                    data-status="<?= $status; ?>">
+                    
+                    <span class="btn-text d-flex align-items-center gap-2 ">
+                        <img src="assets/img/icons/clock-in.svg" alt="Icon" style="height: 24px;">
+                        <?= ($status === 'login') ? 'Clock-Out' : 'Clock-In'; ?>
+                    </span>
+                    
+                    <span class="spinner-border spinner-border-sm text-light d-none" role="status" id="loadingSpinner"></span>
+                </a>
+            </div>
+        
+            <!-- Div B  -->
+            <div id="divB" style="display:none;">
+                <div class="alert alert-warning text-center">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    You must be within <span id="maxDistanceText"></span> of the office to clock in/out.
+                </div>
+            </div>
+        
+            <div class="distance-info" id="distance-info">
+                <!-- <i class="fas fa-ruler-combined me-2"></i> -->
+                <span id="distance-text">Calculating distance to office...</span>
+            </div>
+        </div>
+        
+        <script>
+            // Office location coordinates
+            const officeLat = 28.634281440118656;
+            const officeLon = 77.28287964624323;
+            
+            // Maximum allowed distance from office (in meters)
+            const maxDistance = 50;
+            
+            let userLat = null;
+            let userLon = null;
+            let distance = null;
+            
+            document.getElementById('maxDistanceText').textContent = maxDistance + 'm';
+        
+            // Function to calculate distance between two points (Haversine Formula)
+            function calculateDistance(lat1, lon1, lat2, lon2) {
+                const earthRadius = 6371000; // Radius of Earth in meters
+        
+                const dLat = deg2rad(lat2 - lat1);
+                const dLon = deg2rad(lon2 - lon1);
+        
+                const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                        Math.sin(dLon/2) * Math.sin(dLon/2);
+                        
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+                return earthRadius * c;
+            }
+        
+            function deg2rad(deg) {
+                return deg * (Math.PI/180);
+            }
+            
+            // Get user's location
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            userLat = position.coords.latitude;
+                            userLon = position.coords.longitude;
+                            
+                            // Calculate distance to office
+                            distance = calculateDistance(userLat, userLon, officeLat, officeLon);
+                            
+                            // Update UI
+                            updateLocationStatus(distance <= maxDistance);
+                            updateDistanceText(distance);
+                            toggleDivs(distance <= maxDistance);
+                        },
+                        function(error) {
+                            console.error("Error getting location:", error);
+                            document.getElementById('location-status-text').innerHTML = 
+                                '<span class="text-danger"><i class="fas fa-exclamation-circle me-1"></i> Could not determine location</span>';
+                            
+                            // Default : agar location error hai to div B dikhado
+                            toggleDivs(false);
+                        },
+                        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+                    );
+                } else {
+                    alert("Geolocation is not supported by this browser.");
+                    toggleDivs(false);
+                }
+            }
+            
+            // Update location status UI
+            function updateLocationStatus(isWithinRange) {
+                const statusElement = document.getElementById('location-status-text');
+                
+                if (isWithinRange) {
+                    // statusElement.innerHTML = '<span class="text-success"><i class="fas fa-check-circle me-1"></i> You are within office range</span>';
+                    statusElement.innerHTML = '<span class="text-success"></span>';
+                } else {
+                    // statusElement.innerHTML = '<span class="text-danger"><i class="fas fa-exclamation-circle me-1"></i> You are not in office range</span>';
+                    statusElement.innerHTML = '<span class="text-danger"></span>';
+                }
+            }
+            
+            // Update distance text
+            function updateDistanceText(distance) {
+                const distanceElement = document.getElementById('distance-text');
+                distanceElement.textContent = `You are ${Math.round(distance)} meters from the office`;
+                // distanceElement.textContent = ``;
+            }
+        
+            // ✅ Ye function bas divA/divB toggle karega
+            function toggleDivs(isWithinRange) {
+                if (isWithinRange) {
+                    document.getElementById('divA').style.display = 'block';
+                    document.getElementById('divB').style.display = 'none';
+                } else {
+                    document.getElementById('divA').style.display = 'none';
+                    document.getElementById('divB').style.display = 'block';
+                }
+            }
+            
+            // Initialize the page
+            window.onload = function() {
+                getLocation();
+            };
+        </script>
+        <!-- // Temparory Section End -->
+    </div>
+<!--    Mobile Section Only End    -->
 
                     
                     
@@ -467,10 +515,15 @@ $inactive_employee = count_where("hrm_employee", "status", "0");
           echo "<p class='text-muted'>Today's date: <strong>" . date('F j, Y', strtotime($today)) . "</strong></p>";
           echo "<p class='text-muted'>Today is <strong>" . date('l', strtotime($today)) . "</strong>.</p>";
 
-          $sql = "SELECT fname, lname, dob, doj 
-                  FROM hrm_employee 
-                  WHERE (MONTH(dob) = ? AND DAY(dob) = ?) 
-                     OR (MONTH(doj) = ? AND DAY(doj) = ?)";
+$sql = "SELECT fname, lname, dob, doj 
+        FROM hrm_employee 
+        WHERE 
+         (
+           (MONTH(dob) = ? AND DAY(dob) = ?)
+           OR 
+           (MONTH(doj) = ? AND DAY(doj) = ?)
+         )
+        AND archive_status = 0";
           if ($stmt = $conn->prepare($sql)) {
               $stmt->bind_param("iiii", $todayMonth, $todayDay, $todayMonth, $todayDay);
               $stmt->execute();

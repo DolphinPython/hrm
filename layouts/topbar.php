@@ -55,7 +55,6 @@ if ($row_session['role'] == 'admin' or $row_session['role'] == 'super admin') {
         }
     }
 
-    
 </style>
 <div id="global-preloader">
     <div class="spinner"></div>

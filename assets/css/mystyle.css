@@ -8,3 +8,7 @@
     padding: 0px 20px ;
     
 }
+
+.header {
+    background: linear-gradient(to right, #8460fc 0%, #052665 100%) !important;
+}
