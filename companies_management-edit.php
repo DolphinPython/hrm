@@ -242,132 +242,229 @@ if (isset($_GET['edit'])) {
                     <li class="breadcrumb-item active">Company Details</li>
                 </ul>
 
-                
-<?php
-$result = $conn->query("SELECT * FROM companies");
-while ($row = $result->fetch_assoc()) {
-?>
-
                 <div class="row">
                     <div class="col-md-4">
-                        <h2 class="mb-4">Company Details</h2>
+                        <h2 class="mb-4">Edit - Company Details</h2>
                     </div>
                     <div class="col-md-4"></div>
                     <div class="col-md-4">
-                        <a href="companies_management-edit.php?edit=<?= $row['id'] ?>" class="btn btn-warning btn-sm">Edit Company Details</a>
+                        <a href="companies_management.php" class="btn btn-warning btn-sm">Back</a>
                     </div>
                 </div>
 
-                <div class="company-wrapper">
 
+                <?php if ($message) { ?>
+                    <div class="alert alert-success"><?php echo $message; ?></div>
+                <?php } ?>
 
-                        <div class="company-card">
-                            <div class="company-row">
+                <?php if (isset($_GET['edit'])) { ?>
+                    <h4>Edit Company</h4>
+                <?php } else { ?>
+                    <h4>Add New Company</h4>
+                <?php } ?>
 
-                                <div class="company-item">
-                                    <strong>Name</strong>
-                                    <?= $row['name'] ?>
-                                </div>
-
-                                <div class="company-item">
-                                    <strong>Email</strong>
-                                    <?= $row['email'] ?>
-                                </div>
-
-                                <div class="company-item">
-                                    <strong>Mobile</strong>
-                                    <?= $row['mobile1'] ?><br><?= $row['mobile2'] ?>
-                                </div>
-
-                                <div class="company-item">
-                                    <strong>Industry</strong>
-                                    <?= $row['industry'] ?>
-                                </div>
-
-                                <div class="company-item">
-                                    <strong>Address</strong>
-                                    <?= $row['address1'] ?>
-                                </div>
-
-                                <div class="company-item">
-                                    <strong>Address</strong>
-                                    <?= $row['address2'] ?>
-                                </div>
-
-                                <div class="company-item">
-                                    <strong>Website</strong>
-                                    <a href="<?= $row['website'] ?>" target="_blank">
-                                        <?= $row['website'] ?>
-                                    </a>
-                                </div>
-
-                                <div class="company-item">
-                                    <strong>Founded Year</strong>
-                                    <?= $row['founded_year'] ?>
-                                </div>
-
-                                <div class="company-item">
-                                    <strong>Employees</strong>
-                                    <?= $row['employee_count'] ?>
-                                </div>
-
-                                <div class="company-item">
-                                    <strong>Operating Hours</strong>
-                                    <?= $row['operating_hours'] ?>
-                                </div>
-
-                                <div class="company-item">
-                                    <strong>Logo</strong>
-                                    <?php if ($row['logo']) { ?>
-                                        <img src="uploads/<?= $row['logo'] ?>">
-                                    <?php } else {
-                                        echo 'No Logo';
-                                    } ?>
-                                </div>
-
-                                <div class="company-item">
-                                    <strong>Banner</strong>
-                                    <?php if ($row['banner']) { ?>
-                                        <img src="uploads/<?= $row['banner'] ?>">
-                                    <?php } else {
-                                        echo 'No Banner';
-                                    } ?>
-                                </div>
-
-                                <div class="company-item">
-                                    <strong>Social Links</strong>
-                                    <a href="<?= $row['linkedin'] ?>" target="_blank">LinkedIn</a><br>
-                                    <a href="<?= $row['facebook'] ?>" target="_blank">Facebook</a><br>
-                                    <a href="<?= $row['twitter'] ?>" target="_blank">Twitter</a>
-                                </div>
-
-                                <div class="company-item map-box">
-                                    <strong>Location</strong>
-                                    <?php
-                                    if (!empty($row['longitude'])) {
-                                        echo htmlspecialchars_decode($row['longitude']);
-                                    } else {
-                                        echo 'No Map';
-                                    }
-                                    ?>
-                                </div>
-
-                                <div class="company-item">
-                                    <strong>Parent Company</strong>
-                                    <?= $row['parent_company'] ?>
-                                </div>
-
-                                <div class="company-item">
-                                    <strong>Additional Contact</strong>
-                                    <?= $row['additional_contact'] ?>
-                                </div>
-
-                            </div>
-                        </div>
-
+                <form action=""  method="POST" enctype="multipart/form-data">
+                    <?php if (isset($data['id'])) { ?>
+                        <input type="hidden" name="company_id" value="<?php echo $data['id']; ?>">
+                        <input type="hidden" name="existing_logo" value="<?php echo $data['logo']; ?>">
+                        <input type="hidden" name="existing_banner" value="<?php echo $data['banner']; ?>">
                     <?php } ?>
 
-                </div>
+                    <div class="row">
+                        <!-- Company Name -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="name">Company Name</label>
+                            <input type="text" class="form-control" name="name" value="<?php echo $data['name']; ?>"
+                                required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="email" value="<?php echo $data['email']; ?>"
+                                required>
+                        </div>
+
+                        <!-- Mobile 1 -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="mobile1">Mobile 1</label>
+                            <input type="text" class="form-control" name="mobile1"
+                                value="<?php echo $data['mobile1']; ?>" required>
+                        </div>
+
+                        <!-- Mobile 2 -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="mobile2">Mobile 2</label>
+                            <input type="text" class="form-control" name="mobile2"
+                                value="<?php echo $data['mobile2']; ?>">
+                        </div>
+
+                        <!-- Address Line 1 -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="address1">Address Line 1</label>
+                            <input type="text" class="form-control" name="address1"
+                                value="<?php echo $data['address1']; ?>" required>
+                        </div>
+
+                        <!-- Address Line 2 -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="address2">Address Line 2</label>
+                            <input type="text" class="form-control" name="address2"
+                                value="<?php echo $data['address2']; ?>" required>
+                        </div>
+
+                        <!-- Website -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="website">Website</label>
+                            <input type="url" class="form-control" name="website"
+                                value="<?php echo $data['website']; ?>">
+                        </div>
+
+                        <!-- Industry -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="industry">Industry</label>
+                            <input type="text" class="form-control" name="industry"
+                                value="<?php echo $data['industry']; ?>">
+                        </div>
+
+                        <!-- Tax ID -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="tax_id">Tax ID</label>
+                            <input type="text" class="form-control" name="tax_id"
+                                value="<?php echo $data['tax_id']; ?>">
+                        </div>
+
+                        <!-- LinkedIn -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="linkedin">LinkedIn</label>
+                            <input type="url" class="form-control" name="linkedin"
+                                value="<?php echo $data['linkedin']; ?>">
+                        </div>
+
+                        <!-- Facebook -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="facebook">Facebook</label>
+                            <input type="url" class="form-control" name="facebook"
+                                value="<?php echo $data['facebook']; ?>">
+                        </div>
+
+                        <!-- Twitter -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="twitter">Twitter</label>
+                            <input type="url" class="form-control" name="twitter"
+                                value="<?php echo $data['twitter']; ?>">
+                        </div>
+
+                        <!-- Founded Year -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="founded_year">Founded Year</label>
+                            <input type="number" class="form-control" name="founded_year"
+                                value="<?php echo $data['founded_year']; ?>">
+                        </div>
+
+                        <!-- Employee Count -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="employee_count">Employee Count</label>
+                            <input type="number" class="form-control" name="employee_count"
+                                value="<?php echo $data['employee_count']; ?>">
+                        </div>
+
+                        <!-- Status -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="status">Status</label>
+                            <select class="form-control" name="status">
+                                <option value="active" <?php echo ($data['status'] == 'active') ? 'selected' : ''; ?>>
+                                    Active</option>
+                                <option value="inactive" <?php echo ($data['status'] == 'inactive') ? 'selected' : ''; ?>>
+                                    Inactive</option>
+                            </select>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="col-12 form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control"
+                                name="description"><?php echo $data['description']; ?></textarea>
+                        </div>
+
+                        <!-- Operating Hours -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="operating_hours">Operating Hours</label>
+                            <input type="text" class="form-control" name="operating_hours"
+                                value="<?php echo $data['operating_hours']; ?>">
+                        </div>
+
+                        <!-- Latitude -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="latitude">Latitude</label>
+                            <input type="text" class="form-control" name="latitude"
+                                value="<?php echo $data['latitude']; ?>">
+                        </div>
+
+                        <!-- Longitude (Replace with Iframe Code) -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="longitude">Google Maps Embed Code</label>
+                            <textarea class="form-control" name="longitude"
+                                rows="4"><?php echo $data['longitude']; ?></textarea>
+                        </div>
+
+                        <!-- Parent Company -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="parent_company">Parent Company</label>
+                            <input type="text" class="form-control" name="parent_company"
+                                value="<?php echo $data['parent_company']; ?>">
+                        </div>
+
+                        <!-- Additional Contact -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="additional_contact">Additional Contact</label>
+                            <input type="text" class="form-control" name="additional_contact"
+                                value="<?php echo $data['additional_contact']; ?>">
+                        </div>
+
+                        <!-- Logo -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="logo">Logo</label>
+                            <input type="file" class="form-control" name="logo">
+                            <?php if (isset($data['logo'])) { ?>
+                                <img src="uploads/<?php echo $data['logo']; ?>" width="100" alt="Logo">
+                            <?php } ?>
+                        </div>
+
+                        <!-- Banner -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="banner">Banner</label>
+                            <input type="file" class="form-control" name="banner">
+                            <?php if (isset($data['banner'])) { ?>
+                                <img src="uploads/<?php echo $data['banner']; ?>" width="100" alt="Banner">
+                            <?php } ?>
+                        </div>
+
+                        <!-- Logo Alt Text -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="logo_alt_text">Logo Alt Text</label>
+                            <input type="text" class="form-control" name="logo_alt_text"
+                                value="<?php echo $data['logo_alt_text']; ?>">
+                        </div>
+
+                        <!-- Banner Alt Text -->
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="banner_alt_text">Banner Alt Text</label>
+                            <input type="text" class="form-control" name="banner_alt_text"
+                                value="<?php echo $data['banner_alt_text']; ?>">
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="col-12 text-center mt-4">
+                            <button type="submit" class="btn btn-primary"
+                                name="<?php echo isset($data['id']) ? 'update_company' : 'add_company'; ?>">
+                                <?php echo isset($data['id']) ? 'Update Company' : 'Add Company'; ?>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <br><br>
 
 
                 <!-- Responsive Cards for Smaller Screens -->

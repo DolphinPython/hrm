@@ -438,7 +438,7 @@ if ($row['role'] != 'admin' and $row['role'] != 'super admin') {
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between mb-3">
                                             <div>
-                                                <span class="d-block">Active Employee</span>
+                                                <span class="d-block">Active Employees</span>
                                             </div>
                                             <div>
                                                 <!--<span class="text-success">+<?php echo round(($active_employee * 100) / total_employee() - 1, 0); ?>%</span>-->
@@ -452,12 +452,12 @@ if ($row['role'] != 'admin' and $row['role'] != 'super admin') {
                                             <div class="progress-bar bg-primary" role="progressbar" style="width: 70%;"
                                                 aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
-                                        <p class="mb-0">Overall Employees 
+                                        <!-- <p class="mb-0">Overall Employees 
                                             <?php 
                                                 // echo total_employee() - 1; 
                                                 echo $active_employee+$inactive_employee-1;
                                             ?>
-                                        </p>
+                                        </p> -->
                                     </div>
                                 </div>
 
@@ -465,7 +465,7 @@ if ($row['role'] != 'admin' and $row['role'] != 'super admin') {
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between mb-3">
                                             <div>
-                                                <span class="d-block">Inactive Employee</span>
+                                                <span class="d-block">Inactive Employees</span>
                                             </div>
                                             <div>
                                                 <!--<span class="text-success">+<?php echo round(($inactive_employee * 100) / total_employee(), 0); ?>%</span>-->
@@ -479,12 +479,12 @@ if ($row['role'] != 'admin' and $row['role'] != 'super admin') {
                                             <div class="progress-bar bg-primary" role="progressbar" style="width: 70%;"
                                                 aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
-                                        <p class="mb-0">Overall Employees 
+                                        <!-- <p class="mb-0">Overall Employees 
                                             <?php
                                                 // echo total_employee() - 1; 
                                                 echo $active_employee+$inactive_employee-1;
                                             ?>
-                                        </p>
+                                        </p> -->
                                     </div>
                                 </div>
 

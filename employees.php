@@ -504,17 +504,17 @@ if (isset($_GET['error'])) {
                                 ?>
                                 <tr>
                                     <td>
-                                        
-                                            <!-- <strong>Sr No.</strong> -->
-                                            <?= $sr ?>
-                                        
+
+                                        <!-- <strong>Sr No.</strong> -->
+                                        <?= $sr ?>
+
                                     </td>
                                     <td>
                                         <a class="avatar" href="#" onclick="submitProfileForm(<?php echo $row['id']; ?>)">
                                             <img src="<?php echo $profile_image; ?>" alt="User Image" width="50">
                                         </a>
                                     </td>
-                                    
+
                                     <td><?php echo htmlspecialchars($row['emp_id']); ?></td>
                                     <td>
                                         <a href="#" onclick="submitProfileForm(<?php echo $row['id']; ?>)">
@@ -1630,17 +1630,19 @@ if (isset($_GET['error'])) {
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="input-block mb-3">
-                                                    <label class="col-form-label">First Name <span
-                                                            class="text-danger">*</span></label>
+                                                    <label class="col-form-label">
+                                                        First Name <span class="text-danger">*</span>
+                                                    </label>
                                                     <input required class="form-control" type="text" name="fname_add"
-                                                        id="fname_add">
+                                                        id="fname_add" placeholder="Enter First Name">
                                                 </div>
                                             </div>
+
                                             <div class="col-sm-6">
                                                 <div class="input-block mb-3">
                                                     <label class="col-form-label">Last Name</label>
                                                     <input required class="form-control" type="text" name="lname_add"
-                                                        id="lname_add">
+                                                        id="lname_add" placeholder="Enter Last Name">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
@@ -1656,18 +1658,25 @@ if (isset($_GET['error'])) {
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="input-block mb-3">
-                                                    <label class="col-form-label">Gender <span
-                                                            class="text-danger">*</span></label>
-                                                    <select name="gender_add" id="gender_add" class="form-control">
+                                                    <label class="col-form-label">
+                                                        Gender <span class="text-danger">*</span>
+                                                    </label>
+
+                                                    <select name="gender_add" id="gender_add" class="form-control"
+                                                        required>
+                                                        <option value="" selected disabled> Select Gender </option>
                                                         <option value="1">Male</option>
                                                         <option value="2">Female</option>
                                                     </select>
                                                 </div>
                                             </div>
+
                                             <div class="col-sm-6">
                                                 <div class="input-block mb-3">
                                                     <label class="col-form-label">Blood Group</label>
                                                     <select name="bgroup_add" id="bgroup_add" class="form-control">
+                                                        <option value="" selected disabled> Select Blood Group </option>
+
                                                         <option value="A negative">A negative</option>
                                                         <option value="A positive">A positive</option>
                                                         <option value="B negative">B negative</option>
@@ -1679,16 +1688,21 @@ if (isset($_GET['error'])) {
                                                     </select>
                                                 </div>
                                             </div>
+
                                             <div class="col-sm-6">
                                                 <div class="input-block mb-3">
                                                     <label class="col-form-label">Marital Status</label>
                                                     <select name="marital_status_add" id="marital_status_add"
                                                         class="form-control">
+                                                        <option value="" selected disabled> Select Marital Status
+                                                        </option>
+
                                                         <option value="1">Married</option>
                                                         <option value="2">Unmarried</option>
                                                     </select>
                                                 </div>
                                             </div>
+
                                         </div>
                                         <div class="submit-section">
                                             <button onClick="add_personal_info(
@@ -1740,13 +1754,16 @@ if (isset($_GET['error'])) {
                                         <div class="col-sm-6">
                                             <div class="input-block mb-3">
                                                 <label class="col-form-label">House Type</label>
-                                                <select name="house_type_add" id="house_type_add" class="form-control">
+                                                <select name="house_type_add" id="house_type_add" class="form-control"
+                                                    required>
+                                                    <option value="" selected disabled> Select House Type </option>
                                                     <option value="Rented - with Family">Rented - with Family</option>
                                                     <option value="Rented - Bachelor">Rented - Bachelor</option>
                                                     <option value="Own House">Own House</option>
                                                 </select>
                                             </div>
                                         </div>
+
                                         <div class="col-sm-6">
                                             <div class="input-block mb-3">
                                                 <label class="col-form-label">Staying at Current Residence Since <span
@@ -1823,7 +1840,10 @@ if (isset($_GET['error'])) {
                                             <div class="input-block mb-3">
                                                 <label class="col-form-label">Probation Period</label>
                                                 <select name="probation_period_add" id="probation_period_add"
-                                                    class="form-control">
+                                                    class="form-control" required>
+
+                                                    <option value="" selected disabled> Select Probation Period
+                                                    </option>
                                                     <option value="1">1 Month</option>
                                                     <option value="2">2 Months</option>
                                                     <option value="3">3 Months</option>
@@ -1833,6 +1853,7 @@ if (isset($_GET['error'])) {
                                                 </select>
                                             </div>
                                         </div>
+
                                         <div class="col-sm-6">
                                             <div class="input-block mb-3">
                                                 <label class="col-form-label">Employee Type</label>
@@ -1845,77 +1866,108 @@ if (isset($_GET['error'])) {
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="input-block mb-3">
-                                                <label class="col-form-label">Work Location <span
-                                                        class="text-danger">*</span></label>
+                                                <label class="col-form-label">
+                                                    Work Location <span class="text-danger">*</span>
+                                                </label>
                                                 <select name="work_location_add" id="work_location_add"
-                                                    class="form-control">
-                                                    <option value="Registered Office">Registered Office</option>
+                                                    class="form-control" required>
+
+                                                    <option value="" selected disabled> Select Work Location </option>
+                                                    <option value="Registered Office">Work From Home</option>
                                                     <option value="Corporate Office">Corporate Office</option>
+
                                                 </select>
                                             </div>
                                         </div>
+
+
                                         <div class="col-sm-6">
                                             <div class="input-block mb-3">
                                                 <label class="col-form-label">Work Experience</label>
                                                 <select name="experience_add" id="experience_add" class="form-control">
+                                                    <option value="">Select Experience</option>
                                                     <option value="Fresher">Fresher</option>
-                                                    <option value="6 Month">6 Month</option>
-                                                    <option value="1 Year">6 Month to 1 Year</option>
-                                                    <option value="2 Year">1 Year to 2 Year</option>
-                                                    <option value="3 Year">2 Year to 3 Year</option>
-                                                    <option value="4 Year">3 Year to 4 Year</option>
-                                                    <option value="5 Year">4 Year to 5 Year</option>
-                                                    <option value="6 Year">5 Year to 6 Year</option>
-                                                    <option value="7 Year">6 Year to 7 Year</option>
-                                                    <option value="8 Year">7 Year to 8 Year</option>
-                                                    <option value="9 Year">8 Year to 9 Year</option>
-                                                    <option value="10 Year">9 Year to 10 Year</option>
-                                                    <option value="11 Year">10 Year to 11 Year</option>
-                                                    <option value="12 Year">11 Year to 12 Year</option>
-                                                    <option value="More than 12 Year">More than 12 Year</option>
+                                                    <option value="0-6 Months">0 to 6 Months</option>
+                                                    <option value="6-12 Months">6 Months to 1 Year</option>
+                                                    <option value="1-2 Years">1 Year to 2 Years</option>
+                                                    <option value="2-3 Years">2 Years to 3 Years</option>
+                                                    <option value="3-4 Years">3 Years to 4 Years</option>
+                                                    <option value="4-5 Years">4 Years to 5 Years</option>
+                                                    <option value="5-6 Years">5 Years to 6 Years</option>
+                                                    <option value="6-7 Years">6 Years to 7 Years</option>
+                                                    <option value="7-8 Years">7 Years to 8 Years</option>
+                                                    <option value="8-9 Years">8 Years to 9 Years</option>
+                                                    <option value="9-10 Years">9 Years to 10 Years</option>
+                                                    <option value="10-12 Years">10 Years to 12 Years</option>
+                                                    <option value="12+ Years">More than 12 Years</option>
                                                 </select>
                                             </div>
                                         </div>
+
                                         <div class="col-sm-6">
                                             <div class="input-block mb-3">
-                                                <label class="col-form-label">Designation <span
-                                                        class="text-danger">*</span></label>
+                                                <label class="col-form-label">
+                                                    Designation <span class="text-danger">*</span>
+                                                </label>
+
                                                 <select name="designation_id_add" id="designation_id_add"
-                                                    class="form-control">
+                                                    class="form-control" required>
+
+                                                    <!-- Default placeholder -->
+                                                    <option value="" selected disabled>
+                                                        Select Designation
+                                                    </option>
+
                                                     <?php
-                                                    $query_designation = "SELECT * FROM hrm_designation;";
-                                                    $result_designation = mysqli_query($conn, $query_designation) or die(mysqli_error($conn));
-                                                    while ($row_designation = mysqli_fetch_array($result_designation)) { ?>
+                                                    $query_designation = "SELECT * FROM hrm_designation";
+                                                    $result_designation = mysqli_query($conn, $query_designation)
+                                                        or die(mysqli_error($conn));
+
+                                                    while ($row_designation = mysqli_fetch_array($result_designation)) {
+                                                        ?>
                                                         <option value="<?php echo $row_designation['id']; ?>">
                                                             <?php echo htmlspecialchars($row_designation['name']); ?>
                                                         </option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
+
                                         </div>
-                                        <div class="col-sm-6">
+                                        <!-- <div class="col-sm-6">
                                             <div class="input-block mb-3">
                                                 <label class="col-form-label">Job Title</label>
                                                 <input class="form-control" type="text" name="job_title_add"
                                                     id="job_title_add">
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="col-sm-6">
                                             <div class="input-block mb-3">
-                                                <label class="col-form-label">Department <span
-                                                        class="text-danger">*</span></label>
+                                                <label class="col-form-label">
+                                                    Department <span class="text-danger">*</span>
+                                                </label>
+
                                                 <select name="department_id_add" id="department_id_add"
-                                                    class="form-control">
+                                                    class="form-control" required>
+
+                                                    <!-- Default placeholder -->
+                                                    <option value="" selected disabled>
+                                                        Select Department
+                                                    </option>
+
                                                     <?php
-                                                    $query_department = "SELECT * FROM hrm_department;";
-                                                    $result_department = mysqli_query($conn, $query_department) or die(mysqli_error($conn));
-                                                    while ($row_department = mysqli_fetch_array($result_department)) { ?>
+                                                    $query_department = "SELECT * FROM hrm_department";
+                                                    $result_department = mysqli_query($conn, $query_department)
+                                                        or die(mysqli_error($conn));
+
+                                                    while ($row_department = mysqli_fetch_array($result_department)) {
+                                                        ?>
                                                         <option value="<?php echo $row_department['id']; ?>">
                                                             <?php echo htmlspecialchars($row_department['name']); ?>
                                                         </option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
+
                                         </div>
                                     </div>
                                     <div class="submit-section">

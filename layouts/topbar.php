@@ -54,6 +54,8 @@ if ($row_session['role'] == 'admin' or $row_session['role'] == 'super admin') {
             transform: rotate(360deg);
         }
     }
+
+    
 </style>
 <div id="global-preloader">
     <div class="spinner"></div>
@@ -84,9 +86,15 @@ if ($row_session['role'] == 'admin' or $row_session['role'] == 'super admin') {
     </a>
 
     <!-- Header Title -->
-    <div class="page-title-box">
+    <!-- <div class="page-title-box">
         <h3>HRMPULSE</h3>
-    </div>
+    </div> -->
+    <div class="page-title-box">
+            
+    <img src="assets/img/hrm-logo.png" alt="HRMPULSE Logo" class="w100">
+            
+</div>
+
     <!-- /Header Title -->
 
     <a id="mobile_btn" class="mobile_btn" href="#sidebar"><i class="fa-solid fa-bars"></i></a>
