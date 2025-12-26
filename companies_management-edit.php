@@ -114,13 +114,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif (isset($_POST['update_company'])) {
         $company_id = $_POST['company_id'];
-        $update_sql = "UPDATE companies SET 
-            name = '$name', logo = '$logo', banner = '$banner', logo_alt_text = '$logo_alt_text', banner_alt_text = '$banner_alt_text', 
-            email = '$email', mobile1 = '$mobile1', mobile2 = '$mobile2', website = '$website', industry = '$industry', 
-            tax_id = '$tax_id', linkedin = '$linkedin', facebook = '$facebook', twitter = '$twitter', founded_year = '$founded_year', 
-            employee_count = '$employee_count', status = '$status', description = '$description', operating_hours = '$operating_hours', 
-            latitude = '$latitude', longitude = '$longitude', parent_company = '$parent_company', additional_contact = '$additional_contact', 
-            address1 = '$address1', address2 = '$address2' WHERE id = $company_id";
+
+
+        $fields = [];
+        
+        // Always update fields
+        $fields[] = "name = '$name'";
+        $fields[] = "logo_alt_text = '$logo_alt_text'";
+        $fields[] = "banner_alt_text = '$banner_alt_text'";
+        $fields[] = "email = '$email'";
+        $fields[] = "mobile1 = '$mobile1'";
+        $fields[] = "mobile2 = '$mobile2'";
+        $fields[] = "website = '$website'";
+        $fields[] = "industry = '$industry'";
+        $fields[] = "tax_id = '$tax_id'";
+        $fields[] = "linkedin = '$linkedin'";
+        $fields[] = "facebook = '$facebook'";
+        $fields[] = "twitter = '$twitter'";
+        $fields[] = "founded_year = '$founded_year'";
+        $fields[] = "employee_count = '$employee_count'";
+        $fields[] = "status = '$status'";
+        $fields[] = "description = '$description'";
+        $fields[] = "operating_hours = '$operating_hours'";
+        $fields[] = "latitude = '$latitude'";
+        $fields[] = "longitude = '$longitude'";
+        $fields[] = "parent_company = '$parent_company'";
+        $fields[] = "additional_contact = '$additional_contact'";
+        $fields[] = "address1 = '$address1'";
+        $fields[] = "address2 = '$address2'";
+        
+        // ✅ Logo update only if value exists
+        if (!empty($logo)) {
+            $fields[] = "logo = '$logo'";
+        }
+        
+        // ✅ Banner update only if value exists
+        if (!empty($banner)) {
+            $fields[] = "banner = '$banner'";
+        }
+        
+        $update_sql = "UPDATE companies SET " . implode(", ", $fields) . " WHERE id = $company_id";
+        
+        
+
+        // $update_sql = "UPDATE companies SET 
+        //     name = '$name', logo = '$logo', banner = '$banner', logo_alt_text = '$logo_alt_text', banner_alt_text = '$banner_alt_text', 
+        //     email = '$email', mobile1 = '$mobile1', mobile2 = '$mobile2', website = '$website', industry = '$industry', 
+        //     tax_id = '$tax_id', linkedin = '$linkedin', facebook = '$facebook', twitter = '$twitter', founded_year = '$founded_year', 
+        //     employee_count = '$employee_count', status = '$status', description = '$description', operating_hours = '$operating_hours', 
+        //     latitude = '$latitude', longitude = '$longitude', parent_company = '$parent_company', additional_contact = '$additional_contact', 
+        //     address1 = '$address1', address2 = '$address2' WHERE id = $company_id";
 
         if ($conn->query($update_sql) === TRUE) {
             $message = "Company updated successfully!";

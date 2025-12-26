@@ -2,9 +2,27 @@
 <?php include 'layouts/head-main.php'; ?>
 <?php include 'include/function.php'; ?>
 
+
+
 <?php
 $conn = connect();
 $emp_id = $_SESSION['id'];
+
+
+
+
+
+
+
+$latefineque = "SELECT * FROM office_timing WHERE id = 1";
+$latefinequeres = mysqli_query($conn, $latefineque);
+$latefine = mysqli_fetch_assoc($latefinequeres);
+$normal_fine = $latefine['normal_fine'];
+
+
+
+
+
 
 // Define admin/HR IDs who can see all employees
 // $admin_ids = [10, 14];
@@ -270,6 +288,8 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                     </div>
                 </div>
 
+<hr>
+
                 <!-- Attendance Table -->
                 <div class="row mt-4">
                     <div class="col-md-12">
@@ -285,7 +305,9 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                             $late = 0;
                             $extra_late = 0;
                             $extra_fine = 0;
+                            $halfd_late = 0;
                             $total_late = 0;
+                            $fine_amount = 0;
                             
 
 
@@ -304,16 +326,52 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                 $emp_row = mysqli_fetch_assoc($emp_result);
                                 $employee_name = $emp_row['employee_name'] ?? '';
                                 ?>
-                                <h2 class="text-center m-3 text-danger" id="name"><?= $employee_name; ?></h2>
+<div class="row">
+    <div class="col-md-4">
+        <h2 class="text-danger" id="name"><?= $employee_name; ?></h2>
+        <h5>Present Days: <span id="presentDaysCount"><?= $present_days ?></span></h5>
+        <h5>
+            Leaves: <span id="leaveDaysCount"><?= $leave_days ?></span> 
+            <span class="bcolor">|</span>
+            Absent: <span id="absentDaysCount"><?= $absent_days ?></span> 
+            <span class="bcolor">|</span>
+            Total late: <span id="totallateCount"><?= $total_late ?></span>
+        </h5>
+    </div>
+    <div class="col-md-4 finesec">
+        <div class="row text-center">
+            <h6 class="">
+                Fine: 
+                <span id="totallateFine"><?= $fine_amount ?></span>/-
+            </h6>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="row  text-right">
+            <h3 class="bcolor">
+                <?php 
+                    $monthNumber = $_GET['month'];
+                    $monthName = date('F', mktime(0, 0, 0, $monthNumber, 10));
+                    echo $monthName;
+                    echo "&nbsp;";
+                    echo $_GET['year'];
+                ?>
+            </h3>
+            <h5>Total Working Days: <span id="totalworkingdays"><?= $totalwork_days ?></span></h5>
+            <h5>
+                Saturdays: <span id="saturdayDaysCount"><?= $saturday_days ?></span> 
+                <span class="bcolor">|</span>
+                Sundays: <span id="sundayDaysCount"><?= $sunday_days ?></span> 
+                <span class="bcolor">|</span>
+                Holidays: <span id="holidayDaysCount"><?= $holiday_days ?></span>
+            </h5>
+        </div>
+    </div>
+</div>
+
+                                
                                 <h4 class="text-center m-3">
-                                    Total Working Days: <span id="totalworkingdays"><?= $totalwork_days ?></span> |
-                                    Present Days: <span id="presentDaysCount"><?= $present_days ?></span> |
-                                    Saturdays: <span id="saturdayDaysCount"><?= $saturday_days ?></span> |
-                                    Sundays: <span id="sundayDaysCount"><?= $sunday_days ?></span> |
-                                    Holidays: <span id="holidayDaysCount"><?= $holiday_days ?></span> |
-                                    Leaves: <span id="leaveDaysCount"><?= $leave_days ?></span> |
-                                    Absent: <span id="absentDaysCount"><?= $absent_days ?></span> |
-                                    Total late: <span id="totallateCount"><?= $total_late ?></span>
+
 
                                 </h4>
                             <?php } else { ?>
@@ -464,6 +522,9 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                                 }
                                                                 if($late_status == "Late (Extra Fine)") {
                                                                     $extra_fine++;
+                                                                }
+                                                                if($late_status == "Late (Half Day)") {
+                                                                    $halfd_late++;
                                                                 }
                                                                 echo $late_status;
                                                                 ?>
@@ -624,12 +685,14 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
 
                                                 $totalwork_days = $present_days + $holiday_days + $leave_days + $absent_days;
 
-                                                $total_late = $late + $extra_late + $extra_fine;
+                                                $total_late = $late + $extra_late + $extra_fine + $halfd_late;
+                                                $totallateFine = $normal_fine * $total_late; 
 
                                                 // Update counters in DOM
                                                 echo "<script>
                                                     document.getElementById('totalworkingdays').textContent = '$totalwork_days';
                                                     document.getElementById('totallateCount').textContent = '$total_late';
+                                                    document.getElementById('totallateFine').textContent = '$totallateFine';
                                                     document.getElementById('presentDaysCount').textContent = '$present_days';
                                                     document.getElementById('saturdayDaysCount').textContent = '$saturday_days';
                                                     document.getElementById('sundayDaysCount').textContent = '$sunday_days';

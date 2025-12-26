@@ -235,11 +235,9 @@ $current_year = date("Y");
                                                                 <label class="col-form-label">Year <span class="text-danger">*</span></label>
 
                                                                 <select name="year<?php echo $row['id']; ?>" id="year<?php echo $row['id']; ?>" class="form-control">
-                                                                    <option value="2024"
-                                                                        <?php if ($row['year'] == "2024") echo "selected='selected'"; ?>>2024</option>
-                                                                    <option value="2025"
-                                                                        <?php if ($row['year'] == "2025") echo "selected='selected'"; ?>>2025</option>
-                                                                       
+                                                                    <option value="2024" <?php if ($row['year'] == "2024") echo "selected='selected'"; ?>>2024</option>
+                                                                    <option value="2025" <?php if ($row['year'] == "2025") echo "selected='selected'"; ?>>2025</option>
+                                                                    <option value="2026" <?php if ($row['year'] == "2026") echo "selected='selected'"; ?>>2026</option>
                                                                 </select>
                                                             </div>
                                                             <div class="submit-section">
@@ -307,11 +305,9 @@ $current_year = date("Y");
                                     <label class="col-form-label">Year <span class="text-danger">*</span></label>
 
                                     <select name="year" id="year" class="form-control">
-                                        <option value="2024"
-                                            <?php if ($current_year == "2024") echo "selected='selected'"; ?>>2024</option>
-                                        <option value="2025"
-                                            <?php if ($current_year == "2025") echo "selected='selected'"; ?>>2025</option>
-                                       
+                                        <option value="2024" <?php if ($current_year == "2024") echo "selected='selected'"; ?>>2024</option>
+                                        <option value="2025" <?php if ($current_year == "2025") echo "selected='selected'"; ?>>2025</option>
+                                        <option value="2026" <?php if ($current_year == "2026") echo "selected='selected'"; ?>>2026</option>
                                     </select>
                                 </div>
                                 <div class="submit-section">

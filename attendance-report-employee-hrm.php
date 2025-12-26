@@ -20,6 +20,21 @@ $inactive_employee = count_where("hrm_employee", "status", "0");
 
 $profile_image_dir = "upload-image";
 $profile_image = $profile_image_dir . "/" . $row['image'];
+
+
+
+
+
+
+
+$latefineque = "SELECT * FROM office_timing WHERE id = 1";
+$latefinequeres = mysqli_query($conn, $latefineque);
+$latefine = mysqli_fetch_assoc($latefinequeres);
+$normal_fine = $latefine['normal_fine'];
+
+
+
+
 ?>
 
 <head>
@@ -33,329 +48,735 @@ $profile_image = $profile_image_dir . "/" . $row['image'];
     <div class="main-wrapper">
         <?php include 'layouts/menu.php'; ?>
 
-        <!-- Page Wrapper -->
-        <div class="page-wrapper">
-            <!-- Page Content -->
-            <div class="content container-fluid">
-                <!-- Page Header -->
-                <div class="page-header">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h3 class="page-title">Attendance Reports Employee</h3>
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="admin-dashboard.php">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Attendance Reports Employee</li>
-                            </ul>
+
+
+
+
+
+                <style>
+                    .tab {
+                        overflow: hidden;
+                        border: 1px solid #ccc;
+                        background-color: #f1f1f1;
+                    }
+
+                    /* Tab buttons */
+                    .tab button {
+                        background-color: inherit;
+                        float: left;
+                        border: none;
+                        outline: none;
+                        cursor: pointer;
+                        padding: 14px 16px;
+                        transition: 0.3s;
+                        font-size: 17px;
+                        width: 50%;
+                    }
+
+                    /* Hover effect */
+                    .tab button:hover {
+                        background-color: #ffbc34;
+                        color: #fff;
+                    }
+
+                    /* Active tab */
+                    .tab button.active {
+                        background-color: #052c65;
+                        color: #fff;
+                    }
+
+                    /* Tab content */
+                    .tabcontent {
+                        display: none;
+                        padding: 12px;
+                        border: 1px solid #ccc;
+                        border-top: none;
+                    }
+                    .calendar {
+                        display: grid;
+                        grid-template-columns: repeat(7, 1fr);
+                        gap: 4px;
+                        text-align: center;
+                    }
+
+                    .calendar .day-name {
+                        font-weight: 600;
+                        background: #f0f0f0;
+                        padding: 6px 0;
+                    }
+
+                    .calendar .day {
+                        min-height: 80px;
+                        border: 1px solid #ddd;
+                        padding: 4px;
+                        font-size: 14px;
+                        position: relative;
+                    }
+
+                    .calendar .present {
+                        background: #d4edda;
+                    }
+
+                    .calendar .absent {
+                        background: #f8d7da;
+                    }
+
+                    .calendar .leave {
+                        background: #fff3cd;
+                    }
+
+                    .calendar .holiday {
+                        background: #d1ecf1;
+                    }
+
+                    .calendar .saturday,
+                    .calendar .sunday {
+                        background: #e2e3e5;
+                    }
+
+                    .calendar .future {
+                        background: #fafafa;
+                        color: #aaa;
+                    }
+
+                    .calendar .day span.status {
+                        position: absolute;
+                        bottom: 4px;
+                        left: 4px;
+                        right: 4px;
+                        font-size: 11px;
+                        display: block;
+                    }
+                    .row {
+                        width: 100%;
+                    }
+                    .form-control {
+                        height: 40px;
+                    }
+
+
+                </style>
+
+
+
+
+
+
+
+
+    <!-- Page Wrapper -->
+    <div class="page-wrapper">
+        <!-- Page Content -->
+        <div class="content container-fluid">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-md-7 col-sm-12">
+                        <h3 class="page-title">Attendance Reports Employee</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="admin-dashboard.php">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Attendance Reports Employee</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-5 col-sm-12">
+                        <!-- Month Filter -->
+                        <div class="row mb-4">
+                            <div class="">
+                                <form method="GET" action="">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <select name="month" id="month" class="form-control">
+                                                <option value="">Select Month</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <select name="year" id="year" class="form-control">
+                                                <option value="">Select Year</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="submit" class="btn btn-primary">Search</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- /Page Header -->
+            </div>
+            <!-- /Page Header -->
 
-                <!-- Clock In/Out Buttons -->
-                <!--<div class="row mb-4">-->
-                <!--    <div class="col-md-12">-->
-                <!--        <button id="clockInBtn" class="btn btn-success">Clock In</button>-->
-                <!--        <button id="clockOutBtn" class="btn btn-danger">Clock Out</button>-->
-                <!--    </div>-->
-                <!--</div>-->
+              <hr style="margin-top: -20px; ">
 
-                <!-- Month Filter -->
-                <div class="row mb-4">
-                    <div class="">
-                        <form method="GET" action="">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <select name="month" id="month" class="form-control">
-                                        <option value="">Select Month</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <select name="year" id="year" class="form-control">
-                                        <option value="">Select Year</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="submit" class="btn btn-primary">Search</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-12">
+
+
+
+
                         <?php
-                        // Initialize counters
-                        $present_days = 0;
-                        $absent_days = 0;
-                        $saturday_days = 0;
-                        $sunday_days = 0;
-                        $holiday_days = 0;
-                        $leave_days = 0;
+                            // Initialize counters
+                            $present_days = 0;
+                            $absent_days = 0;
+                            $saturday_days = 0;
+                            $sunday_days = 0;
+                            $holiday_days = 0;
+                            $leave_days = 0;
 
-                        $normal_late = 0;
-                        $late_half_day = 0;
-                        $half_Day = 0;
-                        
+                            // Get selected month and year with doj consideration
+                            $today = new DateTime(); // Use current date
+                            $doj_date = new DateTime($doj);
+                            $current_month = isset($_GET['month']) ? intval($_GET['month']) : $today->format('n');
+                            $current_year = isset($_GET['year']) ? intval($_GET['year']) : $today->format('Y');
+                            $days_in_month = cal_days_in_month(CAL_GREGORIAN, $current_month, $current_year);
+                            $month_name = date('F', mktime(0, 0, 0, $current_month, 1));
 
-                        // Get selected month and year with doj consideration
-                        $today = new DateTime(); // Use current date
-                        $doj_date = new DateTime($doj);
-                        $current_month = isset($_GET['month']) ? intval($_GET['month']) : $today->format('n');
-                        $current_year = isset($_GET['year']) ? intval($_GET['year']) : $today->format('Y');
-                        $days_in_month = cal_days_in_month(CAL_GREGORIAN, $current_month, $current_year);
-                        $month_name = date('F', mktime(0, 0, 0, $current_month, 1));
-
-                        // Fetch holidays for the selected year and convert date format
-                        $holiday_query = "SELECT name, date FROM hrm_holidays WHERE year = '$current_year'";
-                        $holiday_result = mysqli_query($conn, $holiday_query);
-                        $holidays = [];
-                        while ($holiday = mysqli_fetch_assoc($holiday_result)) {
-                            $date_parts = explode('-', $holiday['date']);
-                            if (count($date_parts) === 3) {
-                                $converted_date = $date_parts[2] . '-' . $date_parts[1] . '-' . $date_parts[0];
-                                $holidays[$converted_date] = $holiday['name'];
+                            // Fetch holidays for the selected year and convert date format
+                            $holiday_query = "SELECT name, date FROM hrm_holidays WHERE year = '$current_year'";
+                            $holiday_result = mysqli_query($conn, $holiday_query);
+                            $holidays = [];
+                            while ($holiday = mysqli_fetch_assoc($holiday_result)) {
+                                $date_parts = explode('-', $holiday['date']);
+                                if (count($date_parts) === 3) {
+                                    $converted_date = $date_parts[2] . '-' . $date_parts[1] . '-' . $date_parts[0];
+                                    $holidays[$converted_date] = $holiday['name'];
+                                }
                             }
-                        }
 
-                        // Fetch approved leaves for the employee and month/year
-                        $leave_query = "SELECT start_date, end_date 
-                                      FROM hrm_leave_applied 
-                                      WHERE emp_id = '$emp_id' 
-                                      AND status = 2 
-                                      AND YEAR(start_date) = '$current_year' 
-                                      AND MONTH(start_date) = '$current_month'";
-                        $leave_result = mysqli_query($conn, $leave_query);
-                        $approved_leaves = [];
-                        while ($leave = mysqli_fetch_assoc($leave_result)) {
-                            $start_date = new DateTime($leave['start_date']);
-                            $end_date = new DateTime($leave['end_date']);
-                            $interval = new DateInterval('P1D');
-                            $date_range = new DatePeriod($start_date, $interval, $end_date->modify('+1 day'));
-                            foreach ($date_range as $date) {
-                                $approved_leaves[$date->format('Y-m-d')] = true;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        $lates_leaves = [];
+                                        for ($day = 1; $day <= $days_in_month; $day++) {
+                                            $current_date = sprintf("%d-%02d-%02d", $current_year, $current_month, $day);
+                                            $date_obj = new DateTime($current_date);
+                                            if ($date_obj < $doj_date)
+                                                continue; // Skip dates before doj
+                                        
+                                            $day_of_week = $date_obj->format('N');
+                                            $is_future_date = $date_obj > $today;
+
+                                            if (isset($attendance_records[$current_date]) && $attendance_records[$current_date]['status'] !== 'absent') {
+                                                $present_days++;
+                                                $row = $attendance_records[$current_date];
+                                                list($date, $time) = explode(' ', $row['clock_in_time']);
+                                                $clock_out_time = $row['clock_out_time'];
+
+                                                $login_timestamp = strtotime($row['clock_in_time']);
+                                                $late_status = $row['late_status'];
+                                                $late_color = $row['status_color'];
+
+                                                if (empty($clock_out_time)) {
+                                                    $logout_display = "N/A";
+                                                    $total_working_time = "N/A";
+                                                    $extra_or_remaining_time = "N/A";
+                                                    $extra_or_remaining_label = "N/A";
+                                                } else {
+                                                    $logout_timestamp = strtotime($clock_out_time);
+                                                    $total_working_seconds = $logout_timestamp - $login_timestamp;
+
+                                                    $office_start = strtotime($current_date . ' ' . ($office_timing_row['login_time'] ?? "09:00 AM"));
+                                                    $office_end = strtotime($current_date . ' ' . ($office_timing_row['logout_time'] ?? "06:00 PM"));
+                                                    $office_hours_seconds = $office_end - $office_start;
+
+                                                    $extra_or_remaining_seconds = $total_working_seconds - $office_hours_seconds;
+                                                    $total_working_time = gmdate("H:i:s", $total_working_seconds);
+                                                    $extra_or_remaining_time = gmdate("H:i:s", abs($extra_or_remaining_seconds));
+                                                    $extra_or_remaining_label = $extra_or_remaining_seconds > 0 ? 'Extra Time' : 'Remaining Time';
+                                                    $logout_display = date("h:i A", $logout_timestamp);
+                                                }
+
+                                                if ($late_status == "Late") {
+                                                    $late++;
+                                                    $lates_leaves[$date->format('Y-m-d')] = true;
+                                                }
+                                                if ($late_status == "Late (Extra Late)") {
+                                                    $extra_late++;
+                                                    $lates_leaves[$date->format('Y-m-d')] = true;
+                                                }
+                                                if($late_status == "Late (Extra Fine)") {
+                                                    $extra_fine++;
+                                                    $lates_leaves[$date->format('Y-m-d')] = true;
+                                                }
+                                                if($late_status == "Late (Half Day)") {
+                                                    $halfd_late++;
+                                                    $lates_leaves[$date->format('Y-m-d')] = true;
+                                                }
+                                            }
+                                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            // Fetch approved leaves for the employee and month/year
+                            $leave_query = "SELECT start_date, end_date 
+                                        FROM hrm_leave_applied 
+                                        WHERE emp_id = '$emp_id' 
+                                        AND status = 2 
+                                        AND YEAR(start_date) = '$current_year' 
+                                        AND MONTH(start_date) = '$current_month'";
+                            $leave_result = mysqli_query($conn, $leave_query);
+                            $approved_leaves = [];
+                            while ($leave = mysqli_fetch_assoc($leave_result)) {
+                                $start_date = new DateTime($leave['start_date']);
+                                $end_date = new DateTime($leave['end_date']);
+                                $interval = new DateInterval('P1D');
+                                $date_range = new DatePeriod($start_date, $interval, $end_date->modify('+1 day'));
+                                foreach ($date_range as $date) {
+                                    $approved_leaves[$date->format('Y-m-d')] = true;
+                                }
                             }
-                        }
 
-                        // Fetch all attendance records for the month
-                        $query = "SELECT * FROM newuser_attendance WHERE user_id=$emp_id 
-                                AND MONTH(clock_in_time) = $current_month 
-                                AND YEAR(clock_in_time) = $current_year 
-                                AND clock_in_time >= '$doj'
-                                ORDER BY clock_in_time ASC";
-                        $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
+                            // Fetch all attendance records for the month
+                            $query = "SELECT * FROM newuser_attendance WHERE user_id=$emp_id 
+                                    AND MONTH(clock_in_time) = $current_month 
+                                    AND YEAR(clock_in_time) = $current_year 
+                                    AND clock_in_time >= '$doj'
+                                    ORDER BY clock_in_time ASC";
+                            $result = mysqli_query($conn, $query) or die(mysqli_error($conn));
 
-                        $attendance_records = [];
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $attendance_records[date('Y-m-d', strtotime($row['clock_in_time']))] = $row;
-                        }
+                            $attendance_records = [];
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                $attendance_records[date('Y-m-d', strtotime($row['clock_in_time']))] = $row;
+                            }
 
-                        // Fetch office timings
-                        $office_timing_query = "SELECT login_time, relaxation_time, extra_fine_time, half_day_time, logout_time 
-                                              FROM office_timing WHERE id=1 LIMIT 1";
-                        $office_timing_result = mysqli_query($conn, $office_timing_query);
-                        $office_timing_row = mysqli_fetch_assoc($office_timing_result);
+                            // Fetch office timings
+                            $office_timing_query = "SELECT login_time, relaxation_time, extra_fine_time, half_day_time, logout_time 
+                                                FROM office_timing WHERE id=1 LIMIT 1";
+                            $office_timing_result = mysqli_query($conn, $office_timing_query);
+                            $office_timing_row = mysqli_fetch_assoc($office_timing_result);
 
-                        // Check today's attendance status for button visibility
-                        $today_date = $today->format('Y-m-d');
-                        $has_clocked_in_today = isset($attendance_records[$today_date]) && !empty($attendance_records[$today_date]['clock_in_time']);
-                        $has_clocked_out_today = $has_clocked_in_today && !empty($attendance_records[$today_date]['clock_out_time']);
+                            // Check today's attendance status for button visibility
+                            $today_date = $today->format('Y-m-d');
+                            $has_clocked_in_today = isset($attendance_records[$today_date]) && !empty($attendance_records[$today_date]['clock_in_time']);
+                            $has_clocked_out_today = $has_clocked_in_today && !empty($attendance_records[$today_date]['clock_out_time']);
                         ?>
 
 
+
+
+
+
+
+
+
+
+
+                            <?php
+
+                                $late = 0;
+                                $extra_late = 0;
+                                $halfd_late = 0;
+                                $extra_fine = 0;
+                                $total_late = 0;
+                                $fine_amount = 0;
+                                $totalwork_days = 0;
+                            
+                                $employee_id = $_SESSION["id"];
+                                
+                                $emp_query = "SELECT CONCAT(fname, ' ', lname) as employee_name FROM hrm_employee WHERE id = '$employee_id' AND id != 14";
+                                $emp_result = mysqli_query($conn, $emp_query);
+                                $emp_row = mysqli_fetch_assoc($emp_result);
+                                $employee_name = $emp_row['employee_name'] ?? '';
+                            ?>
 <div class="row">
     <div class="col-md-4">
-        <h4 class="m-3">
-            Present: <span id="presentDaysCount"><?= $present_days ?></span> <br>
-            Absent: <span id="absentDaysCount"><?= $absent_days ?></span> <br>
-            Holidays: <span id="holidayDaysCount"><?= $holiday_days ?></span> <br> 
-            Leaves: <span id="leaveDaysCount"><?= $leave_days ?></span>
-        </h4>
+        <h2 class="text-danger" id="name"><?= $employee_name; ?></h2>
+        <h5>Present Days: <span id="presentDaysCount"><?= $present_days ?></span></h5>
+        <h5>
+            Leaves: <span id="leaveDaysCount"><?= $leave_days ?></span> 
+            <span class="bcolor">|</span>
+            Absent: <span id="absentDaysCount"><?= $absent_days ?></span> 
+            <span class="bcolor">|</span>
+            Total late: <span id="totallateCount"><?= $total_late ?></span>
+        </h5>
+    </div>
+    <div class="col-md-4 finesec">
+        <div class="row text-center">
+            <h6 class="" title="Late Fine Only">
+                Late Fine: 
+                <span id="totallateFine"><?= $fine_amount ?></span>/-
+            </h6>
+        </div>
     </div>
     <div class="col-md-4">
-        <h4 class="text-center m-3"><?= "$month_name $current_year" ?></h4>
-    </div>
-    <div class="col-md-4">
-        <h4 class="m-3" style="text-align: end;">
-            Normal Late: <span id="normallateCount"><?= $normal_late ?></span> <br>
-            Late (Half Day): <span id="latehalfdayCount"><?= $late_half_day ?></span> <br>
-            Half Day: <span id="halfdayCount"><?= $half_Day ?></span> <br>
-        </h4>
+        <div class="row  text-right">
+            <h3 class="bcolor"><?= $month_name . ' ' . $current_year;  ?></h3>
+            <h5>Total Working Days: <span id="totalworkingdays"><?= $totalwork_days ?></span></h5>
+            <h5>
+                Saturdays: <span id="saturdayDaysCount"><?= $saturday_days ?></span> 
+                <span class="bcolor">|</span>
+                Sundays: <span id="sundayDaysCount"><?= $sunday_days ?></span> 
+                <span class="bcolor">|</span>
+                Holidays: <span id="holidayDaysCount"><?= $holiday_days ?></span>
+            </h5>
+        </div>
     </div>
 </div>
-
-                        <!-- <h4 class="text-center m-3">
-                            Attendance Report for <?= "$month_name $current_year" ?><br>
-                            Present: <span id="presentDaysCount"><?= $present_days ?></span> |
-                            Absent: <span id="absentDaysCount"><?= $absent_days ?></span> |
-                            Saturdays: <span id="saturdayDaysCount"><?= $saturday_days ?></span> |
-                            Sundays: <span id="sundayDaysCount"><?= $sunday_days ?></span> |
-                            Holidays: <span id="holidayDaysCount"><?= $holiday_days ?></span> |
-                            Leaves: <span id="leaveDaysCount"><?= $leave_days ?></span>
-                        </h4> -->
-
-                        <div class="table-responsive">
-                            <table class="table table-striped custom-table mb-0" id="attendanceTable">
-                                <thead>
-                                    <tr>
-                                        <!-- <th>#</th> -->
-                                        <th>Date</th>
-                                        <th>Clock In</th>
-                                        <th>Clock Out</th>
-                                        <th>Total Working Time</th>
-                                        <th>Extra / Remaining Time</th>
-                                        <th>Late</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $count = 1;
+<br>
 
 
-                                    for ($day = 1; $day <= $days_in_month; $day++) {
-                                        $current_date = sprintf("%d-%02d-%02d", $current_year, $current_month, $day);
-                                        $date_obj = new DateTime($current_date);
-                                        if ($date_obj < $doj_date) continue; // Skip dates before doj
 
-                                        $day_of_week = $date_obj->format('N');
-                                        $is_future_date = $date_obj > $today;
 
-                                        if (isset($attendance_records[$current_date]) && $attendance_records[$current_date]['status'] !== 'absent') {
-                                            $present_days++;
-                                            $row = $attendance_records[$current_date];
-                                            list($date, $time) = explode(' ', $row['clock_in_time']);
-                                            $clock_out_time = $row['clock_out_time'];
 
-                                            $login_timestamp = strtotime($row['clock_in_time']);
-                                            $late_status = $row['late_status'];
-                                            $late_color = $row['status_color'];
 
-                                            if (empty($clock_out_time)) {
-                                                $logout_display = "N/A";
-                                                $total_working_time = "N/A";
-                                                $extra_or_remaining_time = "N/A";
-                                                $extra_or_remaining_label = "N/A";
-                                            } else {
-                                                $logout_timestamp = strtotime($clock_out_time);
-                                                $total_working_seconds = $logout_timestamp - $login_timestamp;
 
-                                                $office_start = strtotime($current_date . ' ' . ($office_timing_row['login_time'] ?? "09:00 AM"));
-                                                $office_end = strtotime($current_date . ' ' . ($office_timing_row['logout_time'] ?? "06:30 PM"));
-                                                $office_hours_seconds = $office_end - $office_start;
 
-                                                $extra_or_remaining_seconds = $total_working_seconds - $office_hours_seconds;
-                                                $total_working_time = gmdate("H:i:s", $total_working_seconds);
-                                                $extra_or_remaining_time = gmdate("H:i:s", abs($extra_or_remaining_seconds));
-                                                $extra_or_remaining_label = $extra_or_remaining_seconds > 0 ? 'Extra Time' : 'Remaining Time';
-                                                $logout_display = date("h:i A", $logout_timestamp);
-                                            }
-                                    ?>
-                                            <tr>
-                                                <?php
-                                                    $count++;
-                                                ?>
-                                                <!-- <td><?= $count++; ?></td> -->
-                                                <td><?= $current_date ?></td>
-                                                <td><?= date("h:i A", $login_timestamp) ?></td>
-                                                <td><?= $logout_display ?></td>
-                                                <td><?= $total_working_time ?? 'N/A' ?></td>
-                                                <td><?= $extra_or_remaining_label . ': ' . ($extra_or_remaining_time ?? 'N/A') ?></td>
-                                                <td style="color:<?= $late_color ?>"><?= $late_status ?></td>
-                                            </tr>
 
-                                    <?php
 
-                                            if($late_status == "Late"){
-                                                $normal_late++;
-                                            }
-                                            if($late_status == "Late (Half Day)"){
-                                                $late_half_day++;
-                                            }
-                                            if($late_status == "Half Day"){
-                                                $half_Day++;
-                                            }
 
-                                        } elseif (isset($holidays[$current_date])) {
-                                            $holiday_days++;
-                                    ?>
-                                            <tr>
-                                                <?php
-                                                    $count++;
-                                                ?>
-                                                <!-- <td><?= $count++; ?></td> -->
-                                                <td><?= $current_date ?></td>
-                                                <td colspan="5" class="text-center text-success"><?= $holidays[$current_date] ?></td>
-                                            </tr>
-                                    <?php
-                                        } elseif (isset($approved_leaves[$current_date])) {
-                                            $leave_days++;
-                                    ?>
-                                            <tr>
-                                                <?php
-                                                    $count++;
-                                                ?>
-                                                <!-- <td><?= $count++; ?></td> -->
-                                                <td><?= $current_date ?></td>
-                                                <td colspan="5" class="text-center text-warning">Leave</td>
-                                            </tr>
-                                    <?php
-                                        } elseif ($day_of_week == 6) {
-                                            $saturday_days++;
-                                    ?>
-                                            <tr>
-                                                <?php
-                                                    $count++;
-                                                ?>
-                                                <!-- <td><?= $count++; ?></td> -->
-                                                <td><?= $current_date ?></td>
-                                                <td colspan="5" class="text-center text-primary">Saturday</td>
-                                            </tr>
-                                    <?php
-                                        } elseif ($day_of_week == 7) {
-                                            $sunday_days++;
-                                    ?>
-                                            <tr>
-                                                <?php
-                                                    $count++;
-                                                ?>
-                                                <!-- <td><?= $count++; ?></td> -->
-                                                <td><?= $current_date ?></td>
-                                                <td colspan="5" class="text-center text-primary">Sunday</td>
-                                            </tr>
-                                    <?php
-                                        } elseif (!$is_future_date) {
-                                            $absent_days++;
-                                    ?>
-                                            <tr>
-                                                <?php
-                                                    $count++;
-                                                ?>
-                                                <!-- <td><?= $count++; ?></td> -->
-                                                <td><?= $current_date ?></td>
-                                                <td colspan="5" class="text-center text-danger">Absent</td>
-                                            </tr>
-                                    <?php
+                <div class="tab">
+                    <button class="tablinks" id="defaultOpen" onclick="openCity(event, 'CalenderView')">Calender
+                        View</button>
+                    <button class="tablinks" onclick="openCity(event, 'FullDetails')">Full Details</button>
+                </div>
+
+                <!-- Calender View Start -->
+                <div id="CalenderView" class="tabcontent">
+
+                    <div class="row">
+                        
+
+                        <!-- Monthly Attendance Calendar -->
+                        <div id="attendanceCalendar" class="mb-4"></div>
+
+                      
+                        <?php
+                            $js_attendance = [
+                                'present' => array_keys($attendance_records),
+                                'leaves' => array_keys($approved_leaves),
+                                'holidays' => array_keys($holidays),
+                            ];
+                        ?>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const calendarDiv = document.getElementById('attendanceCalendar');
+                                const year = <?= $current_year ?>;
+                                const month = <?= $current_month ?>; // 1–12
+                                const daysInMonth = <?= $days_in_month ?>;
+
+                                const present = <?= json_encode($js_attendance['present']) ?>;
+                                const leaves = <?= json_encode($js_attendance['leaves']) ?>;
+                                const holidays = <?= json_encode($js_attendance['holidays']) ?>;
+
+                                // Weekday names
+                                const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                                let html = '<div class="calendar">';
+                                weekdays.forEach(d => html += `<div class="day-name">${d}</div>`);
+
+                                // Find first weekday of month
+                                const firstDay = new Date(year, month - 1, 1).getDay();
+                                for (let i = 0; i < firstDay; i++) html += '<div></div>';
+
+                                const today = new Date();
+                                for (let d = 1; d <= daysInMonth; d++) {
+                                    const dateStr =
+                                        `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                                    let cls = 'day';
+                                    let label = '';
+                                    if (present.includes(dateStr)) {
+                                        cls += ' present';
+                                        label = 'Present';
+                                    } else if (leaves.includes(dateStr)) {
+                                        cls += ' leave';
+                                        label = 'Leave';
+                                    } else if (holidays.includes(dateStr)) {
+                                        cls += ' holiday';
+                                        label = 'Holiday';
+                                    } else {
+                                        const thisDate = new Date(year, month - 1, d);
+                                        if (thisDate < today) {
+                                            cls += ' absent';
+                                            label = 'Absent';
+                                        } else {
+                                            cls += ' future';
+                                            label = '';
+                                        }
+                                        const dayOfWeek = thisDate.getDay();
+                                        if (dayOfWeek === 6) {
+                                            cls += ' saturday';
+                                            label = 'Saturday';
+                                        }
+                                        if (dayOfWeek === 0) {
+                                            cls += ' sunday';
+                                            label = 'Sunday';
                                         }
                                     }
+                                    html += `<div class="${cls}">${d}<span class="status">${label}</span></div>`;
+                                }
+                                html += '</div>';
+                                calendarDiv.innerHTML = html;
+                            });
+                        </script>
+                    </div>
 
-                                    // Update counters in DOM
-                                    echo "<script>
-                                        document.getElementById('presentDaysCount').textContent = '$present_days';
-                                        document.getElementById('absentDaysCount').textContent = '$absent_days';
-                                        document.getElementById('saturdayDaysCount').textContent = '$saturday_days';
-                                        document.getElementById('sundayDaysCount').textContent = '$sunday_days';
-                                        document.getElementById('holidayDaysCount').textContent = '$holiday_days';
-                                        document.getElementById('leaveDaysCount').textContent = '$leave_days';
-                                        document.getElementById('normallateCount').textContent = '$normal_late';
-                                        document.getElementById('latehalfdayCount').textContent = '$late_half_day';
-                                        document.getElementById('halfdayCount').textContent = '$half_Day';
-                                    </script>";
-                                    ?>
-                                </tbody>
-                            </table>
+                </div>
+                <!-- Calender View End -->
+
+                <!-- Full Details Start -->
+                <div id="FullDetails" class="tabcontent">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped custom-table mb-0" id="attendanceTable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Date</th>
+                                            <th>Clock In</th>
+                                            <th>Clock Out</th>
+                                            <th>Total Working Time</th>
+                                            <th>Extra / Remaining Time</th>
+                                            <th>Late</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $count = 1;
+
+                                        for ($day = 1; $day <= $days_in_month; $day++) {
+                                            $current_date = sprintf("%d-%02d-%02d", $current_year, $current_month, $day);
+                                            $date_obj = new DateTime($current_date);
+                                            if ($date_obj < $doj_date)
+                                                continue; // Skip dates before doj
+                                        
+                                            $day_of_week = $date_obj->format('N');
+                                            $is_future_date = $date_obj > $today;
+
+                                            if (isset($attendance_records[$current_date]) && $attendance_records[$current_date]['status'] !== 'absent') {
+                                                $present_days++;
+                                                $row = $attendance_records[$current_date];
+                                                list($date, $time) = explode(' ', $row['clock_in_time']);
+                                                $clock_out_time = $row['clock_out_time'];
+
+                                                $login_timestamp = strtotime($row['clock_in_time']);
+                                                $late_status = $row['late_status'];
+                                                $late_color = $row['status_color'];
+
+                                                if (empty($clock_out_time)) {
+                                                    $logout_display = "N/A";
+                                                    $total_working_time = "N/A";
+                                                    $extra_or_remaining_time = "N/A";
+                                                    $extra_or_remaining_label = "N/A";
+                                                } else {
+                                                    $logout_timestamp = strtotime($clock_out_time);
+                                                    $total_working_seconds = $logout_timestamp - $login_timestamp;
+
+                                                    $office_start = strtotime($current_date . ' ' . ($office_timing_row['login_time'] ?? "09:00 AM"));
+                                                    $office_end = strtotime($current_date . ' ' . ($office_timing_row['logout_time'] ?? "06:00 PM"));
+                                                    $office_hours_seconds = $office_end - $office_start;
+
+                                                    $extra_or_remaining_seconds = $total_working_seconds - $office_hours_seconds;
+                                                    $total_working_time = gmdate("H:i:s", $total_working_seconds);
+                                                    $extra_or_remaining_time = gmdate("H:i:s", abs($extra_or_remaining_seconds));
+                                                    $extra_or_remaining_label = $extra_or_remaining_seconds > 0 ? 'Extra Time' : 'Remaining Time';
+                                                    $logout_display = date("h:i A", $logout_timestamp);
+                                                }
+                                                ?>
+                                        <tr>
+                                            <td><?= $count++; ?></td>
+                                            <td><?= $current_date ?></td>
+                                            <td><?= date("h:i A", $login_timestamp) ?></td>
+                                            <td><?= $logout_display ?></td>
+                                            <td><?= $total_working_time ?? 'N/A' ?></td>
+                                            <td><?= $extra_or_remaining_label . ': ' . ($extra_or_remaining_time ?? 'N/A') ?>
+                                            </td>
+                                            <td style="color:<?= $late_color ?>">
+                                                <?php
+                                                if ($late_status == "Late") {
+                                                    $late++;
+                                                }
+                                                if ($late_status == "Late (Extra Late)") {
+                                                    $extra_late++;
+                                                }
+                                                if($late_status == "Late (Extra Fine)") {
+                                                    $extra_fine++;
+                                                }
+                                                if($late_status == "Late (Half Day)") {
+                                                    $halfd_late++;
+                                                }
+                                                echo $late_status;
+                                                ?>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                            } elseif (isset($holidays[$current_date])) {
+                                                $holiday_days++;
+                                                ?>
+                                        <tr>
+                                            <td><?= $count++; ?></td>
+                                            <td><?= $current_date ?></td>
+                                            <td colspan="5" class="text-center text-success"><?= $holidays[$current_date] ?>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                            } elseif (isset($approved_leaves[$current_date])) {
+                                                $leave_days++;
+                                                ?>
+                                        <tr>
+                                            <td><?= $count++; ?></td>
+                                            <td><?= $current_date ?></td>
+                                            <td colspan="5" class="text-center text-warning">Leave</td>
+                                        </tr>
+                                        <?php
+                                            } elseif ($day_of_week == 6) {
+                                                $saturday_days++;
+                                                ?>
+                                        <tr>
+                                            <td><?= $count++; ?></td>
+                                            <td><?= $current_date ?></td>
+                                            <td colspan="5" class="text-center text-primary">Saturday</td>
+                                        </tr>
+                                        <?php
+                                            } elseif ($day_of_week == 7) {
+                                                $sunday_days++;
+                                                ?>
+                                        <tr>
+                                            <td><?= $count++; ?></td>
+                                            <td><?= $current_date ?></td>
+                                            <td colspan="5" class="text-center text-primary">Sunday</td>
+                                        </tr>
+                                        <?php
+                                            } elseif (!$is_future_date) {
+                                                $absent_days++;
+                                                ?>
+                                        <tr>
+                                            <td><?= $count++; ?></td>
+                                            <td><?= $current_date ?></td>
+                                            <td colspan="5" class="text-center text-danger">Absent</td>
+                                        </tr>
+                                        <?php
+                                            }
+                                        }
+
+                                        $totalwork_days = $present_days + $holiday_days + $leave_days + $absent_days;
+                                        $total_late = $late + $extra_late + $extra_fine + $halfd_late;
+                                        $totallateFine = $normal_fine * $total_late; 
+
+                                        // Update counters in DOM
+                                        echo "<script>                                                    
+                                            document.getElementById('totalworkingdays').textContent = '$totalwork_days';
+                                            document.getElementById('totallateCount').textContent = '$total_late';
+                                            document.getElementById('totallateFine').textContent = '$totallateFine';
+                                            document.getElementById('presentDaysCount').textContent = '$present_days';
+                                            document.getElementById('absentDaysCount').textContent = '$absent_days';
+                                            document.getElementById('saturdayDaysCount').textContent = '$saturday_days';
+                                            document.getElementById('sundayDaysCount').textContent = '$sunday_days';
+                                            document.getElementById('holidayDaysCount').textContent = '$holiday_days';
+                                            document.getElementById('leaveDaysCount').textContent = '$leave_days';
+                                        </script>";
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+
                 </div>
+                <!-- Full Details End -->
+
+
+                <script>
+                    function openCity(evt, cityName) {
+                        var i, tabcontent, tablinks;
+
+                        tabcontent = document.getElementsByClassName("tabcontent");
+                        for (i = 0; i < tabcontent.length; i++) {
+                            tabcontent[i].style.display = "none";
+                        }
+
+                        tablinks = document.getElementsByClassName("tablinks");
+                        for (i = 0; i < tablinks.length; i++) {
+                            tablinks[i].className = tablinks[i].className.replace(" active", "");
+                        }
+
+                        document.getElementById(cityName).style.display = "block";
+                        evt.currentTarget.className += " active";
+                    }
+                    document.getElementById("defaultOpen").click();
+                </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             </div>
             <!-- /Page Content -->
@@ -373,7 +794,9 @@ $profile_image = $profile_image_dir . "/" . $row['image'];
     $(document).ready(function() {
         $('#attendanceTable').DataTable({
             "pageLength": 31,
-            "order": [[1, "asc"]] // Sort by date
+            "order": [
+                [1, "asc"]
+            ] // Sort by date
         });
 
         // Clock In/Out button visibility
@@ -468,7 +891,9 @@ $profile_image = $profile_image_dir . "/" . $row['image'];
                 if (selectedYear > dojYear || (selectedYear == dojYear && m >= dojMonth)) {
                     const option = document.createElement('option');
                     option.value = m;
-                    option.text = new Date(0, m - 1).toLocaleString('default', { month: 'long' });
+                    option.text = new Date(0, m - 1).toLocaleString('default', {
+                        month: 'long'
+                    });
                     monthSelect.appendChild(option);
                 }
             }
@@ -502,7 +927,9 @@ $profile_image = $profile_image_dir . "/" . $row['image'];
                 if (selectedYear > dojYear || (selectedYear == dojYear && m >= dojMonth)) {
                     const option = document.createElement('option');
                     option.value = m;
-                    option.text = new Date(0, m - 1).toLocaleString('default', { month: 'long' });
+                    option.text = new Date(0, m - 1).toLocaleString('default', {
+                        month: 'long'
+                    });
                     monthSelect.appendChild(option);
                 }
             }
@@ -516,4 +943,5 @@ $profile_image = $profile_image_dir . "/" . $row['image'];
     </script>
 
 </body>
+
 </html>

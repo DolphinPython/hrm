@@ -63,10 +63,10 @@
 											<label class="col-form-label">Password</label>
 										</div>
 										<div class="col-auto">
-    <a class="text-muted" href="#" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">
-        Forgot password?
-    </a>
-</div>
+                                        <a class="text-muted" href="#" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">
+                                            Forgot password?
+                                        </a>
+                                    </div>
 									</div>
 									<div class="position-relative">
 										<input class="form-control" type="password" value="" name="password" id="password">

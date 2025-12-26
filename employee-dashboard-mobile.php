@@ -61,8 +61,7 @@ $inactive_employee = count_where("hrm_employee", "status", "0");
 
 
     <style>
-    .exp1,
-    .exp2 {
+    .exp1,.exp2 {
         display: none;
     }
 
@@ -199,26 +198,6 @@ $inactive_employee = count_where("hrm_employee", "status", "0");
                                     <input type="hidden" id="status" value="<?= $status; ?>">
 
 
-
-                                    <!--    Desktop Section Only Start    -->
-                                    <div class="exp2">
-
-                                        <a href="javascript:void(0);"
-                                            class="btn btn-lg btn-outline-warning px-4 py-2 d-flex justify-content-center align-items-center gap-2 rounded-3 shadow-sm"
-                                            id="clock_in_btn" data-status="<?= $status; ?>">
-
-                                            <span class="btn-text d-flex align-items-center gap-2 ">
-                                                <img src="assets/img/icons/clock-in.svg" alt="Icon"
-                                                    style="height: 24px;">
-                                                <?= ($status === 'login') ? 'Clock-Out' : 'Clock-In'; ?>
-                                            </span>
-
-                                            <span class="spinner-border spinner-border-sm text-light d-none"
-                                                role="status" id="loadingSpinner"></span>
-                                        </a>
-
-                                    </div>
-                                    <!--    Desktop Section Only End    -->
                                     <!--    Mobile Section Only Start    -->
                                     <div class="exp1">
                                         <!-- Temparory Section Start -->
@@ -370,6 +349,25 @@ $inactive_employee = count_where("hrm_employee", "status", "0");
                                         <!-- // Temparory Section End -->
                                     </div>
                                     <!--    Mobile Section Only End    -->
+                                    <!--    Desktop Section Only Start    -->
+                                    <div class="exp2">
+
+                                        <a href="javascript:void(0);"
+                                            class="btn btn-lg btn-outline-warning px-4 py-2 d-flex justify-content-center align-items-center gap-2 rounded-3 shadow-sm"
+                                            id="clock_in_btn" data-status="<?= $status; ?>">
+
+                                            <span class="btn-text d-flex align-items-center gap-2 ">
+                                                <img src="assets/img/icons/clock-in.svg" alt="Icon"
+                                                    style="height: 24px;">
+                                                <?= ($status === 'login') ? 'Clock-Out' : 'Clock-In'; ?>
+                                            </span>
+
+                                            <span class="spinner-border spinner-border-sm text-light d-none"
+                                                role="status" id="loadingSpinner"></span>
+                                        </a>
+
+                                    </div>
+                                    <!--    Desktop Section Only End    -->
 
 
                                     <h3 class="timer mt-3 text-dark" id="timer"></h3>

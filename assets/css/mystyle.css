@@ -12,3 +12,45 @@
 .header {
     background: linear-gradient(to right, #8460fc 0%, #052665 100%) !important;
 }
+
+.bcolor{
+    color: #052665 !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+.finesec{
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.mt100{
+    margin-top: 50%;
+}
+
+
+.fineibox,
+.fineiboxronly{
+    border: 1px solid #2e3840;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    padding: 0px 5px;
+    border-radius: 0px;
+    height: 25px;
+    text-align: center;
+}
+.fineiboxr,
+.fineiboxronlyr{
+    border: 1px solid red;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    padding: 0px 5px;
+    border-radius: 0px;
+    height: 25px;
+    text-align: center;
+}

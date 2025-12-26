@@ -23,7 +23,7 @@ try {
         $office_start = strtotime($officeTimingRow['login_time'] ?? "09:00 AM");
         $relaxation_time = strtotime($officeTimingRow['relaxation_time'] ?? "09:15 AM");
         $extra_fine_time = strtotime($officeTimingRow['extra_fine_time'] ?? "09:30 AM");
-        $half_day_time = strtotime($officeTimingRow['half_day_time'] ?? "09:45 AM");
+        $half_day_time = strtotime($officeTimingRow['half_day_time'] ?? "01:00 PM");
         $evening_half_time = strtotime($officeTimingRow['evening_half_time'] ?? "01:00 PM");
         $fourThirtyPM = strtotime(date("Y-m-d") . " 16:30:00");
         $office_end = strtotime($officeTimingRow['logout_time'] ?? "06:30 PM");
@@ -40,6 +40,7 @@ try {
     $result = mysqli_stmt_get_result($stmt);
 
     if ($result && mysqli_num_rows($result) > 0) {
+
         $record = mysqli_fetch_assoc($result);
 
         // Check if user already logged out
@@ -115,12 +116,16 @@ try {
         $lateStatus = "On Time";
         $statusColor = "green";
 
-        if ($currentTimestamp > $half_day_time) {
+
+        if ($currentTimestamp > $evening_half_time) {
+            $lateStatus = "Half Day";
+            $statusColor = "red";
+        } elseif ($currentTimestamp > $half_day_time) {
             $lateStatus = "Late (Half Day)";
             $statusColor = "red";
-        } elseif ($currentTimestamp > $extra_fine_time) {
-            $lateStatus = "Late (Extra Fine)";
-            $statusColor = "red";
+        // } elseif ($currentTimestamp > $extra_fine_time) {
+        //     $lateStatus = "Late (Extra Fine)";
+        //     $statusColor = "red";
         } elseif ($currentTimestamp > $relaxation_time) {
             $lateStatus = "Late";
             $statusColor = "orange";

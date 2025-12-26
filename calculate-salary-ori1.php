@@ -1860,11 +1860,230 @@ $totalDeduction = $leaveDeduct + $halfDayDeduct + $shortDayDeduct;
 
 
                 <hr>
-                <div class="row">
-                    <br><br><br><br>
+                <div class="row mt100">
+                    <hr>
                 </div>
 
 
+                <div class="page-header">
+                    <div class="row gap-2 justify-content-center">
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 card" id="salarySlip">
+                            <div class="salary-header">
+                                <div class="salary-logo">
+                                    <!--<img src="assets/img/company-crop-logo.webp" alt="company logo" width="200" height="200">-->
+                                </div>
+                                <div class="company-title">
+                                    <h1 class="company-name">Expetize Private Limited</h1>
+                                    <p class="company-address text-center">401, Vinayak Complex, Plot No 76, Vijay
+                                        Block, Laxmi Nagar, Near Pillar<br>No-51-52, Delhi, Delhi-110092<br>CIN:
+                                        U74999DL2016PTC307712
+                                    </p>
+                                    <br>
+                                </div>
+                            </div>
+                            <?php
+
+                            $month_number = $month;
+                            $month_name = date("F", mktime(0, 0, 0, $month_number, 1));
+                            $designation_id = $employee_row['designation_id'];
+                            $department_id = $employee_row['department_id'];
+                            $designation = "Select * from hrm_designation where id=$designation_id";
+                            $department = "Select * from hrm_department where id=$department_id";
+                            $designation_result = mysqli_query($conn, $designation);
+                            $department_result = mysqli_query($conn, $department);
+                            $designation_row = mysqli_fetch_assoc($designation_result);
+                            $department_row = mysqli_fetch_assoc($department_result);
+
+                            $bank_details = "select * from hrm_bank_detail where emp_id=$emp_id";
+                            $bank_result = mysqli_query($conn, $bank_details);
+                            $bank_row = mysqli_fetch_assoc($bank_result);
+
+                            $basic = $salary * 0.40;
+                            $hra = $basic * 0.50;
+                            $medical_allowance = 800;
+
+                            $conveyance_allowance = 1200;
+                            $special_allowance = $salary - ($basic + $medical_allowance + $hra + $conveyance_allowance);
+                            $total_allowance = $basic + $medical_allowance + $hra + $conveyance_allowance + $special_allowance;
+                            $total_deduction = round($salary - $after_deduction);
+                            $net_pay = round($after_deduction);
+                            $pay_in_word = roundAndConvertToWords($after_deduction);
+
+                            ?>
+                            <div class="salary-title">
+                                Payslip for the Month of <?= $month_name; ?>, <?= $year; ?>
+                            </div>
+
+                            <div class="employee-details">
+                                <div class="normal-details">
+                                    <p>
+                                        Name : <?php echo $employee_row['fname'] . " " . $employee_row['lname']; ?>
+                                    </p>
+                                    <p>Designation : <?= $designation_row['name']; ?> </p>
+
+                                    <p>Department : <?= $department_row['name']; ?> </p>
+                                    <p>
+                                        Location : Delhi
+                                    </p>
+                                    <p>
+                                        <br>
+                                        <!-- Effective Work Days : <?= $totalDays; ?> -->
+                                    </p>
+                                    <p>
+                                        <br>
+                                        <!-- LOP : <span id="lop"><?= $totalDays - ($presentDays + 1) ?></span> -->
+                                    </p>
+                                </div>
+                                <div class="bank-details">
+                                    <p>
+                                        Employee ID :
+                                        <?
+                                        // = isset($emp_id) ? $emp_id : ''; 
+                                        ?>
+                                        <?php echo $employee_row['emp_id']; ?>
+                                    </p>
+                                    <p>
+                                        <?php
+
+                                        $query = "SELECT doj FROM hrm_employee WHERE id = ?";
+                                        $stmt = $conn->prepare($query);
+                                        $stmt->bind_param("i", $emp_id);
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
+
+                                        if ($row = $result->fetch_assoc()) {
+                                            $doj = date("F j, Y", strtotime($row['doj']));
+                                            ?>
+                                        Date of joining: <?php echo htmlspecialchars($doj); ?>
+
+                                        <?php
+                                        } else {
+                                            ?>
+                                        Date of joining:00-00-0000
+                                        <?php
+                                        }
+                                        ?>
+
+
+
+                                    </p>
+                                    <p>
+                                        Bank Name : <?= isset($bank_row['bank_name']) ? $bank_row['bank_name'] : ''; ?>
+                                    </p>
+                                    <p>
+                                        Bank Account Number :
+                                        <?= isset($bank_row['account_number']) ? $bank_row['account_number'] : ''; ?>
+                                    </p>
+                                    <p>
+                                        IFSC Code : <?= isset($bank_row['ifsc']) ? $bank_row['ifsc'] : ''; ?>
+                                    </p>
+                                </div>
+
+
+                            </div>
+
+                            <div class="salary-structure">
+
+                                <div class="left-side">
+                                    <div class="left-heading">
+                                        <div>Earning
+                                        </div>
+                                        <div>Amount</div>
+                                    </div>
+                                    <div class="earning-heading">
+                                        <div>
+
+                                            <p>Basic</p>
+                                            <p>HRA</p>
+                                            <p>Medical Allowance</p>
+                                            <p>Conveyance Allowance</p>
+                                            <p>Special Allowance</p>
+
+                                        </div>
+                                        <div>
+                                            <p id="basic">₹<?= isset($basic) ? $basic : ''; ?></p>
+                                            <p id="hra">₹<?= isset($hra) ? $hra : ''; ?></p>
+                                            <p id="medical_allowance">
+                                                ₹<?= isset($medical_allowance) ? $medical_allowance : ''; ?></p>
+                                            <p id="conveyance_allowance">
+                                                ₹<?= isset($conveyance_allowance) ? $conveyance_allowance : ''; ?></p>
+                                            <p id="special_allowance">
+                                                ₹<?= isset($special_allowance) ? $special_allowance : ''; ?></p>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="total-earning">
+                                        <div class="total_allowance">Total Earning (Rs)</div>
+                                        <div id="total_allowance" class="total_allowance">
+                                            ₹<?= isset($total_allowance) ? $total_allowance : ''; ?></div>
+                                    </div>
+
+                                    <div class="net_pay">
+                                        <div>Net Pay For The Month</div>
+                                        <div>
+                                            <span id="net-salary">₹
+                                                <!-- <?= isset($net_pay) ? $net_pay : ''; ?> -->
+                                                <span id="final_salary_slip"> ***** </span>
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="right-side">
+                                    <div class="right-heading">
+                                        <div>Deduction</div>
+                                        <div>Amount</div>
+                                    </div>
+                                    <div class="deduction-heading">
+                                        <div>
+                                            <p style="visibility: hidden;">1</p>
+                                            <p style="visibility: hidden;">2</p>
+                                            <p style="visibility: hidden;"> 3</p>
+                                            <p style="visibility: hidden;">4</p>
+                                            <p style="visibility: hidden;">5</p>
+                                        </div>
+                                        <div>
+                                            <p style="visibility: hidden;">1</p>
+                                            <p style="visibility: hidden;">2</p>
+                                            <p style="visibility: hidden;">3</p>
+                                            <p style="visibility: hidden;">4</p>
+                                            <p style="visibility: hidden;">5</p>
+                                        </div>
+                                    </div>
+                                    <div class="total-deduction">
+                                        <div>
+                                            Total Deduction (Rs)
+                                        </div>
+                                        <div id="total-deduction">
+                                            ₹
+                                            <!-- <?= isset($total_deduction) ? $total_deduction : '0'; ?> -->
+                                            <span id="total_deduction_slip"></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--<div class="salary_in_word">-->
+                            <!--    Rupees-<span id="salary-in-word"><?= isset($pay_in_word) ? $pay_in_word : '' ?> </span>-->
+                            <!--</div>-->
+
+                            <hr>
+                            <!--<div class="mb-3">-->
+                            <!--    <p class="text-center"> This is a system generated payslip and does not require any signature.</p>-->
+                            <!--</div>-->
+                        </div>
+
+                    </div>
+                </div>
+
+                <button id="downloadSalarySlip" class="btn btn-primary  ">Download Salary Slip</button>
+                <button id="submitButton" onclick="generateAndSendPDF()" class="btn btn-info">Generate and Send
+                    PDF</button>
+                <i id="loadingIcon" class="fas fa-spinner fa-spin" style="display: none;"></i>
             </div>
         </div>
     </div>
