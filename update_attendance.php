@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $status_color = "#f65a03"; // Yellow
             $fine_amount = $office_timing_row['normal_fine'] ?? 0;
         } elseif ($login_timestamp <= $half_day_time) {
-            $late_status = "Late (Extra Late)";
+            $late_status = "Late (Half Day)";
             $status_color = "#f70000"; // Orange
             $fine_amount = $office_timing_row['extra_fine'] ?? 0;
         } else {

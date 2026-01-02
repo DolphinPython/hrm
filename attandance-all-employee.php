@@ -9,18 +9,10 @@ $conn = connect();
 $emp_id = $_SESSION['id'];
 
 
-
-
-
-
-
 $latefineque = "SELECT * FROM office_timing WHERE id = 1";
 $latefinequeres = mysqli_query($conn, $latefineque);
 $latefine = mysqli_fetch_assoc($latefinequeres);
 $normal_fine = $latefine['normal_fine'];
-
-
-
 
 
 
@@ -35,11 +27,11 @@ $is_admin = ($role_row && in_array(strtolower($role_row['role']), ['admin', 'sup
 if ($is_admin) {
     $employee_query = "SELECT id, CONCAT(fname, ' ', lname) AS name, doj FROM hrm_employee WHERE id != 14 AND archive_status != 1";
 } else {
-    $employee_query = "SELECT id, CONCAT(fname, ' ', lname) AS name, doj FROM hrm_employee WHERE id = '$emp_id' AND archive_status != 1 AND id != 14 
-                       UNION 
-                       SELECT he.id, CONCAT(he.fname, ' ', he.lname) AS name, he.doj 
-                       FROM hrm_employee he 
-                       INNER JOIN hrm_reporting_manager hrm ON he.id = hrm.employee_id 
+    $employee_query = "SELECT id, CONCAT(fname, ' ', lname) AS name, doj FROM hrm_employee WHERE id = '$emp_id' AND archive_status != 1 AND id != 14
+                       UNION
+                       SELECT he.id, CONCAT(he.fname, ' ', he.lname) AS name, he.doj
+                       FROM hrm_employee he
+                       INNER JOIN hrm_reporting_manager hrm ON he.id = hrm.employee_id
                        WHERE hrm.reporting_manager_id = '$emp_id' AND he.id != 14";
 }
 $employee_result = mysqli_query($conn, $employee_query) or die(mysqli_error($conn));
@@ -89,7 +81,7 @@ $current_date = $today->format('Y-m-d');
 $leave_query = "SELECT he.id, CONCAT(he.fname, ' ', he.lname) AS name, hla.start_date, hla.end_date
                 FROM hrm_employee he
                 INNER JOIN hrm_leave_applied hla ON he.id = hla.emp_id
-                WHERE hla.status = 2 
+                WHERE hla.status = 2
                 AND '$current_date' BETWEEN hla.start_date AND hla.end_date";
 $leave_result = mysqli_query($conn, $leave_query);
 $employees_on_leave = [];
@@ -100,10 +92,10 @@ while ($leave = mysqli_fetch_assoc($leave_result)) {
 // Fetch employees absent for current date (no clock-in and not on leave), excluding emp_id = 14
 $absent_query = "SELECT he.id, CONCAT(he.fname, ' ', he.lname) AS name
                  FROM hrm_employee he
-                 LEFT JOIN newuser_attendance na ON he.id = na.user_id 
+                 LEFT JOIN newuser_attendance na ON he.id = na.user_id
                      AND DATE(na.clock_in_time) = '$current_date'
-                 LEFT JOIN hrm_leave_applied hla ON he.id = hla.emp_id 
-                     AND hla.status = 2 
+                 LEFT JOIN hrm_leave_applied hla ON he.id = hla.emp_id
+                     AND hla.status = 2
                      AND '$current_date' BETWEEN hla.start_date AND hla.end_date
                  WHERE he.status = 1
                  AND he.id != 14
@@ -308,7 +300,7 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                             $halfd_late = 0;
                             $total_late = 0;
                             $fine_amount = 0;
-                            
+
 
 
                             if (
@@ -331,9 +323,9 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
         <h2 class="text-danger" id="name"><?= $employee_name; ?></h2>
         <h5>Present Days: <span id="presentDaysCount"><?= $present_days ?></span></h5>
         <h5>
-            Leaves: <span id="leaveDaysCount"><?= $leave_days ?></span> 
+            Leaves: <span id="leaveDaysCount"><?= $leave_days ?></span>
             <span class="bcolor">|</span>
-            Absent: <span id="absentDaysCount"><?= $absent_days ?></span> 
+            Absent: <span id="absentDaysCount"><?= $absent_days ?></span>
             <span class="bcolor">|</span>
             Total late: <span id="totallateCount"><?= $total_late ?></span>
         </h5>
@@ -341,7 +333,7 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
     <div class="col-md-4 finesec">
         <div class="row text-center">
             <h6 class="">
-                Fine: 
+                Fine:
                 <span id="totallateFine"><?= $fine_amount ?></span>/-
             </h6>
         </div>
@@ -349,7 +341,7 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
     <div class="col-md-4">
         <div class="row  text-right">
             <h3 class="bcolor">
-                <?php 
+                <?php
                     $monthNumber = $_GET['month'];
                     $monthName = date('F', mktime(0, 0, 0, $monthNumber, 10));
                     echo $monthName;
@@ -359,9 +351,9 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
             </h3>
             <h5>Total Working Days: <span id="totalworkingdays"><?= $totalwork_days ?></span></h5>
             <h5>
-                Saturdays: <span id="saturdayDaysCount"><?= $saturday_days ?></span> 
+                Saturdays: <span id="saturdayDaysCount"><?= $saturday_days ?></span>
                 <span class="bcolor">|</span>
-                Sundays: <span id="sundayDaysCount"><?= $sunday_days ?></span> 
+                Sundays: <span id="sundayDaysCount"><?= $sunday_days ?></span>
                 <span class="bcolor">|</span>
                 Holidays: <span id="holidayDaysCount"><?= $holiday_days ?></span>
             </h5>
@@ -369,7 +361,7 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
     </div>
 </div>
 
-                                
+
                                 <h4 class="text-center m-3">
 
 
@@ -411,8 +403,8 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                         $is_manager = mysqli_num_rows($manager_check_result) > 0;
 
                                         if (($is_admin || $is_manager || $employee_id == $_SESSION['id']) && $employee_id != 14) {
-                                            $emp_query = "SELECT CONCAT(fname, ' ', lname) as employee_name, doj 
-                                                         FROM hrm_employee 
+                                            $emp_query = "SELECT CONCAT(fname, ' ', lname) as employee_name, doj
+                                                         FROM hrm_employee
                                                          WHERE id = '$employee_id' AND id != 14";
                                             $emp_result = mysqli_query($conn, $emp_query);
                                             $emp_row = mysqli_fetch_assoc($emp_result);
@@ -435,13 +427,13 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                 }
 
                                                 // Fetch approved leaves for the employee and month/year
-                                                $leave_query = "SELECT start_date, end_date ,status 
-                                                              FROM hrm_leave_applied 
-                                                              WHERE emp_id = '$employee_id' 
-                                                              AND status = 2 
+                                                $leave_query = "SELECT start_date, end_date ,status
+                                                              FROM hrm_leave_applied
+                                                              WHERE emp_id = '$employee_id'
+                                                              AND status = 2
                                                               AND status = 3
                                                               AND status = 4
-                                                              AND YEAR(start_date) = '$year' 
+                                                              AND YEAR(start_date) = '$year'
                                                               AND MONTH(start_date) = '$month'";
                                                 $leave_result = mysqli_query($conn, $leave_query);
                                                 $approved_leaves = [];
@@ -455,13 +447,13 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                     }
                                                 }
 
-                                                $attendance_query = "SELECT id, user_id, clock_in_time, clock_in_ip, 
+                                                $attendance_query = "SELECT id, user_id, clock_in_time, clock_in_ip,
                                                     clock_out_time, clock_out_ip, status, created_at, updated_at,
-                                                    late_status, status_color, total_working_time, 
+                                                    late_status, status_color, total_working_time,
                                                     extra_or_remaining_time, extra_or_remaining_label
-                                                    FROM newuser_attendance 
-                                                    WHERE user_id = '$employee_id' 
-                                                    AND MONTH(clock_in_time) = '$month' 
+                                                    FROM newuser_attendance
+                                                    WHERE user_id = '$employee_id'
+                                                    AND MONTH(clock_in_time) = '$month'
                                                     AND YEAR(clock_in_time) = '$year'
                                                     AND clock_in_time >= '$doj'
                                                     ORDER BY clock_in_time ASC";
@@ -485,7 +477,7 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                         continue; // Skip dates before doj
                                                     if ($date_obj > $today_date)
                                                         continue; // Skip future dates
-                                    
+
                                                     $day_of_week = $date_obj->format('N');
 
                                                     if (isset($attendance_records[$current_date]) && $attendance_records[$current_date]['status'] !== 'absent') {
@@ -539,7 +531,7 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                                         data-clockout="<?= $clock_out_time ? date('H:i', strtotime($clock_out_time)) : '' ?>">
                                                                         <i class="fas fa-edit"></i>
                                                                     </a>
-                                                                    <!--<button class="btn btn-sm btn-danger delete-btn" 
+                                                                    <!--<button class="btn btn-sm btn-danger delete-btn"
                                                                 data-id="<?= $row['id'] ?>">
                                                             <i class="fas fa-trash"></i>
                                                         </button>-->
@@ -627,8 +619,8 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                     } else {
                                                         $absent_days++;
                                                         // Check for existing absent record
-                                                        $check_query = "SELECT id, status FROM newuser_attendance 
-                                                                      WHERE user_id = '$employee_id' 
+                                                        $check_query = "SELECT id, status FROM newuser_attendance
+                                                                      WHERE user_id = '$employee_id'
                                                                       AND DATE(clock_in_time) = '$current_date'";
                                                         $check_result = mysqli_query($conn, $check_query);
                                                         $absent_id = '';
@@ -651,7 +643,7 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                                                 data-clockin="" data-clockout="">
                                                                                 <i class="fas fa-edit"></i>
                                                                             </a>
-                                                                            <!--<button class="btn btn-sm btn-danger delete-btn" 
+                                                                            <!--<button class="btn btn-sm btn-danger delete-btn"
                                                                 data-id="<?= $absent_id ?>">
                                                             <i class="fas fa-trash"></i>
                                                         </button>-->
@@ -686,7 +678,7 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                 $totalwork_days = $present_days + $holiday_days + $leave_days + $absent_days;
 
                                                 $total_late = $late + $extra_late + $extra_fine + $halfd_late;
-                                                $totallateFine = $normal_fine * $total_late; 
+                                                $totallateFine = $normal_fine * $total_late;
 
                                                 // Update counters in DOM
                                                 echo "<script>
@@ -709,9 +701,9 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                         // Modify attendance query based on user role
                                         if ($is_admin) {
                                             // Admins see all employees except emp_id = 14
-                                            // $attendance_query = "SELECT na.id, na.user_id, na.clock_in_time, na.clock_in_ip, 
+                                            // $attendance_query = "SELECT na.id, na.user_id, na.clock_in_time, na.clock_in_ip,
                                             //     na.clock_out_time, na.clock_out_ip, na.status, na.created_at, na.updated_at,
-                                            //     na.late_status, na.status_color, na.total_working_time, 
+                                            //     na.late_status, na.status_color, na.total_working_time,
                                             //     na.extra_or_remaining_time, na.extra_or_remaining_label,
                                             //     CONCAT(he.fname, ' ', he.lname) as employee_name,
                                             //     he.doj
@@ -721,9 +713,9 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                             //     AND na.clock_in_time >= he.doj
                                             //     AND he.id != 14
                                             //     ORDER BY na.id DESC";
-                                            $attendance_query = "SELECT na.id, na.user_id, na.clock_in_time, na.clock_in_ip, 
+                                            $attendance_query = "SELECT na.id, na.user_id, na.clock_in_time, na.clock_in_ip,
                                                  na.clock_out_time, na.clock_out_ip, na.status, na.created_at, na.updated_at,
-                                                 na.late_status, na.status_color, na.total_working_time, 
+                                                 na.late_status, na.status_color, na.total_working_time,
                                                  na.extra_or_remaining_time, na.extra_or_remaining_label,
                                                  CONCAT(he.fname, ' ', he.lname) as employee_name,
                                                  he.doj
@@ -736,9 +728,9 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
 
                                         } else {
                                             // Managers see only their assigned employees
-                                            $attendance_query = "SELECT na.id, na.user_id, na.clock_in_time, na.clock_in_ip, 
+                                            $attendance_query = "SELECT na.id, na.user_id, na.clock_in_time, na.clock_in_ip,
                                                 na.clock_out_time, na.clock_out_ip, na.status, na.created_at, na.updated_at,
-                                                na.late_status, na.status_color, na.total_working_time, 
+                                                na.late_status, na.status_color, na.total_working_time,
                                                 na.extra_or_remaining_time, na.extra_or_remaining_label,
                                                 CONCAT(he.fname, ' ', he.lname) as employee_name,
                                                 he.doj
@@ -768,9 +760,9 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                 $extra_or_remaining_label = $row['extra_or_remaining_label'];
 
                                                 // Check if employee is on leave for current date
-                                                $leave_check_query = "SELECT 1 FROM hrm_leave_applied 
-                                                                    WHERE emp_id = '{$row['user_id']}' 
-                                                                    AND status = 2 
+                                                $leave_check_query = "SELECT 1 FROM hrm_leave_applied
+                                                                    WHERE emp_id = '{$row['user_id']}'
+                                                                    AND status = 2
                                                                     AND '$current_date' BETWEEN start_date AND end_date";
                                                 $leave_check_result = mysqli_query($conn, $leave_check_query);
                                                 $is_on_leave = mysqli_num_rows($leave_check_result) > 0;
@@ -813,7 +805,7 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                                     data-clockout="<?= $clock_out_time ? date('H:i', strtotime($clock_out_time)) : '' ?>">
                                                                     <i class="fas fa-edit"></i>
                                                                 </a>
-                                                                <!--<button class="btn btn-sm btn-danger delete-btn" 
+                                                                <!--<button class="btn btn-sm btn-danger delete-btn"
                                                                 data-id="<?= $row['id'] ?>">
                                                             <i class="fas fa-trash"></i>
                                                         </button>-->
@@ -836,7 +828,7 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                                     data-clockout="">
                                                                     <i class="fas fa-edit"></i>
                                                                 </a>
-                                                                <!--<button class="btn btn-sm btn-danger delete-btn" 
+                                                                <!--<button class="btn btn-sm btn-danger delete-btn"
                                                                 data-id="<?= $row['id'] ?>">
                                                             <i class="fas fa-trash"></i>
                                                         </button>-->

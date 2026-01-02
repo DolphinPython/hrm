@@ -961,9 +961,8 @@ $employees_absent = [];
 while ($absent = mysqli_fetch_assoc($absent_result)) {
     $employees_absent[] = $absent;
 }
-?>
-
-                                        <?php
+        ?>
+        <?php
                             $present_days = 0;
                             $saturday_days = 0;
                             $sunday_days = 0;
@@ -1132,6 +1131,14 @@ while ($absent = mysqli_fetch_assoc($absent_result)) {
                                                                         if($late_status == "Late" AND ($extra_or_remaining_label == "Extra Time")){
                                                                             $late_cover++;
                                                                         }
+
+
+                                                    if($late_status == "Late (Extra Late)" AND ($extra_or_remaining_label == "Extra Time")){
+                                                        $late_cover++;
+                                                    }                   
+                                                    if($late_status == "Late (Extra Fine)" AND ($extra_or_remaining_label == "Extra Time")){
+                                                        $late_cover++;
+                                                    }
                                                                         
                                                                         if($late_status == "Late (Half Day)" AND ($extra_or_remaining_label == "Extra Time")){
                                                                             $halfd_late_cover++;
@@ -1467,8 +1474,7 @@ $totalDeduction = $leaveDeduct + $halfDayDeduct + $shortDayDeduct;
                     // Late Cover (default 0, JS se handle hoga)
                     $lateCoverDeduct = $late_cover * $normal_fine;
 
-
-                    ?>
+                ?>
 
 
 
@@ -1500,25 +1506,24 @@ $totalDeduction = $leaveDeduct + $halfDayDeduct + $shortDayDeduct;
                                 <div class="col-md-12">
                                     <div class="row m-0">
                                         <div class="col-md-12">
-                                            <input type="checkbox" class="form-check-input"
-                                                name="half_day_cover_checkbox">
-                                            <label class="form-label">Late(Half Day) & Cover</label>
+                                            <label class="form-label d-flex align-items-center gap-2 cursor-pointer">
+                                                <input type="checkbox" class="form-check-input lhdac" name="half_day_cover_checkbox">
+                                                Late(Half Day) & Cover
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="row m-0">
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control fineiboxronly"
-                                                value="<?= $halfd_late_cover; ?>" readonly>
+                                            <input type="text" class="form-control fineiboxronly" value="<?= $halfd_late_cover; ?>" readonly>
                                         </div>
                                         <div class="col-md-3 p-0">
                                             <input type="text" class="form-control fineiboxr fine-input-halfday"
                                                 value="<?= $normal_fine ?>" maxlength="4" placeholder="Fine">
                                         </div>
                                         <div class="col-md-5">
-                                            <input type="text" class="form-control fineiboxronlyr"
-                                                name="half_day_fine_cover"
+                                            <input type="text" class="form-control fineiboxronlyr" name="half_day_fine_cover"
                                                 value="<?= $halfd_late_cover * $normal_fine ?>" readonly>
                                         </div>
                                     </div>
@@ -1530,9 +1535,10 @@ $totalDeduction = $leaveDeduct + $halfDayDeduct + $shortDayDeduct;
                                 <div class="col-md-12">
                                     <div class="row m-0">
                                         <div class="col-md-12">
-                                            <input type="checkbox" class="form-check-input"
-                                                name="half_day_not_cover_checkbox">
-                                            <label class="form-label">Late(Half Day) & Not-Cover</label>
+                                            <label class="form-label d-flex align-items-center gap-2 cursor-pointer">
+                                                <input type="checkbox" class="form-check-input lhdanc" name="half_day_not_cover_checkbox">
+                                                Late(Half Day) & Not-Cover
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -1592,8 +1598,10 @@ $totalDeduction = $leaveDeduct + $halfDayDeduct + $shortDayDeduct;
                                 <div class="col-md-12">
                                     <div class="row m-0">
                                         <div class="col-md-12">
-                                            <input type="checkbox" class="form-check-input" name="late_cover_checkbox">
-                                            <label class="form-label">Late & Cover</label>
+                                            <label class="form-label d-flex align-items-center gap-2 cursor-pointer">
+                                                <input type="checkbox" class="form-check-input laccb" name="late_cover_checkbox">
+                                                Late & Cover
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -1622,9 +1630,10 @@ $totalDeduction = $leaveDeduct + $halfDayDeduct + $shortDayDeduct;
                                 <div class="col-md-12">
                                     <div class="row m-0">
                                         <div class="col-md-12">
-                                            <input type="checkbox" class="form-check-input"
-                                                name="lates_not_cover_checkbox">
-                                            <label class="form-label">Late & Not-Cover</label>
+                                            <label class="form-label d-flex align-items-center gap-2 cursor-pointer">
+                                                <input type="checkbox" class="form-check-input lanccb" name="lates_not_cover_checkbox">
+                                                Late & Not-Cover
+                                            </label>
                                         </div>
                                     </div>
                                 </div>

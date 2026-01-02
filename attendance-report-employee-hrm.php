@@ -30,7 +30,7 @@ $profile_image = $profile_image_dir . "/" . $row['image'];
 $latefineque = "SELECT * FROM office_timing WHERE id = 1";
 $latefinequeres = mysqli_query($conn, $latefineque);
 $latefine = mysqli_fetch_assoc($latefinequeres);
-$normal_fine = $latefine['normal_fine'];
+$normal_fine = $latefine['extra_fine'];
 
 
 

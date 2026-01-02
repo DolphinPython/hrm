@@ -138,95 +138,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endif; ?>
                         <form name="form1" id="mainForm" method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                             
-                            <div class="row mb-4">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="monthly_leaves">Monthly Leaves</label>
-                                        <input type="number" class="form-control" id="monthly_leaves" name="monthly_leaves" value="<?php echo htmlspecialchars($monthly_leaves); ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="monthly_half">Monthly Half Day</label>
-                                        <input type="number" class="form-control" id="monthly_half" name="monthly_half" value="<?php echo htmlspecialchars($monthly_half); ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="monthly_shorts">Monthly Short Leaves</label>
-                                        <input type="number" class="form-control" id="monthly_shorts" name="monthly_shorts" value="<?php echo htmlspecialchars($monthly_shorts); ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="relaxation_late">Monthly Relaxation Late</label>
-                                        <input type="number" class="form-control" id="relaxation_late" name="relaxation_late" value="<?php echo htmlspecialchars($relaxation_late); ?>" required>
-                                    </div>
-                                </div>
-                            </div>
-                            
 
-
+                        
                             <div class="row mb-4">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="relaxation_time">Relaxation Time</label>
-                                        <input type="time" class="form-control" id="relaxation_time" name="relaxation_time" value="<?php echo htmlspecialchars($relaxation_time); ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="normal_fine">Fine</label>
-                                        <input type="number" class="form-control" id="normal_fine" name="normal_fine" value="<?php echo htmlspecialchars($normal_fine); ?>" required>
-                                    </div>
-                                </div>
-                            </div>
-                            
-
-                            <input type="hidden" class="form-control" id="extra_fine" name="extra_fine" value="<?php echo htmlspecialchars($extra_fine); ?>">
-                            <input type="hidden" class="form-control" id="extra_fine_time" name="extra_fine_time" value="<?php echo htmlspecialchars($extra_fine_time); ?>">
-                            <!-- <div class="row mb-4">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="extra_fine_time">Extra Fine Time</label>
-                                        <input type="time" class="form-control" id="extra_fine_time" name="extra_fine_time" value="<?php echo htmlspecialchars($extra_fine_time); ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="extra_fine">Extra Fine</label>
-                                        <input type="number" class="form-control" id="extra_fine" name="extra_fine" value="<?php echo htmlspecialchars($extra_fine); ?>" required>
-                                    </div>
-                                </div>
-                            </div> -->
-                            <div class="row mb-4">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="half_day_time">Half Day Time</label>
-                                        <input type="time" class="form-control" id="half_day_time" name="half_day_time" value="<?php echo htmlspecialchars($half_day_time); ?>" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="evening_half_time">Evening Half Time</label>
-                                        <input type="time" class="form-control" id="evening_half_time" name="evening_half_time" value="<?php echo htmlspecialchars($evening_half_time); ?>" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="login_time">Login Time</label>
                                         <input type="time" class="form-control" id="login_time" name="login_time" value="<?php echo htmlspecialchars($login_time); ?>" required>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="logout_time">Logout Time</label>
                                         <input type="time" class="form-control" id="logout_time" name="logout_time" value="<?php echo htmlspecialchars($logout_time); ?>" required>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="saturday_option">Saturday Option</label>
                                         <select class="form-control" id="saturday_option" name="saturday_option" required>
@@ -236,9 +163,92 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-md-2"></div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="half_day_time">Half Day Time</label>
+                                        <input type="time" class="form-control" id="half_day_time" name="half_day_time" value="<?php echo htmlspecialchars($half_day_time); ?>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="evening_half_time">Evening Half Time</label>
+                                        <input type="time" class="form-control" id="evening_half_time" name="evening_half_time" value="<?php echo htmlspecialchars($evening_half_time); ?>" required>
+                                    </div>
+                                </div>
+
                             </div>
                             
-                            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                            <hr class="mt-3 mb-3">
+
+                            <div class="row mb-4">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="monthly_leaves">Monthly Leaves</label>
+                                        <input type="number" class="form-control" id="monthly_leaves" name="monthly_leaves" value="<?php echo htmlspecialchars($monthly_leaves); ?>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="monthly_half">Monthly Half Day</label>
+                                        <input type="number" class="form-control" id="monthly_half" name="monthly_half" value="<?php echo htmlspecialchars($monthly_half); ?>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="monthly_shorts">Monthly Short Leaves</label>
+                                        <input type="number" class="form-control" id="monthly_shorts" name="monthly_shorts" value="<?php echo htmlspecialchars($monthly_shorts); ?>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="relaxation_late">Monthly Relaxation Late</label>
+                                        <input type="number" class="form-control" id="relaxation_late" name="relaxation_late" value="<?php echo htmlspecialchars($relaxation_late); ?>" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <hr class="mt-3 mb-3">
+
+                            <div class="row mb-4">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="relaxation_time">Relaxation Time</label>
+                                        <input type="time" class="form-control" id="relaxation_time" name="relaxation_time" value="<?php echo htmlspecialchars($relaxation_time); ?>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="extra_fine_time">Late (Half Day)</label>
+                                        <input type="time" class="form-control" id="extra_fine_time" name="extra_fine_time" value="<?php echo htmlspecialchars($extra_fine_time); ?>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-2"></div> 
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="extra_fine">Employee Show Fine</label>
+                                        <input type="number" class="form-control" id="extra_fine" name="extra_fine" value="<?php echo htmlspecialchars($extra_fine); ?>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="normal_fine">Normal - Fine</label>
+                                        <input type="number" class="form-control" id="normal_fine" name="normal_fine" value="<?php echo htmlspecialchars($normal_fine); ?>" required>
+                                    </div>
+                                </div>                              
+                                <!-- <input type="hidden" class="form-control" id="extra_fine" name="extra_fine" value="<?php echo htmlspecialchars($extra_fine); ?>">
+                                <input type="hidden" class="form-control" id="extra_fine_time" name="extra_fine_time" value="<?php echo htmlspecialchars($extra_fine_time); ?>"> -->
+                            </div>
+
+                            <hr class="mt-3 mb-3">
+
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-4 text-center">
+                                    <button type="submit" class="btn btn-primary mt-3 w100">Submit</button>
+                                </div>
+                                <div class="col-md-4"></div>
+                            </div>                            
 
                         </form>
                     </div>
